@@ -4,6 +4,8 @@ struct WorkoutExpirienceCustomisation: View {
 
 	@State private var stage: CustomisationStages = .personalInformations
 	@State private var textFieldValue: String = ""
+	@State private var sexTextFieldValue: String = ""
+	@State private var isSexSheetPresented: Bool = false
 
 	var body: some View {
 		VStack(alignment: .leading) {
@@ -28,7 +30,7 @@ struct WorkoutExpirienceCustomisation: View {
 					Text("Personal Information")
 					Spacer()
 				}
-				
+
 				DeafaultTextField(
 					title: "Name",
 					text: $textFieldValue,
@@ -43,10 +45,12 @@ struct WorkoutExpirienceCustomisation: View {
 						placeholder: "ex.: 25"
 					)
 					DeafaultTextField(
-						title: "Sex (Optional)",
-						text: $textFieldValue,
+						title: "Gender (Optional)",
+						text: $sexTextFieldValue,
 						placeholder: "Select"
-					)
+					) {
+						isSexSheetPresented = true
+					}
 				}
 
 				HStack(spacing: 16) {
@@ -87,6 +91,22 @@ struct WorkoutExpirienceCustomisation: View {
 				.stroke(.gray, lineWidth: 1)
 		)
 		.padding(16)
+		.sheet(isPresented: $isSexSheetPresented) {
+			VStack(spacing: 16) {
+				EmptyView().frame(height: 16)
+				Text("Select your gender").font(.title2)
+				Spacer()
+				ForEach(SexOptions.allCases, id: \.self) { option in
+					Button(option.rawValue.capitalized) {
+						sexTextFieldValue = option.rawValue.capitalized
+						isSexSheetPresented = false
+					}
+				}
+				EmptyView().frame(height: 16)
+			}
+			.padding(16)
+			.presentationDetents([.height(200)])
+		}
 	}
 }
 
