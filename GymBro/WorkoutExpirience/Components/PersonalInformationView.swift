@@ -50,3 +50,10 @@ struct PersonalInformationView: View {
 		}
 	}
 }
+
+#Preview {
+	PersonalInformationView(
+		model: .constant(.init()),
+		onTapGender: {}
+	)
+}
