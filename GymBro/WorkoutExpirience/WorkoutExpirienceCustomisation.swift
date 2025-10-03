@@ -3,11 +3,10 @@ import SwiftUI
 struct WorkoutExpirienceCustomisation: View {
 
 	@State private var stage: CustomisationStages = .trainingPreferences
-	@State private var textFieldValue: String = ""
-	@State private var sexTextFieldValue: String = ""
 	@State private var isSheetPresented: Bool = false
 	@State private var personalModel = PersonalInformationModel()
-	
+	@State private var trainingPreferencesModel = TrainingPreferencesModel()
+
 	var body: some View {
 		VStack(alignment: .leading) {
 			HStack(spacing: 16) {
@@ -57,7 +56,7 @@ struct WorkoutExpirienceCustomisation: View {
 				Spacer()
 				ForEach(SexOptions.allCases, id: \.self) { option in
 					Button(option.rawValue.capitalized) {
-						sexTextFieldValue = option.rawValue.capitalized
+						personalModel.gender = option
 						isSheetPresented = false
 					}
 				}
@@ -83,22 +82,25 @@ struct WorkoutExpirienceCustomisation: View {
 					Text("Training Preferences")
 					Spacer()
 				}
-				DeafaultTextField(
+
+				DefaultSelectableField<TrainingDaysPerWeekOptions>(
 					title: "Training days per week",
-					text: .constant(""),
+					option: $trainingPreferencesModel.trainingOption,
 					placeholder: "Ex.: 2 Days",
 					selectableAction: { isSheetPresented = true }
 				)
-				DeafaultTextField(
+
+				DefaultSelectableField<SplitOptions>(
 					title: "Split Type",
-					text: .constant(""),
+					option: $trainingPreferencesModel.splitOption,
 					placeholder: "Ex.: AB Split (2 Workouts)",
 					selectableAction: { isSheetPresented = true }
 				)
-				DeafaultTextField(
+
+				DefaultSelectableField<ExpirienceOptions>(
 					title: "Expirience Level",
-					text: .constant(""),
-					placeholder: "Ex.: Beginner",
+					option: $trainingPreferencesModel.expirienceOption,
+					placeholder: "",
 					selectableAction: { isSheetPresented = true }
 				)
 			}

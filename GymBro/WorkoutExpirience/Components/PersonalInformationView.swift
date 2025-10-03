@@ -12,35 +12,35 @@ struct PersonalInformationView: View {
 				Spacer()
 			}
 
-			DeafaultTextField(
+			DefaultTextField(
 				title: "Name",
 				text: $model.name,
 				placeholder: "Enter your Name"
 			)
 
 			HStack(spacing: 16) {
-				DeafaultTextField(
+				DefaultTextField(
 					title: "Age",
 					text: $model.age,
 					keyboardType: .numberPad,
 					placeholder: "ex.: 25"
 				)
-				DeafaultTextField(
+				DefaultSelectableField<SexOptions>(
 					title: "Gender (Optional)",
-					text: $model.gender,
+					option: $model.gender,
 					placeholder: "Select",
 					selectableAction: onTapGender
 				)
 			}
 
 			HStack(spacing: 16) {
-				DeafaultTextField(
+				DefaultTextField(
 					title: "Weight (kg)",
 					text: $model.weight,
 					keyboardType: .numbersAndPunctuation,
 					placeholder: "ex.: 25"
 				)
-				DeafaultTextField(
+				DefaultTextField(
 					title: "Height (cm)",
 					text: $model.height,
 					keyboardType: .numbersAndPunctuation,
