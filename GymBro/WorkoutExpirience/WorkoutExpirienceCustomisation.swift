@@ -25,7 +25,7 @@ struct WorkoutExpirienceCustomisation: View {
 				.padding(.bottom, 16)
 
 			StageView()
-			.padding(.bottom, 24)
+				.padding(.bottom, 24)
 
 			HStack {
 				Button {
@@ -76,40 +76,53 @@ struct WorkoutExpirienceCustomisation: View {
 				onTapGender: { isSheetPresented = true }
 			)
 		case .trainingPreferences:
-			VStack(spacing: 16) {
-				HStack(spacing: 16) {
-					Image(systemName: "target").frame(width: 16, height: 16)
-					Text("Training Preferences")
-					Spacer()
-				}
-
-				DefaultSelectableField<TrainingDaysPerWeekOptions>(
-					title: "Training days per week",
-					option: $trainingPreferencesModel.trainingOption,
-					placeholder: "Ex.: 2 Days",
-					selectableAction: { isSheetPresented = true }
-				)
-
-				DefaultSelectableField<SplitOptions>(
-					title: "Split Type",
-					option: $trainingPreferencesModel.splitOption,
-					placeholder: "Ex.: AB Split (2 Workouts)",
-					selectableAction: { isSheetPresented = true }
-				)
-
-				DefaultSelectableField<ExpirienceOptions>(
-					title: "Expirience Level",
-					option: $trainingPreferencesModel.expirienceOption,
-					placeholder: "",
-					selectableAction: { isSheetPresented = true }
-				)
-			}
+			TrainingPreferenceView(
+				model: $trainingPreferencesModel,
+				isSheetPresented: $isSheetPresented
+			)
 		case .extraInformations:
 			Text("Ssaa")
 		case .injuriesAndRestrictions:
 			Text("Ssaa")
 		case .helthIntegration:
 			Text("Ssaa")
+		}
+	}
+}
+
+struct TrainingPreferenceView: View {
+	
+	@Binding var model: TrainingPreferencesModel
+	@Binding var isSheetPresented: Bool
+
+	var body: some View {
+		VStack(spacing: 16) {
+			HStack(spacing: 16) {
+				Image(systemName: "target").frame(width: 16, height: 16)
+				Text("Training Preferences")
+				Spacer()
+			}
+
+			DefaultSelectableField<TrainingDaysPerWeekOptions>(
+				title: "Training days per week",
+				option: $model.trainingOption,
+				placeholder: "Ex.: 2 Days",
+				selectableAction: { isSheetPresented = true }
+			)
+
+			DefaultSelectableField<SplitOptions>(
+				title: "Split Type",
+				option: $model.splitOption,
+				placeholder: "Ex.: AB Split (2 Workouts)",
+				selectableAction: { isSheetPresented = true }
+			)
+
+			DefaultSelectableField<ExpirienceOptions>(
+				title: "Expirience Level",
+				option: $model.expirienceOption,
+				placeholder: "",
+				selectableAction: { isSheetPresented = true }
+			)
 		}
 	}
 }
