@@ -6,7 +6,8 @@ struct WorkoutExpirienceCustomisation: View {
 	@State private var textFieldValue: String = ""
 	@State private var sexTextFieldValue: String = ""
 	@State private var isSexSheetPresented: Bool = false
-
+	@State private var personalModel = PersonalInformationModel()
+	
 	var body: some View {
 		VStack(alignment: .leading) {
 			HStack(spacing: 16) {
@@ -24,50 +25,8 @@ struct WorkoutExpirienceCustomisation: View {
 			LoadingBarView(stage: stage, hasStepCounter: true)
 				.padding(.bottom, 16)
 
-			VStack(spacing: 16) {
-				HStack(spacing: 16) {
-					Image(systemName: "person").frame(width: 16, height: 16)
-					Text("Personal Information")
-					Spacer()
-				}
-
-				DeafaultTextField(
-					title: "Name",
-					text: $textFieldValue,
-					placeholder: "Enter your Name"
-				)
-
-				HStack(spacing: 16) {
-					DeafaultTextField(
-						title: "Age",
-						text: $textFieldValue,
-						keyboardType: .numberPad,
-						placeholder: "ex.: 25"
-					)
-					DeafaultTextField(
-						title: "Gender (Optional)",
-						text: $sexTextFieldValue,
-						placeholder: "Select"
-					) {
-						isSexSheetPresented = true
-					}
-				}
-
-				HStack(spacing: 16) {
-					DeafaultTextField(
-						title: "Weight (kg)",
-						text: $textFieldValue,
-						keyboardType: .numbersAndPunctuation,
-						placeholder: "ex.: 25"
-					)
-					DeafaultTextField(
-						title: "Height (cm)",
-						text: $textFieldValue,
-						keyboardType: .numbersAndPunctuation,
-						placeholder: "Select"
-					)
-				}
-			}.padding(.bottom, 24)
+			StageView()
+			.padding(.bottom, 24)
 
 			HStack {
 				Button {
@@ -107,6 +66,14 @@ struct WorkoutExpirienceCustomisation: View {
 			.padding(16)
 			.presentationDetents([.height(200)])
 		}
+	}
+
+	@ViewBuilder
+	private func StageView() -> some View {
+		return PersonalInformationView(
+			model: $personalModel,
+			onTapGender: { isSexSheetPresented = true }
+		)
 	}
 }
 
