@@ -3,9 +3,10 @@ import SwiftUI
 struct WorkoutExpirienceCustomisation: View {
 
 	@State private var stage: CustomisationStages = .trainingPreferences
-	@State private var isSheetPresented: Bool = false
+	@State private var selectedOption: WorkoutOptionsStates? = nil
 	@State private var personalModel = PersonalInformationModel()
 	@State private var trainingPreferencesModel = TrainingPreferencesModel()
+	@State private var sheetHeight: CGFloat = 0
 
 	var body: some View {
 		VStack(alignment: .leading) {
@@ -49,21 +50,34 @@ struct WorkoutExpirienceCustomisation: View {
 				.stroke(.gray, lineWidth: 1)
 		)
 		.padding(16)
-		.sheet(isPresented: $isSheetPresented) {
+		.sheet(
+			isPresented: .constant(selectedOption != nil),
+			onDismiss: {
+				selectedOption = nil
+				sheetHeight = 0
+			}) {
+			let cases: [any OptionsProtocol] = selectedOption?.optionType.allCases as? [any OptionsProtocol] ?? []
 			VStack(spacing: 16) {
-				EmptyView().frame(height: 16)
-				Text("Select your gender").font(.title2)
+				Text(selectedOption?.title ?? "").font(.title2)
 				Spacer()
-				ForEach(SexOptions.allCases, id: \.self) { option in
-					Button(option.rawValue.capitalized) {
-						personalModel.gender = option
-						isSheetPresented = false
+				ForEach(Array(cases.enumerated()), id: \.offset) { _, option in
+					Button(option.title.capitalized) {
+						saveSelectedOption(option)
+						selectedOption = nil
 					}
 				}
-				EmptyView().frame(height: 16)
 			}
 			.padding(16)
-			.presentationDetents([.height(200)])
+			.background(
+				GeometryReader { geo in
+					Color.clear
+						.onAppear { sheetHeight = geo.size.height }
+						.onChange(of: geo.size.height) { _, newHeight in
+							sheetHeight = newHeight
+						}
+				}
+			)
+			.presentationDetents([.height(sheetHeight)])
 		}
 	}
 
@@ -73,13 +87,16 @@ struct WorkoutExpirienceCustomisation: View {
 		case .personalInformations:
 			PersonalInformationView(
 				model: $personalModel,
-				onTapGender: { isSheetPresented = true }
+				onTapGender: {
+					selectedOption = .gender
+				}
 			)
 		case .trainingPreferences:
 			TrainingPreferenceView(
-				model: $trainingPreferencesModel,
-				isSheetPresented: $isSheetPresented
-			)
+				model: $trainingPreferencesModel
+			) { option in
+				selectedOption = option
+			}
 		case .extraInformations:
 			Text("Ssaa")
 		case .injuriesAndRestrictions:
@@ -88,41 +105,18 @@ struct WorkoutExpirienceCustomisation: View {
 			Text("Ssaa")
 		}
 	}
-}
 
-struct TrainingPreferenceView: View {
-	
-	@Binding var model: TrainingPreferencesModel
-	@Binding var isSheetPresented: Bool
-
-	var body: some View {
-		VStack(spacing: 16) {
-			HStack(spacing: 16) {
-				Image(systemName: "target").frame(width: 16, height: 16)
-				Text("Training Preferences")
-				Spacer()
-			}
-
-			DefaultSelectableField<TrainingDaysPerWeekOptions>(
-				title: "Training days per week",
-				option: $model.trainingOption,
-				placeholder: "Ex.: 2 Days",
-				selectableAction: { isSheetPresented = true }
-			)
-
-			DefaultSelectableField<SplitOptions>(
-				title: "Split Type",
-				option: $model.splitOption,
-				placeholder: "Ex.: AB Split (2 Workouts)",
-				selectableAction: { isSheetPresented = true }
-			)
-
-			DefaultSelectableField<ExpirienceOptions>(
-				title: "Expirience Level",
-				option: $model.expirienceOption,
-				placeholder: "",
-				selectableAction: { isSheetPresented = true }
-			)
+	private func saveSelectedOption(_ option: any OptionsProtocol) {
+		switch selectedOption {
+		case .gender:
+			personalModel.gender = GenderOptions(rawValue: option.rawValue)
+		case .trainingDaysPerWeek:
+			trainingPreferencesModel.trainingOption = .init(rawValue: option.rawValue) ?? .two
+		case .split:
+			trainingPreferencesModel.splitOption = .init(rawValue: option.rawValue) ?? .ab
+		case .expirience:
+			trainingPreferencesModel.expirienceOption = .init(rawValue: option.rawValue) ?? .begginer
+		case nil: return
 		}
 	}
 }

@@ -25,7 +25,7 @@ struct PersonalInformationView: View {
 					keyboardType: .numberPad,
 					placeholder: "ex.: 25"
 				)
-				DefaultSelectableField<SexOptions>(
+				DefaultSelectableField<GenderOptions>(
 					title: "Gender (Optional)",
 					option: $model.gender,
 					placeholder: "Select",

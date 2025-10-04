@@ -2,14 +2,14 @@ struct PersonalInformationModel {
 
 	var name: String
 	var age: String
-	var gender: SexOptions?
+	var gender: GenderOptions?
 	var weight: String
 	var height: String
 
 	init(
 		name: String = "",
 		age: String = "",
-		gender: SexOptions? = nil,
+		gender: GenderOptions? = nil,
 		weight: String = "",
 		height: String = ""
 	) {

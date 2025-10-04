@@ -1,6 +1,6 @@
 import Foundation
 
-enum SexOptions: String, OptionsProtocol {
+enum GenderOptions: String, OptionsProtocol {
 
 	case male
 	case female
