@@ -30,18 +30,24 @@ struct WorkoutExpirienceCustomisation: View {
 
 			HStack {
 				Button {
-					stage = stage.getPreviousStage()
+					withAnimation(nil) {
+						stage = stage.getPreviousStage()
+					}
 				} label: {
 					Text("Back")
-				}.buttonStyle(.borderedStyle)
+				}
+				.buttonStyle(.borderedStyle)
 
 				Spacer()
 
 				Button {
-					stage = stage.getNextStage()
+					withAnimation(nil) {
+						stage = stage.getNextStage()
+					}
 				} label: {
 					Text("Next")
-				}.buttonStyle(.filledBorderedStyle)
+				}
+				.buttonStyle(.filledBorderedStyle)
 			}
 		}
 		.padding(16)
