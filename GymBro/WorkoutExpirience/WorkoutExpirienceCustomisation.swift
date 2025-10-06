@@ -2,11 +2,12 @@ import SwiftUI
 
 struct WorkoutExpirienceCustomisation: View {
 
-	@State private var stage: CustomisationStages = .trainingPreferences
+	@State private var stage: CustomisationStages = .extraInformations
 	@State private var selectedOption: WorkoutOptionsStates? = nil
 	@State private var personalModel = PersonalInformationModel()
 	@State private var trainingPreferencesModel = TrainingPreferencesModel()
 	@State private var sheetHeight: CGFloat = 0
+	@State private var isChecked = false
 
 	var body: some View {
 		VStack(alignment: .leading) {
@@ -106,7 +107,38 @@ struct WorkoutExpirienceCustomisation: View {
 				selectedOption = option
 			}
 		case .extraInformations:
-			Text("Ssaa")
+			VStack(alignment: .leading, spacing: 2) {
+				Text("Priorities Muscles Group").font(.subheadline
+				).bold()
+				Text("Select the muscle groups you want to focous on")
+					.font(.subheadline)
+					.foregroundStyle(Color(.systemGray)).padding(.bottom, 8)
+
+				Grid(alignment: .leadingFirstTextBaseline) {
+					ForEach(0...MuscleGroupsOptions.allCases.count / 2, id: \.self) { row in
+						GridRow {
+							ForEach(0..<2) { column in
+								let position = 2 * row + column
+
+								if position < MuscleGroupsOptions.allCases.count {
+									Button {
+										isChecked.toggle()
+									} label: {
+										HStack {
+											Image(systemName: isChecked ? "checkmark.square.fill" : "square")
+
+												.foregroundColor(isChecked ? .black : .secondary)
+											Text(MuscleGroupsOptions.allCases[position].title).bold()
+										}
+									}
+									.buttonStyle(.plain)
+									.padding(4)
+								}
+							}
+						}.frame(maxWidth: .infinity, alignment: .leading)
+					}
+				}
+			}
 		case .injuriesAndRestrictions:
 			Text("Ssaa")
 		case .helthIntegration:
