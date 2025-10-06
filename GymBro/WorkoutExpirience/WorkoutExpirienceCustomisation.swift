@@ -33,7 +33,7 @@ struct WorkoutExpirienceCustomisation: View {
 					stage = stage.getPreviousStage()
 				} label: {
 					Text("Back")
-				}
+				}.buttonStyle(.borderedStyle)
 
 				Spacer()
 
@@ -41,7 +41,7 @@ struct WorkoutExpirienceCustomisation: View {
 					stage = stage.getNextStage()
 				} label: {
 					Text("Next")
-				}
+				}.buttonStyle(.filledBorderedStyle)
 			}
 		}
 		.padding(16)
@@ -61,9 +61,11 @@ struct WorkoutExpirienceCustomisation: View {
 				Text(selectedOption?.title ?? "").font(.title2)
 				Spacer()
 				ForEach(Array(cases.enumerated()), id: \.offset) { _, option in
-					Button(option.title.capitalized) {
+					Button {
 						saveSelectedOption(option)
 						selectedOption = nil
+					} label: {
+						Text(option.title.capitalized)
 					}
 				}
 			}
