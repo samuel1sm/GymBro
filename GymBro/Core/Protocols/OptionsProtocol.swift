@@ -1,4 +1,4 @@
-protocol OptionsProtocol: RawRepresentable, Equatable, CaseIterable where RawValue == String {
+protocol OptionsProtocol: RawRepresentable, Hashable, Equatable, CaseIterable where RawValue == String {
 
 	var title: String { get }
 }
