@@ -29,7 +29,7 @@ struct SquareOptions<Cases: OptionsProtocol>: View {
 								HStack {
 									Image(systemName: status ? "checkmark.square.fill" : "square")
 										.foregroundColor(status ? .black : .secondary)
-									Text(option.title).bold()
+									Text(option.title)
 								}
 							}
 							.buttonStyle(.plain)

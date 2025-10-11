@@ -8,7 +8,8 @@ struct WorkoutExpirienceCustomisation: View {
 	@State private var trainingPreferencesModel = TrainingPreferencesModel()
 	@State private var sheetHeight: CGFloat = 0
 	@State private var isChecked = false
-	@State private var selectableOptions: [MuscleGroupsOptions: Bool] = [:]
+	@State private var muscleOptions: [MuscleGroupsOptions: Bool] = [:]
+	@State private var equipamentOptions: [EquipamentOptions: Bool] = [:]
 
 	var body: some View {
 		VStack(alignment: .leading) {
@@ -64,31 +65,31 @@ struct WorkoutExpirienceCustomisation: View {
 				selectedOption = nil
 				sheetHeight = 0
 			}) {
-			let cases: [any OptionsProtocol] = selectedOption?.optionType.allCases as? [any OptionsProtocol] ?? []
-			VStack(spacing: 16) {
-				Text(selectedOption?.title ?? "").font(.title2)
-				Spacer()
-				ForEach(Array(cases.enumerated()), id: \.offset) { _, option in
-					Button {
-						saveSelectedOption(option)
-						selectedOption = nil
-					} label: {
-						Text(option.title.capitalized)
+				let cases: [any OptionsProtocol] = selectedOption?.optionType.allCases as? [any OptionsProtocol] ?? []
+				VStack(spacing: 16) {
+					Text(selectedOption?.title ?? "").font(.title2)
+					Spacer()
+					ForEach(Array(cases.enumerated()), id: \.offset) { _, option in
+						Button {
+							saveSelectedOption(option)
+							selectedOption = nil
+						} label: {
+							Text(option.title.capitalized)
+						}
 					}
 				}
+				.padding(16)
+				.background(
+					GeometryReader { geo in
+						Color.clear
+							.onAppear { sheetHeight = geo.size.height }
+							.onChange(of: geo.size.height) { _, newHeight in
+								sheetHeight = newHeight
+							}
+					}
+				)
+				.presentationDetents([.height(sheetHeight)])
 			}
-			.padding(16)
-			.background(
-				GeometryReader { geo in
-					Color.clear
-						.onAppear { sheetHeight = geo.size.height }
-						.onChange(of: geo.size.height) { _, newHeight in
-							sheetHeight = newHeight
-						}
-				}
-			)
-			.presentationDetents([.height(sheetHeight)])
-		}
 	}
 
 	@ViewBuilder
@@ -108,22 +109,10 @@ struct WorkoutExpirienceCustomisation: View {
 				selectedOption = option
 			}
 		case .extraInformations:
-			VStack(alignment: .leading, spacing: 2) {
-				Text("Priorities Muscles Group").font(.subheadline
-				).bold()
-				Text("Select the muscle groups you want to focous on")
-					.font(.subheadline)
-					.foregroundStyle(Color(.systemGray)).padding(.bottom, 8)
-
-				SquareOptions<MuscleGroupsOptions>(selectableOptions: $selectableOptions)
-					.padding(.bottom, 16)
-
-				Text("Available Equipament").font(.subheadline
-				).bold()
-				Text("Select all equipament you have access to")
-					.font(.subheadline)
-					.foregroundStyle(Color(.systemGray)).padding(.bottom, 8)
-			}
+			ExtraInformationsView(
+				selectableOptions: $muscleOptions,
+				equipamentOptions: $equipamentOptions
+			)
 		case .injuriesAndRestrictions:
 			Text("Ssaa")
 		case .helthIntegration:
