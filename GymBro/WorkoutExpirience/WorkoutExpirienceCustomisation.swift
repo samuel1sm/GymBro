@@ -2,7 +2,7 @@ import SwiftUI
 
 struct WorkoutExpirienceCustomisation: View {
 
-	@State private var stage: CustomisationStages = .extraInformations
+	@State private var stage: CustomisationStages = .injuriesAndRestrictions
 	@State private var selectedOption: WorkoutOptionsStates? = nil
 	@State private var personalModel = PersonalInformationModel()
 	@State private var trainingPreferencesModel = TrainingPreferencesModel()
@@ -10,6 +10,7 @@ struct WorkoutExpirienceCustomisation: View {
 	@State private var isChecked = false
 	@State private var muscleOptions: [MuscleGroupsOptions: Bool] = [:]
 	@State private var equipamentOptions: [EquipamentOptions: Bool] = [:]
+	@State private var injuryDescription: String = ""
 
 	var body: some View {
 		VStack(alignment: .leading) {
@@ -114,7 +115,7 @@ struct WorkoutExpirienceCustomisation: View {
 				equipamentOptions: $equipamentOptions
 			)
 		case .injuriesAndRestrictions:
-			Text("Ssaa")
+			InjuriesAndRestrictionsViews(injuryDescription: $injuryDescription)
 		case .helthIntegration:
 			Text("Ssaa")
 		}
@@ -134,6 +135,9 @@ struct WorkoutExpirienceCustomisation: View {
 		}
 	}
 }
+
+
+
 
 #Preview {
 	WorkoutExpirienceCustomisation()
