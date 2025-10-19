@@ -10,7 +10,7 @@ enum CustomisationStages: Int, StageFlow {
 	case trainingPreferences = 2
 	case extraInformations = 3
 	case injuriesAndRestrictions = 4
-	case helthIntegration = 5
+	case healthIntegration = 5
 }
 
 extension CustomisationStages {
@@ -20,6 +20,6 @@ extension CustomisationStages {
 	}
 
 	func getPreviousStage() -> CustomisationStages {
-		.init(rawValue: self.rawValue.advanced(by: -1)) ?? .helthIntegration
+		.init(rawValue: self.rawValue.advanced(by: -1)) ?? .healthIntegration
 	}
 }

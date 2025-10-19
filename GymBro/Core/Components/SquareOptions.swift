@@ -27,8 +27,7 @@ struct SquareOptions<Cases: OptionsProtocol>: View {
 								selectableOptions[option] = !status
 							} label: {
 								HStack {
-									Image(systemName: status ? "checkmark.square.fill" : "square")
-										.foregroundColor(status ? .black : .secondary)
+									CheckBoxView(status: status)
 									Text(option.title)
 								}
 							}

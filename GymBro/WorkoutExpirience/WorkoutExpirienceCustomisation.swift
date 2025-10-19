@@ -2,12 +2,13 @@ import SwiftUI
 
 struct WorkoutExpirienceCustomisation: View {
 
-	@State private var stage: CustomisationStages = .injuriesAndRestrictions
+	@State private var stage: CustomisationStages = .healthIntegration
 	@State private var selectedOption: WorkoutOptionsStates? = nil
 	@State private var personalModel = PersonalInformationModel()
 	@State private var trainingPreferencesModel = TrainingPreferencesModel()
 	@State private var sheetHeight: CGFloat = 0
-	@State private var isChecked = false
+	@State private var isAppleHealthCareEnable = false
+	@State private var isGoogleFitEnable = false
 	@State private var muscleOptions: [MuscleGroupsOptions: Bool] = [:]
 	@State private var equipamentOptions: [EquipamentOptions: Bool] = [:]
 	@State private var injuryDescription: String = ""
@@ -116,8 +117,11 @@ struct WorkoutExpirienceCustomisation: View {
 			)
 		case .injuriesAndRestrictions:
 			InjuriesAndRestrictionsViews(injuryDescription: $injuryDescription)
-		case .helthIntegration:
-			Text("Ssaa")
+		case .healthIntegration:
+			HealthIntegrationView(
+				isAppleHealthCareEnable: $isAppleHealthCareEnable,
+				isGoogleFitEnable: $isGoogleFitEnable
+			)
 		}
 	}
 
@@ -135,8 +139,6 @@ struct WorkoutExpirienceCustomisation: View {
 		}
 	}
 }
-
-
 
 
 #Preview {
