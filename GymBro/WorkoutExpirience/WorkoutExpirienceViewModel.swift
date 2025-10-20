@@ -4,12 +4,9 @@ import Observation
 @MainActor
 @Observable final class WorkoutExpirienceViewModel {
 
-	var stage: CustomisationStages = .extraInformations
+	var stage: CustomisationStages = .personalInformations
 	var selectedOption: WorkoutOptionsStates? = nil
-
-
 	var data = WorkoutExpirienceData()
-
 
 	func nextStage() {
 		stage = stage.getNextStage()
@@ -23,7 +20,6 @@ import Observation
 		print("criando plano")
 	}
 
-    // Business logic
     func saveSelectedOption(_ option: any OptionsProtocol) {
         switch selectedOption {
         case .gender:
