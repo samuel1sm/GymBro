@@ -2,16 +2,8 @@ import SwiftUI
 
 struct WorkoutExpirienceCustomisation: View {
 
-	@State private var stage: CustomisationStages = .healthIntegration
-	@State private var selectedOption: WorkoutOptionsStates? = nil
-	@State private var personalModel = PersonalInformationModel()
-	@State private var trainingPreferencesModel = TrainingPreferencesModel()
-	@State private var sheetHeight: CGFloat = 0
-	@State private var isAppleHealthCareEnable = false
-	@State private var isGoogleFitEnable = false
-	@State private var muscleOptions: [MuscleGroupsOptions: Bool] = [:]
-	@State private var equipamentOptions: [EquipamentOptions: Bool] = [:]
-	@State private var injuryDescription: String = ""
+	@State private var viewModel = WorkoutExpirienceViewModel()
+	@State private var sheetHeight: CGFloat = 100
 
 	var body: some View {
 		VStack(alignment: .leading) {
@@ -27,7 +19,7 @@ struct WorkoutExpirienceCustomisation: View {
 				.foregroundStyle(.secondary)
 				.padding(.bottom, 8)
 
-			LoadingBarView(stage: stage, hasStepCounter: true)
+			LoadingBarView(stage: viewModel.stage, hasStepCounter: true)
 				.padding(.bottom, 16)
 
 			StageView()
@@ -36,7 +28,7 @@ struct WorkoutExpirienceCustomisation: View {
 			HStack {
 				Button {
 					withAnimation(nil) {
-						stage = stage.getPreviousStage()
+						viewModel.backStage()
 					}
 				} label: {
 					Text("Back")
@@ -47,7 +39,7 @@ struct WorkoutExpirienceCustomisation: View {
 
 				Button {
 					withAnimation(nil) {
-						stage = stage.getNextStage()
+						viewModel.nextStage()
 					}
 				} label: {
 					Text("Next")
@@ -62,19 +54,19 @@ struct WorkoutExpirienceCustomisation: View {
 		)
 		.padding(16)
 		.sheet(
-			isPresented: .constant(selectedOption != nil),
+			isPresented: .constant(viewModel.selectedOption != nil),
 			onDismiss: {
-				selectedOption = nil
-				sheetHeight = 0
+				viewModel.selectedOption = nil
+				sheetHeight = 100
 			}) {
-				let cases: [any OptionsProtocol] = selectedOption?.optionType.allCases as? [any OptionsProtocol] ?? []
+				let cases: [any OptionsProtocol] = viewModel.selectedOption?.optionType.allCases as? [any OptionsProtocol] ?? []
 				VStack(spacing: 16) {
-					Text(selectedOption?.title ?? "").font(.title2)
+					Text(viewModel.selectedOption?.title ?? "").font(.title2)
 					Spacer()
 					ForEach(Array(cases.enumerated()), id: \.offset) { _, option in
 						Button {
-							saveSelectedOption(option)
-							selectedOption = nil
+							viewModel.saveSelectedOption(option)
+							viewModel.selectedOption = nil
 						} label: {
 							Text(option.title.capitalized)
 						}
@@ -96,46 +88,32 @@ struct WorkoutExpirienceCustomisation: View {
 
 	@ViewBuilder
 	private func StageView() -> some View {
-		switch stage {
+		switch viewModel.stage {
 		case .personalInformations:
 			PersonalInformationView(
-				model: $personalModel,
+				model: $viewModel.data.personal,
 				onTapGender: {
-					selectedOption = .gender
+					viewModel.selectedOption = .gender
 				}
 			)
 		case .trainingPreferences:
 			TrainingPreferenceView(
-				model: $trainingPreferencesModel
+				model: $viewModel.data.training
 			) { option in
-				selectedOption = option
+				viewModel.selectedOption = option
 			}
 		case .extraInformations:
 			ExtraInformationsView(
-				selectableOptions: $muscleOptions,
-				equipamentOptions: $equipamentOptions
+				selectableOptions: $viewModel.data.muscles,
+				equipamentOptions: $viewModel.data.equipment
 			)
 		case .injuriesAndRestrictions:
-			InjuriesAndRestrictionsViews(injuryDescription: $injuryDescription)
+			InjuriesAndRestrictionsViews(injuryDescription: $viewModel.data.injuryDescription)
 		case .healthIntegration:
 			HealthIntegrationView(
-				isAppleHealthCareEnable: $isAppleHealthCareEnable,
-				isGoogleFitEnable: $isGoogleFitEnable
+				isAppleHealthCareEnable: $viewModel.data.integrations.appleHealth,
+				isGoogleFitEnable: $viewModel.data.integrations.googleFit
 			)
-		}
-	}
-
-	private func saveSelectedOption(_ option: any OptionsProtocol) {
-		switch selectedOption {
-		case .gender:
-			personalModel.gender = GenderOptions(rawValue: option.rawValue)
-		case .trainingDaysPerWeek:
-			trainingPreferencesModel.trainingOption = .init(rawValue: option.rawValue) ?? .two
-		case .split:
-			trainingPreferencesModel.splitOption = .init(rawValue: option.rawValue) ?? .ab
-		case .expirience:
-			trainingPreferencesModel.expirienceOption = .init(rawValue: option.rawValue) ?? .begginer
-		case nil: return
 		}
 	}
 }

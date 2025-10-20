@@ -2,16 +2,8 @@ import SwiftUI
 
 struct SquareOptions<Cases: OptionsProtocol>: View {
 
-	@Binding private var selectableOptions: [Cases: Bool]
-	private let cases: [Cases]
-
-	init(selectableOptions: Binding<[Cases : Bool]>) {
-		self._selectableOptions = selectableOptions
-		cases = Array(Cases.allCases)
-		cases.forEach { option in
-			self.selectableOptions[option] = self.selectableOptions[option] ?? false
-		}
-	}
+	@Binding var selectableOptions: [Cases: Bool]
+	private let cases: [Cases] = Array(Cases.allCases)
 
 	var body: some View {
 		Grid(alignment: .leadingFirstTextBaseline) {
