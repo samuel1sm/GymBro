@@ -34,15 +34,20 @@ struct WorkoutExpirienceCustomisation: View {
 					Text("Back")
 				}
 				.buttonStyle(.borderedStyle)
+				.disabled(viewModel.stage == .personalInformations)
 
 				Spacer()
 
 				Button {
 					withAnimation(nil) {
-						viewModel.nextStage()
+						if viewModel.stage == .healthIntegration {
+							viewModel.createPlan()
+						} else {
+							viewModel.nextStage()
+						}
 					}
 				} label: {
-					Text("Next")
+					Text(viewModel.stage == .healthIntegration ? "Generate My Plan" : "Next")
 				}
 				.buttonStyle(.filledBorderedStyle)
 			}

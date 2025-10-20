@@ -22,9 +22,11 @@ struct FilledBorderedStyle: ButtonStyle {
 }
 
 struct BorderedStyle: ButtonStyle {
+	@Environment(\.isEnabled) private var isEnabled
 	func makeBody(configuration: Configuration) -> some View {
 		configuration.label
 			.bold()
+			.foregroundStyle(isEnabled ? .black : .gray)
 			.padding()
 			.overlay(
 				RoundedRectangle(cornerRadius: 8)
@@ -33,7 +35,6 @@ struct BorderedStyle: ButtonStyle {
 			.background(
 				configuration.isPressed ? Color.gray.opacity(0.7) : Color.clear
 			)
-			.foregroundStyle(.black)
 			.clipShape(RoundedRectangle(cornerRadius: 8))
 			.scaleEffect(configuration.isPressed ? 0.98 : 1.0)
 			.animation(.easeOut(duration: 0.2), value: configuration.isPressed)
@@ -45,7 +46,7 @@ struct BorderedStyle: ButtonStyle {
 		Button { } label: {
 			Text("Test")
 		}.buttonStyle(.filledBorderedStyle)
-
+		
 		Button { } label: {
 			Text("Test")
 		}.buttonStyle(.borderedStyle)

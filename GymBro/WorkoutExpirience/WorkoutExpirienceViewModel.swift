@@ -19,6 +19,10 @@ import Observation
 		stage = stage.getPreviousStage()
 	}
 
+	func createPlan() {
+		print("criando plano")
+	}
+
     // Business logic
     func saveSelectedOption(_ option: any OptionsProtocol) {
         switch selectedOption {
