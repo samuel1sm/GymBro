@@ -6,20 +6,63 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		899A45CD2F8184C900D5D7BC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 899A45B72F8184C700D5D7BC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 899A45BE2F8184C700D5D7BC;
+			remoteInfo = GymBro;
+		};
+		899A45D72F8184C900D5D7BC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 899A45B72F8184C700D5D7BC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 899A45BE2F8184C700D5D7BC;
+			remoteInfo = GymBro;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
-		895F37AB2E8C258300C27A66 /* GymBro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GymBro.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		899A45BF2F8184C700D5D7BC /* GymBro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GymBro.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		899A45CC2F8184C900D5D7BC /* GymBroTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GymBroTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		899A45D62F8184C900D5D7BC /* GymBroUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GymBroUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		895F37AD2E8C258300C27A66 /* GymBro */ = {
+		899A45C12F8184C700D5D7BC /* GymBro */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = GymBro;
+			sourceTree = "<group>";
+		};
+		899A45CF2F8184C900D5D7BC /* GymBroTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = GymBroTests;
+			sourceTree = "<group>";
+		};
+		899A45D92F8184C900D5D7BC /* GymBroUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = GymBroUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		895F37A82E8C258300C27A66 /* Frameworks */ = {
+		899A45BC2F8184C700D5D7BC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		899A45C92F8184C900D5D7BC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		899A45D32F8184C900D5D7BC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -29,18 +72,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		895F37A22E8C258200C27A66 = {
+		899A45B62F8184C700D5D7BC = {
 			isa = PBXGroup;
 			children = (
-				895F37AD2E8C258300C27A66 /* GymBro */,
-				895F37AC2E8C258300C27A66 /* Products */,
+				899A45C12F8184C700D5D7BC /* GymBro */,
+				899A45CF2F8184C900D5D7BC /* GymBroTests */,
+				899A45D92F8184C900D5D7BC /* GymBroUITests */,
+				899A45C02F8184C700D5D7BC /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		895F37AC2E8C258300C27A66 /* Products */ = {
+		899A45C02F8184C700D5D7BC /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				895F37AB2E8C258300C27A66 /* GymBro.app */,
+				899A45BF2F8184C700D5D7BC /* GymBro.app */,
+				899A45CC2F8184C900D5D7BC /* GymBroTests.xctest */,
+				899A45D62F8184C900D5D7BC /* GymBroUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,64 +95,134 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		895F37AA2E8C258300C27A66 /* GymBro */ = {
+		899A45BE2F8184C700D5D7BC /* GymBro */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 895F37B62E8C258400C27A66 /* Build configuration list for PBXNativeTarget "GymBro" */;
+			buildConfigurationList = 899A45E02F8184C900D5D7BC /* Build configuration list for PBXNativeTarget "GymBro" */;
 			buildPhases = (
-				895F37A72E8C258300C27A66 /* Sources */,
-				895F37A82E8C258300C27A66 /* Frameworks */,
-				895F37A92E8C258300C27A66 /* Resources */,
+				899A45BB2F8184C700D5D7BC /* Sources */,
+				899A45BC2F8184C700D5D7BC /* Frameworks */,
+				899A45BD2F8184C700D5D7BC /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				895F37AD2E8C258300C27A66 /* GymBro */,
+				899A45C12F8184C700D5D7BC /* GymBro */,
 			);
 			name = GymBro;
 			packageProductDependencies = (
 			);
 			productName = GymBro;
-			productReference = 895F37AB2E8C258300C27A66 /* GymBro.app */;
+			productReference = 899A45BF2F8184C700D5D7BC /* GymBro.app */;
 			productType = "com.apple.product-type.application";
+		};
+		899A45CB2F8184C900D5D7BC /* GymBroTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 899A45E32F8184C900D5D7BC /* Build configuration list for PBXNativeTarget "GymBroTests" */;
+			buildPhases = (
+				899A45C82F8184C900D5D7BC /* Sources */,
+				899A45C92F8184C900D5D7BC /* Frameworks */,
+				899A45CA2F8184C900D5D7BC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				899A45CE2F8184C900D5D7BC /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				899A45CF2F8184C900D5D7BC /* GymBroTests */,
+			);
+			name = GymBroTests;
+			packageProductDependencies = (
+			);
+			productName = GymBroTests;
+			productReference = 899A45CC2F8184C900D5D7BC /* GymBroTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		899A45D52F8184C900D5D7BC /* GymBroUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 899A45E62F8184C900D5D7BC /* Build configuration list for PBXNativeTarget "GymBroUITests" */;
+			buildPhases = (
+				899A45D22F8184C900D5D7BC /* Sources */,
+				899A45D32F8184C900D5D7BC /* Frameworks */,
+				899A45D42F8184C900D5D7BC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				899A45D82F8184C900D5D7BC /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				899A45D92F8184C900D5D7BC /* GymBroUITests */,
+			);
+			name = GymBroUITests;
+			packageProductDependencies = (
+			);
+			productName = GymBroUITests;
+			productReference = 899A45D62F8184C900D5D7BC /* GymBroUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		895F37A32E8C258200C27A66 /* Project object */ = {
+		899A45B72F8184C700D5D7BC /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2600;
-				LastUpgradeCheck = 2600;
+				LastSwiftUpdateCheck = 2610;
+				LastUpgradeCheck = 2610;
 				TargetAttributes = {
-					895F37AA2E8C258300C27A66 = {
-						CreatedOnToolsVersion = 26.0;
+					899A45BE2F8184C700D5D7BC = {
+						CreatedOnToolsVersion = 26.1;
+					};
+					899A45CB2F8184C900D5D7BC = {
+						CreatedOnToolsVersion = 26.1;
+						TestTargetID = 899A45BE2F8184C700D5D7BC;
+					};
+					899A45D52F8184C900D5D7BC = {
+						CreatedOnToolsVersion = 26.1;
+						TestTargetID = 899A45BE2F8184C700D5D7BC;
 					};
 				};
 			};
-			buildConfigurationList = 895F37A62E8C258200C27A66 /* Build configuration list for PBXProject "GymBro" */;
+			buildConfigurationList = 899A45BA2F8184C700D5D7BC /* Build configuration list for PBXProject "GymBro" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = 895F37A22E8C258200C27A66;
+			mainGroup = 899A45B62F8184C700D5D7BC;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 895F37AC2E8C258300C27A66 /* Products */;
+			productRefGroup = 899A45C02F8184C700D5D7BC /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				895F37AA2E8C258300C27A66 /* GymBro */,
+				899A45BE2F8184C700D5D7BC /* GymBro */,
+				899A45CB2F8184C900D5D7BC /* GymBroTests */,
+				899A45D52F8184C900D5D7BC /* GymBroUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		895F37A92E8C258300C27A66 /* Resources */ = {
+		899A45BD2F8184C700D5D7BC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		899A45CA2F8184C900D5D7BC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		899A45D42F8184C900D5D7BC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -115,7 +232,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		895F37A72E8C258300C27A66 /* Sources */ = {
+		899A45BB2F8184C700D5D7BC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		899A45C82F8184C900D5D7BC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		899A45D22F8184C900D5D7BC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -124,8 +255,21 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		899A45CE2F8184C900D5D7BC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 899A45BE2F8184C700D5D7BC /* GymBro */;
+			targetProxy = 899A45CD2F8184C900D5D7BC /* PBXContainerItemProxy */;
+		};
+		899A45D82F8184C900D5D7BC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 899A45BE2F8184C700D5D7BC /* GymBro */;
+			targetProxy = 899A45D72F8184C900D5D7BC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
-		895F37B42E8C258400C27A66 /* Debug */ = {
+		899A45DE2F8184C900D5D7BC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -178,7 +322,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -189,7 +333,7 @@
 			};
 			name = Debug;
 		};
-		895F37B52E8C258400C27A66 /* Release */ = {
+		899A45DF2F8184C900D5D7BC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -236,7 +380,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -246,7 +390,7 @@
 			};
 			name = Release;
 		};
-		895F37B72E8C258400C27A66 /* Debug */ = {
+		899A45E12F8184C900D5D7BC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -256,6 +400,7 @@
 				DEVELOPMENT_TEAM = C7CDTC5F99;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -278,7 +423,7 @@
 			};
 			name = Debug;
 		};
-		895F37B82E8C258400C27A66 /* Release */ = {
+		899A45E22F8184C900D5D7BC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -288,6 +433,7 @@
 				DEVELOPMENT_TEAM = C7CDTC5F99;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -310,28 +456,130 @@
 			};
 			name = Release;
 		};
+		899A45E42F8184C900D5D7BC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C7CDTC5F99;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = samuel.GymBroTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GymBro.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GymBro";
+			};
+			name = Debug;
+		};
+		899A45E52F8184C900D5D7BC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C7CDTC5F99;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = samuel.GymBroTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GymBro.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GymBro";
+			};
+			name = Release;
+		};
+		899A45E72F8184C900D5D7BC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C7CDTC5F99;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = samuel.GymBroUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = GymBro;
+			};
+			name = Debug;
+		};
+		899A45E82F8184C900D5D7BC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C7CDTC5F99;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = samuel.GymBroUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = GymBro;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		895F37A62E8C258200C27A66 /* Build configuration list for PBXProject "GymBro" */ = {
+		899A45BA2F8184C700D5D7BC /* Build configuration list for PBXProject "GymBro" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				895F37B42E8C258400C27A66 /* Debug */,
-				895F37B52E8C258400C27A66 /* Release */,
+				899A45DE2F8184C900D5D7BC /* Debug */,
+				899A45DF2F8184C900D5D7BC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		895F37B62E8C258400C27A66 /* Build configuration list for PBXNativeTarget "GymBro" */ = {
+		899A45E02F8184C900D5D7BC /* Build configuration list for PBXNativeTarget "GymBro" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				895F37B72E8C258400C27A66 /* Debug */,
-				895F37B82E8C258400C27A66 /* Release */,
+				899A45E12F8184C900D5D7BC /* Debug */,
+				899A45E22F8184C900D5D7BC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		899A45E32F8184C900D5D7BC /* Build configuration list for PBXNativeTarget "GymBroTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				899A45E42F8184C900D5D7BC /* Debug */,
+				899A45E52F8184C900D5D7BC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		899A45E62F8184C900D5D7BC /* Build configuration list for PBXNativeTarget "GymBroUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				899A45E72F8184C900D5D7BC /* Debug */,
+				899A45E82F8184C900D5D7BC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 895F37A32E8C258200C27A66 /* Project object */;
+	rootObject = 899A45B72F8184C700D5D7BC /* Project object */;
 }
