@@ -1,7 +1,3 @@
-// Usage:
-// Text("PUSH DAY").font(.barlowCondensed(.black, size: 48))
-// Text("3 sets · 10 reps").font(.plusJakartaSans(.regular, size: 14))
-// Text("Score").font(.plusJakartaSans(.semiBold, size: 16))
 
 import SwiftUI
 import CoreText
@@ -150,18 +146,20 @@ extension Font {
 
     // MARK: Named scale — Plus Jakarta Sans
 
+	/// 17 pt SemiBold — Buttons titles
+	static func buttonTitle() -> Font { .plusJakartaSans(.bold, size: 18) }
     /// 17 pt SemiBold — navigation bar titles
-    static func navTitle() -> Font { .plusJakartaSans(.semiBold, size: 17) }
+    static func navTitle() -> Font { .plusJakartaSans(.semiBold, size: 18) }
     /// 15 pt SemiBold — button labels, chip labels, active tab labels
-    static func labelMD() -> Font { .plusJakartaSans(.semiBold, size: 15) }
+    static func labelMD() -> Font { .plusJakartaSans(.semiBold, size: 16) }
     /// 15 pt Regular — body text, exercise descriptions
-    static func bodyMD() -> Font { .plusJakartaSans(.regular, size: 15) }
+    static func bodyMD() -> Font { .plusJakartaSans(.regular, size: 16) }
     /// 13 pt Medium — metadata (sets · reps · rest), suggested dates
-    static func bodySM() -> Font { .plusJakartaSans(.medium, size: 13) }
+    static func bodySM() -> Font { .plusJakartaSans(.medium, size: 14) }
     /// 12 pt Regular — captions, chart axis labels, section headers
     static func caption() -> Font { .plusJakartaSans(.regular, size: 12) }
     /// 11 pt Medium — tab bar labels, badges, inline tags
-    static func micro() -> Font { .plusJakartaSans(.medium, size: 11) }
+    static func micro() -> Font { .plusJakartaSans(.medium, size: 10) }
 }
 
 // MARK: - UIFont convenience (UIKit / UIAppearance)
