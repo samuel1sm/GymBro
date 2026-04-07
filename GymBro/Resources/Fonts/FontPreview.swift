@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct FontPreview: View {
+
+	private let title = "Font Preview"
+	
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 32) {
@@ -15,7 +18,7 @@ struct FontPreview: View {
                 // MARK: - Barlow Condensed Section
                 
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("Barlow Condensed")
+                    Text(verbatim: "Barlow Condensed")
                         .font(.system(.caption))
                         .foregroundStyle(.secondary)
                     
@@ -23,45 +26,45 @@ struct FontPreview: View {
                     
                     // Hero XL
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("56pt Black")
+                        Text(verbatim: "56pt Black")
                             .font(.system(.caption2))
                             .foregroundStyle(.secondary)
-                        Text("123.5 KG")
+                        Text(verbatim: "123.5 KG")
                             .font(.heroXL())
-                        Text("123.5 KG")
+                        Text(verbatim: "123.5 KG")
                             .font(.heroXL(true))
                     }
                     
                     // Hero LG
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("40pt Black")
+                        Text(verbatim: "40pt Black")
                             .font(.system(.caption2))
                             .foregroundStyle(.secondary)
-                        Text("PUSH DAY")
+                        Text(verbatim: "PUSH DAY")
                             .font(.heroLG())
-                        Text("PUSH DAY")
+                        Text(verbatim: "PUSH DAY")
                             .font(.heroLG(true))
                     }
                     
                     // Display MD
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("32pt ExtraBold")
+                        Text(verbatim: "32pt ExtraBold")
                             .font(.system(.caption2))
                             .foregroundStyle(.secondary)
-                        Text("Bench Press")
+                        Text(verbatim: "Bench Press")
                             .font(.displayMD())
-                        Text("Bench Press")
+                        Text(verbatim: "Bench Press")
                             .font(.displayMD(true))
                     }
                     
                     // Heading SM
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("24pt Bold")
+                        Text(verbatim: "24pt Bold")
                             .font(.system(.caption2))
                             .foregroundStyle(.secondary)
-                        Text("Working Sets")
+                        Text(verbatim: "Working Sets")
                             .font(.headingSM())
-                        Text("Working Sets")
+                        Text(verbatim: "Working Sets")
                             .font(.headingSM(true))
                     }
                 }
@@ -72,7 +75,7 @@ struct FontPreview: View {
                 // MARK: - Plus Jakarta Sans Section
                 
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("Plus Jakarta Sans")
+                    Text(verbatim: "Plus Jakarta Sans")
                         .font(.system(.caption))
                         .foregroundStyle(.secondary)
                     
@@ -80,55 +83,55 @@ struct FontPreview: View {
                     
                     // Nav Title
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("17pt SemiBold — Nav Title")
+                        Text(verbatim: "17pt SemiBold — Nav Title")
                             .font(.system(.caption2))
                             .foregroundStyle(.secondary)
-                        Text("Workouts")
+                        Text(verbatim: "Workouts")
                             .font(.navTitle())
                     }
                     
                     // Label MD
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("15pt SemiBold — Label MD")
+                        Text(verbatim: "15pt SemiBold — Label MD")
                             .font(.system(.caption2))
                             .foregroundStyle(.secondary)
-                        Text("Start Workout")
+                        Text(verbatim: "Start Workout")
                             .font(.labelMD())
                     }
                     
                     // Body MD
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("15pt Regular — Body MD")
+                        Text(verbatim: "15pt Regular — Body MD")
                             .font(.system(.caption2))
                             .foregroundStyle(.secondary)
-                        Text("This exercise targets your chest, shoulders, and triceps.")
+                        Text(verbatim: "This exercise targets your chest, shoulders, and triceps.")
                             .font(.bodyMD())
                     }
                     
                     // Body SM
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("13pt Medium — Body SM")
+                        Text(verbatim: "13pt Medium — Body SM")
                             .font(.system(.caption2))
                             .foregroundStyle(.secondary)
-                        Text("3 sets · 10 reps · 90s rest")
+                        Text(verbatim: "3 sets · 10 reps · 90s rest")
                             .font(.bodySM())
                     }
                     
                     // Caption
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("12pt Regular — Caption")
+                        Text(verbatim: "12pt Regular — Caption")
                             .font(.system(.caption2))
                             .foregroundStyle(.secondary)
-                        Text("Last updated 2 days ago")
+                        Text(verbatim: "Last updated 2 days ago")
                             .font(.caption())
                     }
                     
                     // Micro
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("11pt Medium — Micro")
+                        Text(verbatim: "11pt Medium — Micro")
                             .font(.system(.caption2))
                             .foregroundStyle(.secondary)
-                        Text("Workout")
+                        Text(verbatim: "Workout")
                             .font(.micro())
                     }
                 }
@@ -139,7 +142,7 @@ struct FontPreview: View {
                 // MARK: - Real-World Examples
                 
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("Real-World Examples")
+                    Text(verbatim: "Real-World Examples")
                         .font(.system(.caption))
                         .foregroundStyle(.secondary)
                     
@@ -147,12 +150,12 @@ struct FontPreview: View {
                     
                     // Workout Card Example
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("PUSH DAY")
+                        Text(verbatim: "PUSH DAY")
                             .font(.heroLG())
-                        Text("Build strength in your chest, shoulders, and triceps")
+                        Text(verbatim: "Build strength in your chest, shoulders, and triceps")
                             .font(.bodyMD())
                             .foregroundStyle(.secondary)
-                        Text("45 min · 8 exercises")
+                        Text(verbatim: "45 min · 8 exercises")
                             .font(.bodySM())
                             .foregroundStyle(.secondary)
                     }
@@ -164,17 +167,17 @@ struct FontPreview: View {
                     // Stats Example
                     HStack(spacing: 24) {
                         VStack(spacing: 4) {
-                            Text("185")
+                            Text(verbatim: "185")
                                 .font(.heroXL())
-                            Text("Max Weight")
+                            Text(verbatim: "Max Weight")
                                 .font(.bodySM())
                                 .foregroundStyle(.secondary)
                         }
                         
                         VStack(spacing: 4) {
-                            Text("12")
+                            Text(verbatim: "12")
                                 .font(.heroXL())
-                            Text("PR Count")
+                            Text(verbatim: "PR Count")
                                 .font(.bodySM())
                                 .foregroundStyle(.secondary)
                         }
@@ -186,24 +189,24 @@ struct FontPreview: View {
                     
                     // Exercise Detail Example
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Bench Press")
+                        Text(verbatim: "Bench Press")
                             .font(.displayMD())
                         
-                        Text("Working Sets")
+                        Text(verbatim: "Working Sets")
                             .font(.headingSM())
                         
                         HStack {
-                            Text("Set 1")
+                            Text(verbatim: "Set 1")
                                 .font(.labelMD())
                             Spacer()
-                            Text("100 kg × 8")
+                            Text(verbatim: "100 kg × 8")
                                 .font(.bodyMD())
                         }
                         .padding()
                         .background(Color(.systemGray5))
                         .cornerRadius(8)
                         
-                        Text("Rest 2-3 minutes between sets")
+                        Text(verbatim: "Rest 2-3 minutes between sets")
                             .font(.caption())
                             .foregroundStyle(.secondary)
                     }
@@ -218,11 +221,12 @@ struct FontPreview: View {
             }
             .padding()
         }
-        .navigationTitle("Font Preview")
+        .navigationTitle(title)
+        .navigationBarTitleDisplayMode(.large)
     }
 }
 
-#Preview {
+#Preview("Fonts") {
     NavigationStack {
         FontPreview()
     }
