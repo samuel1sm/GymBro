@@ -6,7 +6,7 @@ struct WelcomePageView: View {
 			Text(verbatim: "GYMBRO")
 				.font(.barlowCondensed(.extraBold, size: 72))
 				.foregroundStyle(.volt)
-			Text("Your AI-powered workout planner.\nBuilt for strength, designed for results.")
+			Text(.welcomePageText)
 				.font(.navTitle())
 				.foregroundStyle(.labelSecondary)
 				.multilineTextAlignment(.center)
