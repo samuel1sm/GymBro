@@ -7,12 +7,12 @@ enum GBBadgeTone {
 
     var backgroundColor: Color {
         switch self {
-        case .default: return Color(red: 0.18, green: 0.18, blue: 0.18)
+        case .default: return .chipSurface
         case .accent:  return .voltDim
-        case .success: return Color(red: 0.298, green: 0.686, blue: 0.314, opacity: 0.15)
-        case .warning: return Color(red: 1.0, green: 0.757, blue: 0.027, opacity: 0.15)
+        case .success: return .chipSuccessSurface
+        case .warning: return .chipWarningSurface
         case .error:   return .dangerSurface
-        case .info:    return Color(red: 0.129, green: 0.588, blue: 0.953, opacity: 0.15)
+        case .info:    return .chipInfoSurface
         }
     }
 
@@ -20,10 +20,10 @@ enum GBBadgeTone {
         switch self {
         case .default: return .labelSecondary
         case .accent:  return .volt
-        case .success: return Color(red: 0.298, green: 0.686, blue: 0.314)
+        case .success: return .chipSuccess
         case .warning: return .flame
         case .error:   return .danger
-        case .info:    return Color(red: 0.129, green: 0.588, blue: 0.953)
+        case .info:    return .chipInfo
         }
     }
 }

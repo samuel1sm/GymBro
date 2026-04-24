@@ -1,7 +1,5 @@
 import SwiftUI
 
-private let gbSurface3 = Color(red: 0.18, green: 0.18, blue: 0.18)
-
 struct GBChip: View {
     var label: String
     var isActive: Bool = false
@@ -19,7 +17,7 @@ struct GBChip: View {
         .foregroundStyle(isActive ? Color.labelOnAccent : Color.labelSecondary)
         .frame(height: 32)
         .padding(.horizontal, 12)
-        .background(isActive ? Color.volt : gbSurface3)
+        .background(isActive ? Color.volt : Color.chipSurface)
         .clipShape(Capsule())
         .overlay(Capsule().stroke(isActive ? Color.volt : Color.borderDefault, lineWidth: 1))
     }

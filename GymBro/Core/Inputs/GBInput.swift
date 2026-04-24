@@ -1,8 +1,5 @@
 import SwiftUI
 
-// Surface3 (#2E2E2E) — used for input/chip backgrounds, slightly above Surface2
-private let gbSurface3 = Color(red: 0.18, green: 0.18, blue: 0.18)
-
 struct GBInput: View {
     var label: String? = nil
     @Binding var text: String
@@ -35,7 +32,7 @@ struct GBInput: View {
             }
             .frame(height: 52)
             .padding(.horizontal, 14)
-            .background(gbSurface3)
+            .background(.chipSurface)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.borderDefault, lineWidth: 1))
         }
