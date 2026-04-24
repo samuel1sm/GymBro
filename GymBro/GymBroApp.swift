@@ -16,7 +16,7 @@ struct GymBroApp: App {
     
     var body: some Scene {
         WindowGroup {
-            WelcomePageView()
+			OnboardingView()
         }
     }
 }

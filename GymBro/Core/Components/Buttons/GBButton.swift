@@ -80,7 +80,7 @@ struct GBButton: View {
                     .font(size.font)
                 if let iconRight {
                     Image(systemName: iconRight)
-                        .font(.system(size: size.iconSize, weight: .semibold))
+						.font(.system(size: size.iconSize, weight: .light))
                 }
             }
             .foregroundStyle(foregroundColor)
