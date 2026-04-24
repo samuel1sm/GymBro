@@ -33,7 +33,7 @@ enum GBButtonSize {
 // MARK: - GBButton
 
 struct GBButton: View {
-    var label: String
+    var label: LocalizedStringKey
     var variant: GBButtonVariant = .primary
     var size: GBButtonSize = .md
     var icon: String? = nil
