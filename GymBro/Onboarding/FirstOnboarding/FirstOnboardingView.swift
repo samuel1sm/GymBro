@@ -1,17 +1,10 @@
 import SwiftUI
 
-enum OnboardingStates {
-	case firstBoard
-	case secondBoard
-	case thirdBoard
-}
+struct FirstOnboardingView: View {
 
-struct OnboardingView: View {
-	@State private var state = OnboardingStates.firstBoard
-
-    var body: some View {
+	var body: some View {
 		GeometryReader { geo in
-			VStack {
+			VStack(spacing: 16) {
 				ZStack(alignment: .topTrailing) {
 					Image(.imgOnboardOne)
 						.resizable()
@@ -65,5 +58,5 @@ struct OnboardingView: View {
 }
 
 #Preview {
-	OnboardingView()
+	FirstOnboardingView()
 }
