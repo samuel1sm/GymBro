@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct FirstOnboardView: View {
+struct FirstOnboardingView: View {
 	@Environment(\.coordinator) var coordinator
 	
 	var body: some View {
@@ -26,23 +26,25 @@ struct FirstOnboardView: View {
 					.padding()
 				}
 
-				VStack(alignment: .leading) {
+				VStack(alignment: .leading, spacing: 0) {
 					Text("01 · INTRO")
-						.font(.system(size: 11, weight: .regular, design: .monospaced))
-						.bold()
+						.font(.system(size: 11, weight: .bold, design: .monospaced))
 						.tracking(2.4)
 						.foregroundStyle(.volt)
+						.padding(.bottom, 14)
 
-					let aiLabel = Text("AI")
-						.font(.system(size: 44))
-						.foregroundStyle(.volt)
-					Text("Your \(aiLabel)\nGym Coach.")
-						.font(.system(size: 44))
-						.foregroundStyle(.labelPrimary)
-						.bold()
+					let aiText = Text("AI").foregroundColor(.volt)
+					Text("Your \(aiText)\nGym Coach.")
+						.foregroundColor(.labelPrimary)
+						.font(.barlowCondensed(.black, size: 44))
+						.lineSpacing(2)
+
 					Text("Generate a personalised weekly workout plan in seconds.")
 						.font(.system(size: 17))
 						.foregroundStyle(.labelSecondary)
+						.lineSpacing(5)
+						.padding(.top, 14)
+					Spacer()
 				}
 				.frame(maxWidth: .infinity, alignment: .leading)
 			}
@@ -53,6 +55,6 @@ struct FirstOnboardView: View {
 
 #Preview {
 	RouterView {
-		FirstOnboardView()
+		FirstOnboardingView()
 	}
 }

@@ -18,35 +18,13 @@ struct OnboardingView: View {
 		GeometryReader { geo in
 			VStack {
 				TabView(selection: $selectedTab) {
-					FirstOnboardView()
+					FirstOnboardingView()
 						.tag(OnboardingStates.firstView.rawValue)
 
-					VStack {
-						VStack(alignment: .leading) {
-							Text("02 · How it works")
-								.font(.system(size: 11, weight: .regular, design: .monospaced))
-								.bold()
-								.tracking(2.4)
-								.foregroundStyle(.volt)
-
-							let youLabel = Text("You.")
-								.font(.system(size: 44))
-								.foregroundStyle(.volt)
-							Text("Built.\nAround \(youLabel)")
-								.font(.system(size: 44))
-								.foregroundStyle(.labelPrimary)
-								.bold()
-							Text("Tell us your goals, equipment, and schedule. We handle the rest.")
-								.font(.system(size: 17))
-								.foregroundStyle(.labelSecondary)
-						}
-					}
-					.padding(.horizontal, 16)
+					SecondOnboardingView(selectedTab: $selectedTab)
 					.frame(maxWidth: .infinity, alignment: .leading)
-
-
+					.padding(.horizontal, 16)
 					.tag(OnboardingStates.secondView.rawValue)
-
 				}
 				.tabViewStyle(.page)
 
