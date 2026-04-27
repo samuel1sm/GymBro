@@ -44,8 +44,10 @@ struct FirstOnboardView: View {
 						.font(.system(size: 17))
 						.foregroundStyle(.labelSecondary)
 				}
+				.frame(maxWidth: .infinity, alignment: .leading)
 			}
-		}			.background(.appBackground)
+		}
+		.background(.appBackground)
 	}
 }
 
