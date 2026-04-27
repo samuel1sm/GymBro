@@ -1,7 +1,8 @@
 import SwiftUI
 
-struct FirstOnboardingView: View {
+struct FirstOnboardView: View {
 	@Environment(\.coordinator) var coordinator
+	
 	var body: some View {
 		GeometryReader { geo in
 			VStack(spacing: 16) {
@@ -18,11 +19,11 @@ struct FirstOnboardingView: View {
 								topTrailingRadius: 0
 							)
 						)
-
+					
 					GBButton(label: "Skip", variant: .secondary, size: .md) {
 						coordinator.push(.firstOnboarding)
 					}
-						.padding()
+					.padding()
 				}
 
 				VStack(alignment: .leading) {
@@ -43,24 +44,13 @@ struct FirstOnboardingView: View {
 						.font(.system(size: 17))
 						.foregroundStyle(.labelSecondary)
 				}
-				Spacer()
-				GBButton(
-					label: "Continue",
-					variant: .primary,
-					size: .lg,
-					iconRight: "chevron.right",
-					isFullWidth: true
-				)
-				.padding(.all, 16)
-				.frame(maxWidth: .infinity)
 			}
-			.background(.appBackground)
-		}
+		}			.background(.appBackground)
 	}
 }
 
 #Preview {
 	RouterView {
-		FirstOnboardingView()
+		FirstOnboardView()
 	}
 }

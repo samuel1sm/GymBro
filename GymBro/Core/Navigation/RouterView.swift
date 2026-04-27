@@ -14,9 +14,9 @@ struct RouterView<Root: View>: View {
                 .navigationDestination(for: Route.self) { route in
                     switch route {
                     case .firstOnboarding:
-                        FirstOnboardingView()
-                    case .secondOnboarding:
-                        FirstOnboardingView()
+                        OnboardingView()
+                    case .accountInformation:
+                        OnboardingView()
                     }
                 }
         }
