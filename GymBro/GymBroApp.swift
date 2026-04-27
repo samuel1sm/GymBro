@@ -9,14 +9,16 @@ import SwiftUI
 
 @main
 struct GymBroApp: App {
-    
+
     init() {
         FontRegistrar.registerAll()
     }
-    
+
     var body: some Scene {
         WindowGroup {
-			FirstOnboardingView()
+            RouterView {
+                FirstOnboardingView()
+            }
         }
     }
 }

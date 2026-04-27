@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct FirstOnboardingView: View {
-
+	@Environment(\.coordinator) var coordinator
 	var body: some View {
 		GeometryReader { geo in
 			VStack(spacing: 16) {
@@ -19,7 +19,9 @@ struct FirstOnboardingView: View {
 							)
 						)
 
-					GBButton(label: "Skip", variant: .secondary, size: .md)
+					GBButton(label: "Skip", variant: .secondary, size: .md) {
+						coordinator.push(.firstOnboarding)
+					}
 						.padding()
 				}
 
@@ -58,5 +60,7 @@ struct FirstOnboardingView: View {
 }
 
 #Preview {
-	FirstOnboardingView()
+	RouterView {
+		FirstOnboardingView()
+	}
 }
