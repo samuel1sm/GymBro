@@ -9,7 +9,7 @@ enum OnboardingStates: Int {
 
 struct OnboardingView: View {
 	@Environment(\.coordinator) var coordinator
-	@State private var selectedTab = 1
+	@State private var selectedTab = 0
 	var isLastTab: Bool {
 		selectedTab == OnboardingStates.thirdView.rawValue
 	}
@@ -22,22 +22,42 @@ struct OnboardingView: View {
 						.tag(OnboardingStates.firstView.rawValue)
 
 					SecondOnboardingView(selectedTab: $selectedTab)
+						.frame(maxWidth: .infinity, alignment: .leading)
+						.padding(.horizontal, 16)
+						.tag(OnboardingStates.secondView.rawValue)
+
+				ThirdOnboardingView(selectedTab: $selectedTab)
 					.frame(maxWidth: .infinity, alignment: .leading)
 					.padding(.horizontal, 16)
-					.tag(OnboardingStates.secondView.rawValue)
+					.tag(OnboardingStates.thirdView.rawValue)
 				}
 				.tabViewStyle(.page)
 
 				Spacer()
 
-				GBButton(
-					label: "Next",
-					variant: .primary,
-					size: .lg,
-					iconRight: "chevron.right",
-					isFullWidth: true
-				) {
-					selectedTab += 1
+				VStack(spacing: 10) {
+					GBButton(
+						label: isLastTab ? "Get Started" : "Next",
+						variant: .primary,
+						size: .lg,
+						iconRight: isLastTab ? nil : "chevron.right",
+						isFullWidth: true
+					) {
+						if isLastTab {
+							coordinator.push(.accountInformation)
+						} else {
+							selectedTab += 1
+						}
+					}
+
+					if isLastTab {
+						Button("I already have an account") {
+							coordinator.push(.accountInformation)
+						}
+						.font(.system(size: 15, weight: .medium))
+						.foregroundStyle(.labelSecondary)
+						.frame(height: 48)
+					}
 				}
 				.padding(.horizontal, 16)
 				.padding(.bottom, 16)

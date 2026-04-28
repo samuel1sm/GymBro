@@ -47,6 +47,7 @@ struct FirstOnboardingView: View {
 					Spacer()
 				}
 				.frame(maxWidth: .infinity, alignment: .leading)
+				.padding(.horizontal, 16)
 			}
 		}
 		.background(.appBackground)

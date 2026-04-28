@@ -1,10 +1,10 @@
 import SwiftUI
 
-struct SecondOnboardingView: View {
-    @Environment(\.coordinator) private var coordinator
+struct ThirdOnboardingView: View {
+	@Environment(\.coordinator) private var coordinator
 	@Binding var selectedTab: Int
 
-    var body: some View {
+	var body: some View {
 		VStack(spacing: 16) {
 			HStack {
 				Button(action: {
@@ -18,46 +18,41 @@ struct SecondOnboardingView: View {
 				.padding(.leading, 12)
 
 				Spacer()
-
-				Button("Skip") {
-					coordinator.push(.accountInformation)
-				}.font(.system(size: 15, weight: .medium))
-				.foregroundStyle(.labelSecondary)
-					.padding(.trailing, 20)
 			}
 			.frame(height: 44)
 
-			FeatureGraphicView()
+			CTAGraphicView()
 				.padding(.vertical, 16)
 
 			VStack(alignment: .leading, spacing: 0) {
-				Text("02 · HOW IT WORKS")
+				Text("03 · LET'S GO")
 					.font(.system(size: 11, weight: .bold, design: .monospaced))
 					.tracking(2.4)
 					.foregroundStyle(.volt)
 					.padding(.bottom, 14)
 
-				let youText = Text("You.").foregroundColor(.volt)
-				Text("Built\nAround \(youText)")
+				let smarterText = Text("smarter?").foregroundColor(.volt)
+				Text("Ready to train\n\(smarterText)")
 					.foregroundColor(.labelPrimary)
 					.font(.barlowCondensed(.black, size: 44))
 					.lineSpacing(2)
 
-				Text("Tell us your goals, equipment, and schedule. We handle the rest.")
+				Text("Set up your profile and generate your first plan — it takes less than 3 minutes.")
 					.font(.system(size: 17))
 					.foregroundStyle(.labelSecondary)
 					.lineSpacing(5)
 					.padding(.top, 14)
+
 				Spacer()
 			}
 			.frame(maxWidth: .infinity, alignment: .leading)
 		}
-        .background(.appBackground)
-    }
+		.background(.appBackground)
+	}
 }
 
 #Preview {
-    RouterView {
-		SecondOnboardingView(selectedTab: .constant(1))
-    }
+	RouterView {
+		ThirdOnboardingView(selectedTab: .constant(2))
+	}
 }
