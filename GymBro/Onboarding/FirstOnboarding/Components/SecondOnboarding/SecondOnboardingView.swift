@@ -20,7 +20,7 @@ struct SecondOnboardingView: View {
 				Spacer()
 
 				Button("Skip") {
-					coordinator.push(.accountInformation)
+					coordinator.push(.profileGoals)
 				}.font(.system(size: 15, weight: .medium))
 				.foregroundStyle(.labelSecondary)
 					.padding(.trailing, 20)

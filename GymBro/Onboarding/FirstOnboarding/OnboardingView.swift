@@ -44,7 +44,7 @@ struct OnboardingView: View {
 						isFullWidth: true
 					) {
 						if isLastTab {
-							coordinator.push(.accountInformation)
+							coordinator.push(.profileGoals)
 						} else {
 							var transaction = Transaction()
 							transaction.disablesAnimations = true

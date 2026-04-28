@@ -21,7 +21,7 @@ struct FirstOnboardingView: View {
 						)
 					
 					GBButton(label: "Skip", variant: .secondary, size: .md) {
-						coordinator.push(.firstOnboarding)
+						coordinator.push(.profileGoals)
 					}
 					.padding()
 				}

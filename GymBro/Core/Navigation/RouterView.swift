@@ -16,7 +16,9 @@ struct RouterView<Root: View>: View {
                     case .firstOnboarding:
                         OnboardingView()
                     case .accountInformation:
-						OnboardingView()
+                        OnboardingView()
+                    case .profileGoals:
+                        ProfileGoalsView()
                     }
                 }
         }
