@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct InjuriesView: View {
+    @Environment(\.coordinator) private var coordinator
     @Binding var step: Int
     @Binding var state: ProfileGoalsState
 
@@ -23,7 +24,7 @@ struct InjuriesView: View {
             title: "Injuries or limitations",
             subtitle: "Safety constraint — we'll filter contraindicated movements.",
             ctaLabel: "Generate Plan",
-            onNext: { step += 1 },
+            onNext: { coordinator.push(.planGeneration) },
             onBack: { step -= 1 }
         ) {
             VStack(alignment: .leading, spacing: 18) {
