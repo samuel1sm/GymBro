@@ -46,7 +46,11 @@ struct OnboardingView: View {
 						if isLastTab {
 							coordinator.push(.accountInformation)
 						} else {
-							selectedTab += 1
+							var transaction = Transaction()
+							transaction.disablesAnimations = true
+							withTransaction(transaction) {
+								selectedTab += 1
+							}
 						}
 					}
 
