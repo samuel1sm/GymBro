@@ -26,6 +26,26 @@ struct PhysicalView: View {
         )
     }
 
+    private var weightValue: Binding<Int> {
+        Binding(
+            get: { state.weightUnit == .lbs ? state.weightLbs : state.weightKg },
+            set: {
+                if state.weightUnit == .lbs { state.weightLbs = $0 }
+                else { state.weightKg = $0 }
+            }
+        )
+    }
+
+    private var heightValue: Binding<Int> {
+        Binding(
+            get: { state.heightUnit == .inches ? state.heightIn : state.heightCm },
+            set: {
+                if state.heightUnit == .inches { state.heightIn = $0 }
+                else { state.heightCm = $0 }
+            }
+        )
+    }
+
     var body: some View {
         ProfileFrame(
             step: 1,
@@ -89,7 +109,7 @@ struct PhysicalView: View {
 
                 numericField(
                     label: "Weight",
-                    display: state.weightDisplay,
+                    value: weightValue,
                     unit: state.weightUnit.label,
                     unitOptions: ["LBS", "KG"],
                     unitIndex: weightUnitIndex
@@ -97,7 +117,7 @@ struct PhysicalView: View {
 
                 numericField(
                     label: "Height",
-                    display: state.heightDisplay,
+                    value: heightValue,
                     unit: state.heightUnit.label,
                     unitOptions: ["IN", "CM"],
                     unitIndex: heightUnitIndex
@@ -148,7 +168,7 @@ struct PhysicalView: View {
     @ViewBuilder
     private func numericField(
         label: String,
-        display: String,
+        value: Binding<Int>,
         unit: String,
         unitOptions: [String],
         unitIndex: Binding<Int>
@@ -164,7 +184,8 @@ struct PhysicalView: View {
             }
 
             HStack {
-                Text(display)
+                TextField("", value: value, format: .number)
+                    .keyboardType(.numberPad)
                     .font(.system(size: 20, weight: .bold))
                     .foregroundStyle(.labelPrimary)
                     .frame(maxWidth: .infinity, alignment: .leading)

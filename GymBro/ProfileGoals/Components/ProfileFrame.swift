@@ -91,6 +91,7 @@ struct ProfileFrame<Content: View>: View {
                     .padding(.horizontal, 24)
                     .padding(.bottom, 24)
             }
+            .scrollDismissesKeyboard(.interactively)
 
             Rectangle()
                 .fill(Color.borderDefault)
@@ -110,6 +111,13 @@ struct ProfileFrame<Content: View>: View {
             .padding(.vertical, 16)
         }
         .background(.appBackground)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            UIApplication.shared.sendAction(
+                #selector(UIResponder.resignFirstResponder),
+                to: nil, from: nil, for: nil
+            )
+        }
         .toolbar(.hidden, for: .navigationBar)
     }
 }
