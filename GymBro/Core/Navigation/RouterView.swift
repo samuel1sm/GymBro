@@ -21,6 +21,8 @@ struct RouterView<Root: View>: View {
                         ProfileGoalsView()
                     case .planGeneration:
                         PlanGenerationView()
+                    case .plannerReview:
+                        PlannerReviewView()
                     }
                 }
         }
