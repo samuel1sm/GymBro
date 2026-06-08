@@ -150,7 +150,7 @@ struct PlannerReviewView: View {
                         .fill(Color.borderDefault)
                         .frame(height: 1)
                 }
-        )
+		)
     }
 
     // MARK: - Bindings
