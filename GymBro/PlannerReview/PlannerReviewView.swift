@@ -3,24 +3,19 @@ import SwiftUI
 struct PlannerReviewView: View {
     @Environment(\.coordinator) private var coordinator
 
-    @State private var state = PlannerReviewState()
-    @State private var activeIndex: Int = 0
-    @State private var openedExerciseID: PlannerExercise.ID? = nil
-    @State private var toastMessage: String? = nil
-    @State private var toastTask: Task<Void, Never>? = nil
-
-    private var activeSlot: PlannerTrainingSlot { state.slots[activeIndex] }
-    private var activeExercises: [PlannerExercise] { activeSlot.exercises }
+    @State private var viewModel = PlannerReviewViewModel()
 
     var body: some View {
+        @Bindable var vm = viewModel
+
         VStack(spacing: 0) {
             header
 
-            PlannerTabStrip(slots: state.slots, activeIndex: tabBinding)
+            PlannerTabStrip(slots: viewModel.state.slots, activeIndex: $vm.activeIndex)
 
             ScrollView {
                 VStack(spacing: 0) {
-                    SessionHeaderCard(slot: activeSlot)
+                    SessionHeaderCard(slot: viewModel.activeSlot)
 
                     Text("Exercises")
                         .font(.plusJakartaSans(.semiBold, size: 12))
@@ -33,14 +28,14 @@ struct PlannerReviewView: View {
                         .padding(.bottom, 10)
 
                     LazyVStack(spacing: 10) {
-                        ForEach(Array(activeExercises.enumerated()), id: \.element.id) { index, exercise in
+                        ForEach(Array(viewModel.activeExercises.enumerated()), id: \.element.id) { index, exercise in
                             PlannerExerciseCard(
                                 exercise: exercise,
-                                isOpen: openedExerciseID == exercise.id,
+                                isOpen: viewModel.openedExerciseID == exercise.id,
                                 canMoveUp: index > 0,
-                                canMoveDown: index < activeExercises.count - 1,
-                                onOpen: { openedExerciseID = exercise.id },
-                                onClose: { if openedExerciseID == exercise.id { openedExerciseID = nil } },
+                                canMoveDown: index < viewModel.activeExercises.count - 1,
+                                onOpen: { viewModel.openExercise(exercise.id) },
+                                onClose: { viewModel.closeExercise(exercise.id) },
                                 onMoveUp: { move(from: index, by: -1) },
                                 onMoveDown: { move(from: index, by: +1) },
                                 onRemove: { remove(at: index) },
@@ -65,11 +60,14 @@ struct PlannerReviewView: View {
         .background(Color.appBackground)
         .toolbar(.hidden, for: .navigationBar)
         .overlay(alignment: .bottom) {
-            if let toastMessage {
-                PlannerToast(message: toastMessage)
-                    .padding(.bottom, 150)
-                    .animation(.easeOut(duration: 0.24), value: toastMessage)
+            Group {
+                if let toastMessage = viewModel.toastMessage {
+                    PlannerToast(message: toastMessage)
+                        .padding(.bottom, 150)
+                        .transition(.opacity)
+                }
             }
+            .animation(.easeOut(duration: 0.22), value: viewModel.toastMessage)
         }
     }
 
@@ -153,55 +151,22 @@ struct PlannerReviewView: View {
 		)
     }
 
-    // MARK: - Bindings
-
-    private var tabBinding: Binding<Int> {
-        Binding(
-            get: { activeIndex },
-            set: { newValue in
-                activeIndex = newValue
-                openedExerciseID = nil
-            }
-        )
-    }
-
-    // MARK: - Mutations
+    // MARK: - Animated wrappers
 
     private func move(from index: Int, by delta: Int) {
-        let target = index + delta
-        guard state.slots.indices.contains(activeIndex) else { return }
-        let exercises = state.slots[activeIndex].exercises
-        guard exercises.indices.contains(index), exercises.indices.contains(target) else { return }
         withAnimation(.spring(response: 0.32, dampingFraction: 0.85)) {
-            state.slots[activeIndex].exercises.swapAt(index, target)
+            viewModel.move(from: index, by: delta)
         }
     }
 
     private func remove(at index: Int) {
-        guard state.slots.indices.contains(activeIndex),
-              state.slots[activeIndex].exercises.indices.contains(index) else { return }
         withAnimation(.easeInOut(duration: 0.22)) {
-            state.slots[activeIndex].exercises.remove(at: index)
+            viewModel.remove(at: index)
         }
     }
 
-    // MARK: - Toast
-
     private func fireToast(_ message: String) {
-        toastTask?.cancel()
-        withAnimation(.easeOut(duration: 0.22)) {
-            toastMessage = message
-        }
-        toastTask = Task {
-            try? await Task.sleep(nanoseconds: 1_800_000_000)
-            if !Task.isCancelled {
-                await MainActor.run {
-                    withAnimation(.easeIn(duration: 0.2)) {
-                        toastMessage = nil
-                    }
-                }
-            }
-        }
+        viewModel.fireToast(message)
     }
 }
 

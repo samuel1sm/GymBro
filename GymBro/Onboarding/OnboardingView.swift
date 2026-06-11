@@ -9,24 +9,23 @@ enum OnboardingStates: Int {
 
 struct OnboardingView: View {
 	@Environment(\.coordinator) var coordinator
-	@State private var selectedTab = 0
-	var isLastTab: Bool {
-		selectedTab == OnboardingStates.thirdView.rawValue
-	}
+	@State private var viewModel = OnboardingViewModel()
 
 	var body: some View {
+		@Bindable var vm = viewModel
+
 		GeometryReader { geo in
 			VStack {
-				TabView(selection: $selectedTab) {
+				TabView(selection: $vm.selectedTab) {
 					FirstOnboardingView()
 						.tag(OnboardingStates.firstView.rawValue)
 
-					SecondOnboardingView(selectedTab: $selectedTab)
+					SecondOnboardingView(selectedTab: $vm.selectedTab)
 						.frame(maxWidth: .infinity, alignment: .leading)
 						.padding(.horizontal, 16)
 						.tag(OnboardingStates.secondView.rawValue)
 
-				ThirdOnboardingView(selectedTab: $selectedTab)
+				ThirdOnboardingView(selectedTab: $vm.selectedTab)
 					.frame(maxWidth: .infinity, alignment: .leading)
 					.padding(.horizontal, 16)
 					.tag(OnboardingStates.thirdView.rawValue)
@@ -37,24 +36,24 @@ struct OnboardingView: View {
 
 				VStack(spacing: 10) {
 					GBButton(
-						label: isLastTab ? "Get Started" : "Next",
+						label: viewModel.isLastTab ? "Get Started" : "Next",
 						variant: .primary,
 						size: .lg,
-						iconRight: isLastTab ? nil : "chevron.right",
+						iconRight: viewModel.isLastTab ? nil : "chevron.right",
 						isFullWidth: true
 					) {
-						if isLastTab {
+						if viewModel.isLastTab {
 							coordinator.push(.profileGoals)
 						} else {
 							var transaction = Transaction()
 							transaction.disablesAnimations = true
 							withTransaction(transaction) {
-								selectedTab += 1
+								viewModel.advance()
 							}
 						}
 					}
 
-					if isLastTab {
+					if viewModel.isLastTab {
 						Button("I already have an account") {
 							coordinator.push(.accountInformation)
 						}
