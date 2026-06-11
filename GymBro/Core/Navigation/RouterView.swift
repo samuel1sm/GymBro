@@ -23,6 +23,8 @@ struct RouterView<Root: View>: View {
                         PlanGenerationView()
                     case .plannerReview:
                         PlannerReviewView()
+                    case .activeSession:
+                        ActiveSessionView()
                     }
                 }
         }

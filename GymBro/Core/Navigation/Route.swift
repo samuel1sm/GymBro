@@ -6,4 +6,5 @@ enum Route: Hashable {
     case profileGoals
     case planGeneration
     case plannerReview
+    case activeSession
 }

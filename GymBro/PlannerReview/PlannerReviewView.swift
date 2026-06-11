@@ -127,7 +127,7 @@ struct PlannerReviewView: View {
                 size: .lg,
                 isFullWidth: true
             ) {
-                fireToast("Plan saved")
+                coordinator.push(.activeSession)
             }
 
             GBButton(
