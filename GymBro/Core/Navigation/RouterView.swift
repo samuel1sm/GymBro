@@ -25,6 +25,8 @@ struct RouterView<Root: View>: View {
                         PlannerReviewView()
                     case .activeSession:
                         ActiveSessionView()
+                    case .profileSettings:
+                        ProfileSettingsView()
                     }
                 }
         }
