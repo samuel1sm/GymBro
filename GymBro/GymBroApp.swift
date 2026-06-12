@@ -11,7 +11,7 @@ import SwiftUI
 struct GymBroApp: App {
 
     init() {
-        FontRegistrar.registerAll()
+        FontRegister.registerAll()
     }
 
     var body: some Scene {

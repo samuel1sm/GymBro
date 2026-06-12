@@ -5,7 +5,7 @@ import CoreText
 // MARK: - Font Registration
 
 /// Call `FontRegistrar.registerAll()` once at app launch (already wired in GymBroApp).
-enum FontRegistrar {
+enum FontRegister {
 
     private static var registered = false
 
