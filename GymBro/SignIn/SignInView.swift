@@ -160,7 +160,10 @@ struct SignInView: View {
     private var forgotPassword: some View {
         HStack {
             Spacer()
-            Button("Forgot password?") {}
+            Button("Forgot password?") {
+                focusedField = nil
+                coordinator.push(.forgotPassword)
+            }
                 .font(.plusJakartaSans(.medium, size: 13))
                 .foregroundStyle(.labelSecondary)
                 .buttonStyle(.plain)

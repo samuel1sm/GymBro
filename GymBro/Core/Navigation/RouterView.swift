@@ -19,6 +19,8 @@ struct RouterView<Root: View>: View {
                         SignInView()
                     case .profileGoals:
                         ProfileGoalsView()
+                    case .forgotPassword:
+                        ForgotPasswordView()
                     case .planGeneration:
                         PlanGenerationView()
                     case .plannerReview:
