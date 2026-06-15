@@ -19,8 +19,6 @@ struct GenStepRow: View {
 
                 if stepState == .active {
 					PulsingDots()
-				} else {
-					PulsingDots().hidden()
 				}
             }
         }

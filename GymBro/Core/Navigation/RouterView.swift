@@ -10,13 +10,14 @@ struct RouterView<Root: View>: View {
 
     var body: some View {
         NavigationStack(path: $coordinator.path) {
-            root
-                .navigationDestination(for: Route.self) { route in
+            root.navigationDestination(for: Route.self) { route in
                     switch route {
                     case .firstOnboarding:
                         OnboardingView()
                     case .accountInformation:
                         SignInView()
+                    case .signUp:
+                        SignUpView()
                     case .profileGoals:
                         ProfileGoalsView()
                     case .forgotPassword:

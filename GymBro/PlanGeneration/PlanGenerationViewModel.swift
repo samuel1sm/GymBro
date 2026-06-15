@@ -4,8 +4,9 @@ import Observation
 /// View model for the Plan Generation screen.
 ///
 /// Owns the step checklist, the rotating status copy and the simulated
-/// progress. The view drives the timing loops and wraps the ticks in
-/// animations; this object is the single source of truth they mutate.
+/// progress, along with the timing loops that drive them. The view simply
+/// kicks off the loops; all the timing and animation lives here.
+@MainActor
 @Observable
 final class PlanGenerationViewModel {
 
@@ -44,14 +45,55 @@ final class PlanGenerationViewModel {
         return .pending
     }
 
-    // MARK: - Actions
+    // MARK: - Lifecycle
 
-    func tickProgress() {
-        progress += 0.018
-        if progress >= 1.0 { progress = 0 }
+    /// Starts the looping glow animation on the progress ring.
+    func startGlow() {
+        withAnimation(.easeInOut(duration: 2.4).repeatForever(autoreverses: true)) {
+            glowing = true
+        }
     }
 
-    func advanceRotatingText() {
+    /// Runs the simulated generation to completion, then routes to the Save
+    /// Plan gate. Cancellation-safe — navigating away mid-generation won't push.
+    func generatePlan() async {
+        await runProgressLoop()
+        guard !Task.isCancelled else { return }
+        // Hold the full ring for a beat, then present the Save Plan gate.
+        try? await Task.sleep(for: .milliseconds(400))
+        guard !Task.isCancelled else { return }
+    }
+
+    /// Advances the simulated progress ring until it reaches 100% (or the task
+    /// is cancelled).
+    private func runProgressLoop() async {
+        while !Task.isCancelled && progress < 1.0 {
+            try? await Task.sleep(nanoseconds: 120_000_000)
+            guard !Task.isCancelled else { break }
+            withAnimation(.linear(duration: 0.12)) {
+                tickProgress()
+            }
+        }
+    }
+
+    /// Cycles the rotating status copy until cancelled.
+    func runRotatingTextLoop() async {
+        while !Task.isCancelled {
+            try? await Task.sleep(nanoseconds: 2_000_000_000)
+            guard !Task.isCancelled else { break }
+            withAnimation(.easeOut(duration: 0.42)) {
+                advanceRotatingText()
+            }
+        }
+    }
+
+    // MARK: - Actions
+
+    private func tickProgress() {
+        progress = min(1.0, progress + 0.018)
+    }
+
+    private func advanceRotatingText() {
         rotatingIndex = (rotatingIndex + 1) % rotatingTexts.count
     }
 }

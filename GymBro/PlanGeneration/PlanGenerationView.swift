@@ -3,6 +3,7 @@ import SwiftUI
 // MARK: - View
 
 struct PlanGenerationView: View {
+    @Environment(\.coordinator) private var coordinator
     @State private var viewModel = PlanGenerationViewModel()
 
     var body: some View {
@@ -56,6 +57,7 @@ struct PlanGenerationView: View {
                     )
                 }
             }
+			.frame(width: 280, alignment: .leading)
             .padding(.horizontal, 16)
             .padding(.vertical, 4)
             .background(Color.surfacePrimary)
@@ -66,29 +68,12 @@ struct PlanGenerationView: View {
         .padding(.horizontal, 24)
         .background(.appBackground)
         .toolbar(.hidden, for: .navigationBar)
-        .onAppear {
-            withAnimation(.easeInOut(duration: 2.4).repeatForever(autoreverses: true)) {
-                viewModel.glowing = true
-            }
-        }
-        .task {
-            while !Task.isCancelled {
-                try? await Task.sleep(nanoseconds: 120_000_000)
-                guard !Task.isCancelled else { break }
-                withAnimation(.linear(duration: 0.12)) {
-                    viewModel.tickProgress()
-                }
-            }
-        }
-        .task {
-            while !Task.isCancelled {
-                try? await Task.sleep(nanoseconds: 2_000_000_000)
-                guard !Task.isCancelled else { break }
-                withAnimation(.easeOut(duration: 0.42)) {
-                    viewModel.advanceRotatingText()
-                }
-            }
-        }
+        .onAppear { viewModel.startGlow() }
+		.task {
+			await viewModel.generatePlan()
+			coordinator.push(.signUp)
+		}
+        .task { await viewModel.runRotatingTextLoop() }
     }
 }
 
