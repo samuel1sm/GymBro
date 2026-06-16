@@ -74,8 +74,8 @@ struct WeekStrip: View {
     private var weekContent: some View {
         HStack(alignment: .top, spacing: 4) {
             ForEach(week) { day in
-                VStack(spacing: 8) {
-                    WeekDayDot(status: day.status)
+                VStack(spacing: 6) {
+                    WeekDayDot(status: day.status, dayNumber: day.dayNumber)
                     Text(day.letter)
                         .font(.plusJakartaSans(.semiBold, size: 11))
                         .kerning(0.4)
@@ -134,16 +134,20 @@ struct WeekStrip: View {
 
 // MARK: - Day dot (week)
 
-/// A single 36pt status dot in the weekly strip.
+/// A single 36pt status dot in the weekly strip, holding the day-of-month number.
 struct WeekDayDot: View {
     var status: WeekDayStatus
+    var dayNumber: Int
 
     private let size: CGFloat = 36
 
     var body: some View {
         ZStack {
             shape
-            symbol
+            Text("\(dayNumber)")
+                .font(.plusJakartaSans(.semiBold, size: 13))
+                .monospacedDigit()
+                .foregroundStyle(numberColor)
         }
         .frame(width: size, height: size)
     }
@@ -156,32 +160,22 @@ struct WeekDayDot: View {
         case .today:
             Circle().stroke(Color.volt, lineWidth: 2)
         case .missed:
-            Circle().stroke(Color.warning, lineWidth: 2)
+            Circle().stroke(Color.danger, lineWidth: 2)
         case .rest:
-            Circle().fill(Color.surfaceSecondary)
+            Circle().fill(Color.restDay)
         case .future:
             Circle().fill(Color.surfaceSecondary)
                 .overlay(Circle().stroke(Color.borderDefault, lineWidth: 2))
         }
     }
 
-    @ViewBuilder
-    private var symbol: some View {
+    private var numberColor: Color {
         switch status {
-        case .done:
-            Image(systemName: "checkmark")
-                .font(.system(size: 15, weight: .heavy))
-                .foregroundStyle(.labelOnAccent)
-        case .missed:
-            Image(systemName: "xmark")
-                .font(.system(size: 13, weight: .bold))
-                .foregroundStyle(.warning)
-        case .rest:
-            Capsule()
-                .fill(Color.labelTertiary)
-                .frame(width: 8, height: 2)
-        default:
-            EmptyView()
+        case .done:   return .labelOnAccent
+        case .today:  return .volt
+        case .missed: return .danger
+        case .rest:   return .labelOnAccent
+        case .future: return .labelTertiary
         }
     }
 }
@@ -217,9 +211,9 @@ struct MonthDayCell: View {
         case .today:
             Circle().stroke(Color.volt, lineWidth: 2)
         case .missed:
-            Circle().stroke(Color.warning, lineWidth: 2)
+            Circle().stroke(Color.danger, lineWidth: 2)
         case .rest:
-            Circle().fill(Color.surfaceSecondary)
+            Circle().fill(Color.restDay)
         case .future:
             EmptyView()
         }
@@ -229,8 +223,8 @@ struct MonthDayCell: View {
         switch status {
         case .done:   return .labelOnAccent
         case .today:  return .volt
-        case .missed: return .warning
-        case .rest:   return .labelTertiary
+        case .missed: return .danger
+        case .rest:   return .labelOnAccent
         case .future: return .labelTertiary
         }
     }

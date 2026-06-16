@@ -19,6 +19,8 @@ struct WeekDay: Identifiable {
     let id = UUID()
     /// Single-letter day initial (M, T, W, …).
     let letter: String
+    /// Day-of-month number (1…31).
+    let dayNumber: Int
     let status: WeekDayStatus
     /// Short training label (Push / Pull / Legs / Rest).
     let focus: String
@@ -60,13 +62,13 @@ struct HomeState {
     // MARK: - This week
 
     var week: [WeekDay] = [
-        WeekDay(letter: "M", status: .done,   focus: "Push"),
-        WeekDay(letter: "T", status: .done,   focus: "Pull"),
-        WeekDay(letter: "W", status: .missed, focus: "Legs"),
-        WeekDay(letter: "T", status: .done,   focus: "Push"),
-        WeekDay(letter: "F", status: .today,  focus: "Pull"),
-        WeekDay(letter: "S", status: .rest,   focus: "Rest"),
-        WeekDay(letter: "S", status: .rest,   focus: "Rest"),
+        WeekDay(letter: "M", dayNumber: 25, status: .done,   focus: "Push"),
+        WeekDay(letter: "T", dayNumber: 26, status: .done,   focus: "Pull"),
+        WeekDay(letter: "W", dayNumber: 27, status: .missed, focus: "Legs"),
+        WeekDay(letter: "T", dayNumber: 28, status: .done,   focus: "Push"),
+        WeekDay(letter: "F", dayNumber: 29, status: .today,  focus: "Pull"),
+        WeekDay(letter: "S", dayNumber: 30, status: .rest,   focus: "Rest"),
+        WeekDay(letter: "S", dayNumber: 31, status: .rest,   focus: "Rest"),
     ]
 
     // MARK: - This month
