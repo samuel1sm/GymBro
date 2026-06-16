@@ -26,8 +26,12 @@ struct HomeView: View {
 
                 WeekStrip(
                     week: viewModel.state.week,
+                    month: viewModel.state.month,
+                    monthLabel: viewModel.state.monthLabel,
                     doneCount: viewModel.state.doneCount,
-                    plannedCount: viewModel.state.plannedCount
+                    plannedCount: viewModel.state.plannedCount,
+                    monthDoneCount: viewModel.state.monthDoneCount,
+                    monthPlannedCount: viewModel.state.monthPlannedCount
                 )
             }
             .padding(.bottom, 16)
