@@ -10,10 +10,9 @@ struct ProfileSettingsView: View {
     var body: some View {
         @Bindable var vm = viewModel
 
-        VStack(spacing: 0) {
-            ScrollView {
-                VStack(spacing: 0) {
-                    GBNavBar(title: "Profile")
+        ScrollView {
+            VStack(spacing: 0) {
+                GBNavBar(title: "Profile")
 
                     ProfileSummaryCard(state: viewModel.state)
 
@@ -50,9 +49,6 @@ struct ProfileSettingsView: View {
                     redoSetup
                 }
             }
-
-            GBTabBar(activeTab: .profile)
-        }
         .background(Color.appBackground)
         .toolbar(.hidden, for: .navigationBar)
     }

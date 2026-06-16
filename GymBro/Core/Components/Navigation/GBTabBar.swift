@@ -3,13 +3,12 @@ import SwiftUI
 // MARK: - Tab definition
 
 enum GBTab: String, CaseIterable, Hashable {
-    case home, workouts, log, stats, profile
+    case home, workouts, stats, profile
 
     var icon: String {
         switch self {
         case .home:     return "house"
         case .workouts: return "dumbbell"
-        case .log:      return "plus"
         case .stats:    return "chart.bar"
         case .profile:  return "person"
         }
@@ -19,7 +18,6 @@ enum GBTab: String, CaseIterable, Hashable {
         switch self {
         case .home:     return "Home"
         case .workouts: return "Workouts"
-        case .log:      return ""
         case .stats:    return "Stats"
         case .profile:  return "Profile"
         }
@@ -37,31 +35,22 @@ struct GBTabBar: View {
     var body: some View {
         HStack(alignment: .bottom, spacing: 0) {
             ForEach(tabs, id: \.self) { tab in
-                if tab == .log {
-                    Spacer()
-                    Button { onTap?(tab) } label: {
-                        GBIconButtonVolt(icon: tab.icon, size: 48)
-                            .padding(.bottom, 4)
-                    }
-                    Spacer()
-                } else {
-                    Spacer()
-                    Button { onTap?(tab) } label: {
-                        VStack(spacing: 4) {
-                            Image(systemName: tab.icon)
-                                .font(.system(size: 24))
+                Spacer()
+                Button { onTap?(tab) } label: {
+                    VStack(spacing: 4) {
+                        Image(systemName: tab.icon)
+                            .font(.system(size: 24))
+                            .foregroundStyle(activeTab == tab ? Color.volt : Color.labelTertiary)
+                        if !tab.label.isEmpty {
+                            Text(tab.label)
+                                .font(.micro())
+                                .kerning(0.1)
+                                .fontWeight(.semibold)
                                 .foregroundStyle(activeTab == tab ? Color.volt : Color.labelTertiary)
-                            if !tab.label.isEmpty {
-                                Text(tab.label)
-                                    .font(.micro())
-                                    .kerning(0.1)
-                                    .fontWeight(.semibold)
-                                    .foregroundStyle(activeTab == tab ? Color.volt : Color.labelTertiary)
-                            }
                         }
                     }
-                    Spacer()
                 }
+                Spacer()
             }
         }
         .padding(.horizontal, 8)
