@@ -10,11 +10,11 @@ struct MainTabView: View {
                     .tag(GBTab.home)
                     .toolbar(.hidden, for: .tabBar)
 
-                ComingSoonView(title: "Workouts", icon: "dumbbell")
+                WorkoutsView()
                     .tag(GBTab.workouts)
                     .toolbar(.hidden, for: .tabBar)
 
-                ComingSoonView(title: "Statistics", icon: "chart.bar")
+                StatisticsView()
                     .tag(GBTab.stats)
                     .toolbar(.hidden, for: .tabBar)
 
