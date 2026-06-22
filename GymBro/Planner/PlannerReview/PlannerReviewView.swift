@@ -4,6 +4,7 @@ struct PlannerReviewView: View {
     @Environment(\.coordinator) private var coordinator
 
     @State private var viewModel = PlannerReviewViewModel()
+    @State private var exerciseToDelete: PlannerExercise?
 
     var body: some View {
         @Bindable var vm = viewModel
@@ -13,52 +14,57 @@ struct PlannerReviewView: View {
 
             PlannerTabStrip(slots: viewModel.state.slots, activeIndex: $vm.activeIndex)
 
-            ScrollView {
-                VStack(spacing: 0) {
-                    SessionHeaderCard(slot: viewModel.activeSlot)
+            List {
+                SessionHeaderCard(slot: viewModel.activeSlot)
+                    .plannerRow(insets: EdgeInsets(top: 16, leading: 20, bottom: 0, trailing: 20))
 
-                    Text("Exercises")
-                        .font(.plusJakartaSans(.semiBold, size: 12))
-                        .tracking(1)
-                        .foregroundStyle(.labelTertiary)
-                        .textCase(.uppercase)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 2)
-                        .padding(.top, 20)
-                        .padding(.bottom, 10)
+                Text("Exercises")
+                    .font(.plusJakartaSans(.semiBold, size: 12))
+                    .tracking(1)
+                    .foregroundStyle(.labelTertiary)
+                    .textCase(.uppercase)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .plannerRow(insets: EdgeInsets(top: 20, leading: 22, bottom: 10, trailing: 22))
 
-                    LazyVStack(spacing: 10) {
-                        ForEach(Array(viewModel.activeExercises.enumerated()), id: \.element.id) { index, exercise in
-                            PlannerExerciseCard(
-                                exercise: exercise,
-                                isOpen: viewModel.openedExerciseID == exercise.id,
-                                canMoveUp: index > 0,
-                                canMoveDown: index < viewModel.activeExercises.count - 1,
-                                onOpen: { viewModel.openExercise(exercise.id) },
-                                onClose: { viewModel.closeExercise(exercise.id) },
-                                onMoveUp: { move(from: index, by: -1) },
-                                onMoveDown: { move(from: index, by: +1) },
-                                onRemove: { remove(at: index) },
-                                onSwap: { fireToast("Swap exercise") }
-                            )
-                        }
-
-                        AddExerciseCard {
-                            fireToast("Exercise Library")
-                        }
-                        .padding(.top, 2)
+                ForEach(viewModel.activeExercises) { exercise in
+                    PlannerExerciseCard(
+                        exercise: exercise,
+                        onSwap: { fireToast("Swap exercise") },
+                        onDelete: { exerciseToDelete = exercise }
+                    )
+                    .plannerRow(insets: EdgeInsets(top: 0, leading: 20, bottom: 10, trailing: 20), background: .appBackground)
+                }
+                .onMove { source, destination in
+                    withAnimation(.spring(response: 0.32, dampingFraction: 0.85)) {
+                        viewModel.move(fromOffsets: source, toOffset: destination)
                     }
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 16)
-                .padding(.bottom, 8)
+
+                AddExerciseCard {
+                    fireToast("Exercise Library")
+                }
+                .plannerRow(insets: EdgeInsets(top: 2, leading: 20, bottom: 8, trailing: 20))
             }
+            .listStyle(.plain)
+            .scrollContentBackground(.hidden)
             .scrollDismissesKeyboard(.interactively)
 
             bottomActions
         }
         .background(Color.appBackground)
         .toolbar(.hidden, for: .navigationBar)
+        .sheet(item: $exerciseToDelete) { exercise in
+            PlannerRemoveExerciseSheet(
+                exercise: exercise,
+                onConfirm: {
+                    withAnimation(.easeInOut(duration: 0.22)) {
+                        viewModel.remove(exercise)
+                    }
+                    exerciseToDelete = nil
+                },
+                onCancel: { exerciseToDelete = nil }
+            )
+        }
         .overlay(alignment: .bottom) {
             Group {
                 if let toastMessage = viewModel.toastMessage {
@@ -151,22 +157,26 @@ struct PlannerReviewView: View {
 		)
     }
 
-    // MARK: - Animated wrappers
-
-    private func move(from index: Int, by delta: Int) {
-        withAnimation(.spring(response: 0.32, dampingFraction: 0.85)) {
-            viewModel.move(from: index, by: delta)
-        }
-    }
-
-    private func remove(at index: Int) {
-        withAnimation(.easeInOut(duration: 0.22)) {
-            viewModel.remove(at: index)
-        }
-    }
+    // MARK: - Helpers
 
     private func fireToast(_ message: String) {
         viewModel.fireToast(message)
+    }
+}
+
+// MARK: - List row styling
+
+private extension View {
+    /// Applies the planner's separator-free row chrome with custom insets.
+    ///
+    /// `background` defaults to `clear`, but draggable rows pass `appBackground`
+    /// so the system's drag-lift snapshot is opaque (otherwise a clear row falls
+    /// back to a white platter behind the lifted card).
+    func plannerRow(insets: EdgeInsets, background: Color = .clear) -> some View {
+        self
+            .listRowInsets(insets)
+            .listRowSeparator(.hidden)
+            .listRowBackground(background)
     }
 }
 

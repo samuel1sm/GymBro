@@ -1,5 +1,6 @@
 import Foundation
 import Observation
+import SwiftUI
 
 /// View model for the Planner Review screen.
 ///
@@ -12,12 +13,9 @@ final class PlannerReviewViewModel {
     // MARK: - State
 
     var state = PlannerReviewState()
-    var openedExerciseID: PlannerExercise.ID? = nil
     var toastMessage: String? = nil
 
-    var activeIndex: Int = 0 {
-        didSet { openedExerciseID = nil }
-    }
+    var activeIndex: Int = 0
 
     // MARK: - Private
 
@@ -30,26 +28,14 @@ final class PlannerReviewViewModel {
 
     // MARK: - Actions
 
-    func openExercise(_ id: PlannerExercise.ID) {
-        openedExerciseID = id
-    }
-
-    func closeExercise(_ id: PlannerExercise.ID) {
-        if openedExerciseID == id { openedExerciseID = nil }
-    }
-
-    func move(from index: Int, by delta: Int) {
-        let target = index + delta
+    func move(fromOffsets source: IndexSet, toOffset destination: Int) {
         guard state.slots.indices.contains(activeIndex) else { return }
-        let exercises = state.slots[activeIndex].exercises
-        guard exercises.indices.contains(index), exercises.indices.contains(target) else { return }
-        state.slots[activeIndex].exercises.swapAt(index, target)
+        state.slots[activeIndex].exercises.move(fromOffsets: source, toOffset: destination)
     }
 
-    func remove(at index: Int) {
-        guard state.slots.indices.contains(activeIndex),
-              state.slots[activeIndex].exercises.indices.contains(index) else { return }
-        state.slots[activeIndex].exercises.remove(at: index)
+    func remove(_ exercise: PlannerExercise) {
+        guard state.slots.indices.contains(activeIndex) else { return }
+        state.slots[activeIndex].exercises.removeAll { $0.id == exercise.id }
     }
 
     // MARK: - Toast
