@@ -8,6 +8,7 @@ enum Route: Hashable {
     case forgotPassword
     case planGeneration
     case plannerReview
+    case editWorkout
     case activeSession
     case main
 }

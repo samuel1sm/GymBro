@@ -40,7 +40,7 @@ struct WorkoutsView: View {
                 },
                 onEdit: {
                     viewModel.dismissSession()
-                    coordinator.push(.plannerReview)
+                    coordinator.push(.editWorkout)
                 }
             )
             .presentationDetents([.height(280)])

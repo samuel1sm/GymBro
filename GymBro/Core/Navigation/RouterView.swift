@@ -26,6 +26,8 @@ struct RouterView<Root: View>: View {
                         PlanGenerationView()
                     case .plannerReview:
                         PlannerReviewView()
+                    case .editWorkout:
+                        EditWorkoutView()
                     case .activeSession:
                         ActiveSessionView()
                     case .main:
