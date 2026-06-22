@@ -15,7 +15,6 @@ struct SecondOnboardingView: View {
 						.foregroundStyle(.labelSecondary)
 						.padding(8)
 				}
-				.padding(.leading, 12)
 
 				Spacer()
 

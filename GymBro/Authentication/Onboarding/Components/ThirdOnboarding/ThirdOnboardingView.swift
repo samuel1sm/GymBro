@@ -15,8 +15,6 @@ struct ThirdOnboardingView: View {
 						.foregroundStyle(.labelSecondary)
 						.padding(8)
 				}
-				.padding(.leading, 12)
-
 				Spacer()
 			}
 			.frame(height: 44)

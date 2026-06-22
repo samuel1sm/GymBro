@@ -12,20 +12,18 @@ struct OnboardingView: View {
 	@State private var viewModel = OnboardingViewModel()
 
 	var body: some View {
-		@Bindable var vm = viewModel
-
 		GeometryReader { geo in
 			VStack {
-				TabView(selection: $vm.selectedTab) {
-					FirstOnboardingView()
+				TabView(selection: $viewModel.selectedTab) {
+					FirstOnboardingView(skipButtonAction: viewModel.skipToLastTab)
 						.tag(OnboardingStates.firstView.rawValue)
 
-					SecondOnboardingView(selectedTab: $vm.selectedTab)
+					SecondOnboardingView(selectedTab: $viewModel.selectedTab)
 						.frame(maxWidth: .infinity, alignment: .leading)
 						.padding(.horizontal, 16)
 						.tag(OnboardingStates.secondView.rawValue)
 
-				ThirdOnboardingView(selectedTab: $vm.selectedTab)
+				ThirdOnboardingView(selectedTab: $viewModel.selectedTab)
 					.frame(maxWidth: .infinity, alignment: .leading)
 					.padding(.horizontal, 16)
 					.tag(OnboardingStates.thirdView.rawValue)

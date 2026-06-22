@@ -1,10 +1,6 @@
 import Foundation
 import Observation
 
-/// View model for the Onboarding carousel.
-///
-/// Owns the selected tab and the paging logic. The view is a thin
-/// projection of this object via `@Bindable`.
 @Observable
 final class OnboardingViewModel {
 
@@ -23,4 +19,8 @@ final class OnboardingViewModel {
     func advance() {
         selectedTab += 1
     }
+
+	func skipToLastTab() {
+		selectedTab = OnboardingStates.thirdView.rawValue
+	}
 }
