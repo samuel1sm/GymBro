@@ -3,6 +3,7 @@ import Foundation
 enum BiologicalSex: String, CaseIterable {
     case male = "Male"
     case female = "Female"
+    case preferNotToSay = "Prefer not to say"
 }
 
 enum WeightUnit: String, CaseIterable {
@@ -82,7 +83,7 @@ struct ProfileGoalsState {
     var heightIn: Int = 70
     var heightCm: Int = 178
     var heightUnit: HeightUnit = .inches
-    var sex: BiologicalSex? = .male
+    var sex: BiologicalSex = .male
 
     var fitnessLevel: FitnessLevel = .intermediate
 

@@ -7,8 +7,20 @@ struct PhysicalView: View {
 
     private var sexIndex: Binding<Int> {
         Binding(
-            get: { state.sex == .male ? 0 : 1 },
-            set: { state.sex = $0 == 0 ? .male : .female }
+            get: {
+                switch state.sex {
+                case .male: return 0
+                case .female: return 1
+                case .preferNotToSay: return 2
+                }
+            },
+            set: {
+                switch $0 {
+                case 0: state.sex = .male
+                case 1: state.sex = .female
+                default: state.sex = .preferNotToSay
+                }
+            }
         )
     }
 
@@ -55,56 +67,53 @@ struct PhysicalView: View {
             onBack: { coordinator.pop() }
         ) {
             VStack(spacing: 16) {
-                HStack(alignment: .top, spacing: 12) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Age")
-                            .font(.plusJakartaSans(.medium, size: 14))
-                            .foregroundStyle(.labelSecondary)
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Age")
+                        .font(.plusJakartaSans(.medium, size: 14))
+                        .foregroundStyle(.labelSecondary)
 
-                        HStack(spacing: 0) {
-                            Button {
-                                if state.age > 13 { state.age -= 1 }
-                            } label: {
-                                Image(systemName: "minus")
-                                    .font(.system(size: 14, weight: .semibold))
-                                    .foregroundStyle(.labelSecondary)
-                                    .frame(width: 44, height: 52)
-                            }
-                            .buttonStyle(.plain)
-
-                            Rectangle().fill(Color.borderDefault).frame(width: 1, height: 24)
-
-                            Text("\(state.age)")
-                                .font(.system(size: 20, weight: .bold))
-                                .foregroundStyle(.labelPrimary)
-                                .frame(maxWidth: .infinity)
-
-                            Rectangle().fill(Color.borderDefault).frame(width: 1, height: 24)
-
-                            Button {
-                                if state.age < 100 { state.age += 1 }
-                            } label: {
-                                Image(systemName: "plus")
-                                    .font(.system(size: 14, weight: .semibold))
-                                    .foregroundStyle(.volt)
-                                    .frame(width: 44, height: 52)
-                            }
-                            .buttonStyle(.plain)
+                    HStack(spacing: 0) {
+                        Button {
+                            if state.age > 13 { state.age -= 1 }
+                        } label: {
+                            Image(systemName: "minus")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundStyle(.labelSecondary)
+                                .frame(width: 44, height: 52)
                         }
-                        .background(Color.surfaceSecondary)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.borderDefault, lineWidth: 1))
-                    }
+                        .buttonStyle(.plain)
 
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Biological sex")
-                            .font(.plusJakartaSans(.medium, size: 14))
-                            .foregroundStyle(.labelSecondary)
+                        Rectangle().fill(Color.borderDefault).frame(width: 1, height: 24)
 
-                        SegmentedPicker(options: ["Male", "Female"], selectedIndex: sexIndex)
-                            .frame(height: 52)
-                            .opacity(state.sex == nil ? 0.4 : 1)
+                        Text("\(state.age)")
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundStyle(.labelPrimary)
+                            .frame(maxWidth: .infinity)
+
+                        Rectangle().fill(Color.borderDefault).frame(width: 1, height: 24)
+
+                        Button {
+                            if state.age < 100 { state.age += 1 }
+                        } label: {
+                            Image(systemName: "plus")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundStyle(.volt)
+                                .frame(width: 44, height: 52)
+                        }
+                        .buttonStyle(.plain)
                     }
+                    .background(Color.surfaceSecondary)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.borderDefault, lineWidth: 1))
+                }
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Biological sex")
+                        .font(.plusJakartaSans(.medium, size: 14))
+                        .foregroundStyle(.labelSecondary)
+
+                    SegmentedPicker(options: ["Male", "Female", "Prefer not to say"], selectedIndex: sexIndex)
+                        .frame(height: 52)
                 }
 
                 numericField(
@@ -122,28 +131,6 @@ struct PhysicalView: View {
                     unitOptions: ["IN", "CM"],
                     unitIndex: heightUnitIndex
                 )
-
-                Button {
-                    state.sex = (state.sex == nil) ? .male : nil
-                } label: {
-                    HStack(spacing: 6) {
-                        Image(systemName: "person")
-                            .font(.system(size: 14))
-                        Text("Prefer not to say")
-                            .font(.plusJakartaSans(.medium, size: 13))
-                    }
-                    .foregroundStyle(state.sex == nil ? Color.volt : Color.labelSecondary)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 44)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .strokeBorder(
-                                state.sex == nil ? Color.volt : Color.borderDefault,
-                                style: StrokeStyle(lineWidth: 1, dash: [6])
-                            )
-                    )
-                }
-                .buttonStyle(.plain)
 
                 HStack(alignment: .top, spacing: 10) {
                     Circle()
