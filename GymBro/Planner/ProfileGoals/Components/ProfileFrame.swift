@@ -121,3 +121,36 @@ struct ProfileFrame<Content: View>: View {
         .toolbar(.hidden, for: .navigationBar)
     }
 }
+
+#Preview {
+    ProfileFrame(
+        step: 2,
+        totalSteps: 5,
+        title: "What's your fitness goal?",
+        subtitle: "Help us personalize your experience by selecting your primary fitness objective.",
+        ctaLabel: "Continue",
+        ctaDisabled: false,
+        onNext: {
+            print("Next tapped")
+        },
+        onBack: {
+            print("Back tapped")
+        }
+    ) {
+        VStack(spacing: 16) {
+            ForEach(0..<3) { index in
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Option \(index + 1)")
+                        .font(.system(size: 16, weight: .semibold))
+                    Text("This is a sample description for option \(index + 1)")
+                        .font(.system(size: 14))
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
+                .background(Color.gray.opacity(0.1))
+                .cornerRadius(12)
+            }
+        }
+    }
+}
