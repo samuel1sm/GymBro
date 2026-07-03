@@ -65,7 +65,7 @@ struct PlannerRemoveExerciseSheet: View {
     Color.appBackground
         .sheet(isPresented: .constant(true)) {
             PlannerRemoveExerciseSheet(
-                exercise: .init(name: "Barbell Bench Press", muscles: "Chest · Front Delts", sets: 4, reps: 8, restSeconds: 120),
+                exercise: PlannerExercise(source: AIPlan.WorkoutPlan.reviewSeed.sessions[0].exercises[0]),
                 onConfirm: {},
                 onCancel: {}
             )

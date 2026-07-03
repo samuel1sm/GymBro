@@ -24,13 +24,14 @@ final class PendingPlanStore {
         if let data = defaults.data(forKey: Self.defaultsKey),
            let pending = try? JSONDecoder().decode(Pending.self, from: data) {
             request = pending.request
-            plan = pending.plan
+            plan = pending.plan.fillingSuggestedDays(from: pending.request)
         }
     }
 
     var hasPendingPlan: Bool { request != nil && plan != nil }
 
     func stash(request: AIPlan.PlanRequest, plan: AIPlan.WorkoutPlan) {
+        let plan = plan.fillingSuggestedDays(from: request)
         self.request = request
         self.plan = plan
         if let data = try? JSONEncoder().encode(Pending(request: request, plan: plan)) {
@@ -51,11 +52,11 @@ final class PendingPlanStore {
         try store.saveUser(request)
     }
 
-    /// Persists the stashed plan for the saved user and clears the stash.
-    /// Falls back to creating the user from the stashed request if sign-up
-    /// didn't save one (e.g. the user signed in instead).
-    func persistPlan(to store: UserStore) throws {
-        guard let plan else { return }
+    /// Persists the given plan — the stashed plan with any review edits
+    /// applied — for the saved user and clears the stash. Falls back to
+    /// creating the user from the stashed request if sign-up didn't save one
+    /// (e.g. the user signed in instead).
+    func persistPlan(_ plan: AIPlan.WorkoutPlan, to store: UserStore) throws {
         let user: StoredUser
         if let existing = try store.loadUser() {
             user = existing

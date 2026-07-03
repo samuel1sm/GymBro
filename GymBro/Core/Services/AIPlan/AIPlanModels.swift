@@ -25,12 +25,12 @@ extension AIPlan {
         }
     }
 
-    struct MuscleGroups: Codable, Sendable, Equatable {
+    struct MuscleGroups: Codable, Sendable, Hashable {
         var primary: [MuscleGroup]
         var secondary: [MuscleGroup]
     }
 
-    struct AlternativeExercise: Codable, Sendable, Equatable {
+    struct AlternativeExercise: Codable, Sendable, Hashable {
         var name: String
         var equipment: Equipment
         var muscles: MuscleGroups
@@ -38,7 +38,7 @@ extension AIPlan {
         var videoUrl: String?
     }
 
-    struct Exercise: Codable, Sendable, Equatable {
+    struct Exercise: Codable, Sendable, Hashable {
         var name: String
         var equipment: Equipment
         var muscles: MuscleGroups
@@ -53,7 +53,7 @@ extension AIPlan {
     }
 
     /// Self-contained unit — this is what the watch will receive later.
-    struct WorkoutSession: Codable, Sendable, Equatable {
+    struct WorkoutSession: Codable, Sendable, Hashable {
         var sessionNumber: Int
         var focus: String
         var suggestedDay: String?
@@ -63,7 +63,7 @@ extension AIPlan {
         var exercises: [Exercise]
     }
 
-    struct WorkoutPlan: Codable, Sendable, Equatable {
+    struct WorkoutPlan: Codable, Sendable, Hashable {
         var splitType: SplitType
         var weeklySessionCount: Int
         var planNotes: String?

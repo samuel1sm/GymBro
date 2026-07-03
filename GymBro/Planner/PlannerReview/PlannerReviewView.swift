@@ -8,10 +8,11 @@ struct PlannerReviewView: View {
     @State private var viewModel = PlannerReviewViewModel()
     @State private var exerciseToDelete: PlannerExercise?
 
-    /// Persists the pending generated plan to SwiftData, then routes Home.
+    /// Persists the reviewed plan — with every edit applied — to SwiftData,
+    /// then routes Home.
     private func savePlan() {
         do {
-            try pendingPlanStore.persistPlan(to: userStore)
+            try pendingPlanStore.persistPlan(viewModel.buildPlan(), to: userStore)
             coordinator.replaceRoot(.main)
         } catch {
             fireToast("Couldn't save your plan")
@@ -41,8 +42,17 @@ struct PlannerReviewView: View {
                 ForEach(viewModel.activeExercises) { exercise in
                     PlannerExerciseCard(
                         exercise: exercise,
+                        isExpanded: viewModel.expandedExerciseID == exercise.id,
+                        repsText: repsBinding(for: exercise.id),
+                        restText: restBinding(for: exercise.id),
+                        onTap: {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                viewModel.toggleExpanded(exercise.id)
+                            }
+                        },
                         onSwap: { fireToast("Swap exercise") },
-                        onDelete: { exerciseToDelete = exercise }
+                        onDelete: { exerciseToDelete = exercise },
+                        onStepSets: { viewModel.stepSets(id: exercise.id, by: $0) }
                     )
                     .plannerRow(insets: EdgeInsets(top: 0, leading: 20, bottom: 10, trailing: 20), background: .appBackground)
                 }
@@ -68,6 +78,7 @@ struct PlannerReviewView: View {
         }
         .background(Color.appBackground)
         .toolbar(.hidden, for: .navigationBar)
+        .onAppear { viewModel.loadPendingPlan(pendingPlanStore.plan) }
         .sheet(item: $exerciseToDelete) { exercise in
             PlannerRemoveExerciseSheet(
                 exercise: exercise,
@@ -90,6 +101,22 @@ struct PlannerReviewView: View {
             }
             .animation(.easeOut(duration: 0.22), value: viewModel.toastMessage)
         }
+    }
+
+    // MARK: - Bindings
+
+    private func repsBinding(for id: PlannerExercise.ID) -> Binding<String> {
+        Binding(
+            get: { viewModel.activeExercises.first { $0.id == id }?.repsText ?? "" },
+            set: { viewModel.updateReps(id: id, $0) }
+        )
+    }
+
+    private func restBinding(for id: PlannerExercise.ID) -> Binding<String> {
+        Binding(
+            get: { viewModel.activeExercises.first { $0.id == id }?.restText ?? "" },
+            set: { viewModel.updateRest(id: id, $0) }
+        )
     }
 
     // MARK: - Helpers
