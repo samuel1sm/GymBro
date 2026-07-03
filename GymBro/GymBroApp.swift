@@ -7,6 +7,7 @@ struct GymBroApp: App {
 
     private let modelContainer: ModelContainer
     private let userStore: UserStore
+    private let pendingPlanStore = PendingPlanStore()
 
     init() {
         FontRegister.registerAll()
@@ -23,8 +24,10 @@ struct GymBroApp: App {
     var body: some Scene {
         WindowGroup {
             RouterView {
-                OnboardingView()
+                LaunchView()
             }
+            .environment(\.userStore, userStore)
+            .environment(\.pendingPlanStore, pendingPlanStore)
         }
         .modelContainer(modelContainer)
     }

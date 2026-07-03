@@ -17,6 +17,12 @@ final class Coordinator {
     func popToRoot() {
         path.removeLast(path.count)
     }
+
+    /// Clears the stack and makes `route` its only destination — the screens
+    /// underneath (auth, onboarding) can't be navigated back to.
+    func replaceRoot(_ route: Route) {
+        path = NavigationPath([route])
+    }
 }
 
 // MARK: - Environment

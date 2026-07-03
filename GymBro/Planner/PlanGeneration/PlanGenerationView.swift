@@ -4,6 +4,7 @@ import SwiftUI
 
 struct PlanGenerationView: View {
     @Environment(\.coordinator) private var coordinator
+    @Environment(\.pendingPlanStore) private var pendingPlanStore
     @State private var viewModel = PlanGenerationViewModel()
 
     let request: AIPlan.PlanRequest
@@ -73,6 +74,9 @@ struct PlanGenerationView: View {
         .onAppear { viewModel.startGlow() }
 		.task {
 			await viewModel.generatePlan(from: request)
+			if let plan = viewModel.generatedPlan {
+				pendingPlanStore.stash(request: request, plan: plan)
+			}
 			coordinator.push(.signUp)
 		}
         .task { await viewModel.runRotatingTextLoop() }

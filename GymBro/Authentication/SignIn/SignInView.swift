@@ -7,12 +7,30 @@ import SwiftUI
 /// error states on the primary CTA. Back chevron pops to the previous screen.
 struct SignInView: View {
     @Environment(\.coordinator) private var coordinator
+    @Environment(\.accountService) private var accountService
+    @Environment(\.userStore) private var userStore
 
     @State private var viewModel: SignInViewModel
     @FocusState private var focusedField: SignInState.Field?
 
     init(viewModel: SignInViewModel = SignInViewModel()) {
         _viewModel = State(initialValue: viewModel)
+    }
+
+    /// The account already has a plan saved in SwiftData.
+    private func hasPersistedPlan() -> Bool {
+        guard let user = try? userStore.loadUser() else { return false }
+        return ((try? userStore.loadSavedPlans(for: user)) ?? []).isEmpty == false
+    }
+
+    private func submit() {
+        // Without a persisted plan the user still has to review (and save)
+        // one — pending or freshly generated; otherwise go straight to Home.
+        let destination: Route = hasPersistedPlan() ? .main : .plannerReview
+        viewModel.submit(
+            accountService: accountService,
+            onSuccess: { coordinator.replaceRoot(destination) }
+        )
     }
 
     var body: some View {
@@ -153,7 +171,7 @@ struct SignInView: View {
         .submitLabel(.go)
         .onSubmit {
             focusedField = nil
-            viewModel.submit()
+            submit()
         }
     }
 
@@ -197,7 +215,7 @@ struct SignInView: View {
 
         return Button {
             focusedField = nil
-            viewModel.submit()
+            submit()
         } label: {
             HStack(spacing: 9) {
                 if isLoading {

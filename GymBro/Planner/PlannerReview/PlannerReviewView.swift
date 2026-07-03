@@ -2,9 +2,21 @@ import SwiftUI
 
 struct PlannerReviewView: View {
     @Environment(\.coordinator) private var coordinator
+    @Environment(\.userStore) private var userStore
+    @Environment(\.pendingPlanStore) private var pendingPlanStore
 
     @State private var viewModel = PlannerReviewViewModel()
     @State private var exerciseToDelete: PlannerExercise?
+
+    /// Persists the pending generated plan to SwiftData, then routes Home.
+    private func savePlan() {
+        do {
+            try pendingPlanStore.persistPlan(to: userStore)
+            coordinator.replaceRoot(.main)
+        } catch {
+            fireToast("Couldn't save your plan")
+        }
+    }
 
     var body: some View {
         @Bindable var vm = viewModel
@@ -131,7 +143,7 @@ struct PlannerReviewView: View {
                 size: .lg,
                 isFullWidth: true
             ) {
-                coordinator.push(.activeSession)
+                savePlan()
             }
 
             GBButton(

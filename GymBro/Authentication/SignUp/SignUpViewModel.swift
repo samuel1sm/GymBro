@@ -3,11 +3,9 @@ import Observation
 
 /// View model for the Sign Up (Save Plan Gate) screen.
 ///
-/// Owns the form state and the demo account-creation flow. The view is a thin
-/// `@Bindable` projection of this object. Account creation is simulated with a
-/// short delay; replace `createAccount()` with a real network call when a
-/// backend exists. On success the anonymous profile + plan would migrate to the
-/// new account and route to Home — for now the prototype returns to idle.
+/// Owns the form state and drives account creation through `AccountService`
+/// (mocked for now). On success the user profile is saved to SwiftData; the
+/// plan itself is persisted later, on the Planner Review screen.
 @Observable
 final class SignUpViewModel {
 
@@ -25,33 +23,39 @@ final class SignUpViewModel {
         createTask?.cancel()
     }
 
-    /// Creates an account with the current credentials.
+    /// Creates an account with the current credentials, then saves the user
+    /// profile (not the plan) on success. `onSuccess` fires after the success
+    /// state has been shown for a beat — the view routes onward there.
     ///
     /// No-ops unless the form is valid (the CTA is disabled in that case too).
-    /// Enters the loading state, simulates a request, then resolves to success
-    /// or error. Demo rule (mirrors the prototype): an email containing "taken"
-    /// simulates a duplicate-account error; anything else succeeds.
-    func submit() {
+    func submit(
+        accountService: AccountService,
+        userStore: UserStore,
+        pendingPlan: PendingPlanStore,
+        onSuccess: @escaping () -> Void = {}
+    ) {
         guard state.canSubmit() else { return }
 
         state.status = .loading
         state.errorMessage = ""
 
+        let email = state.email
+        let password = state.password
+
         createTask?.cancel()
         createTask = Task { @MainActor [weak self] in
-            try? await Task.sleep(for: .milliseconds(1500))
-            guard let self, !Task.isCancelled else { return }
-
-            if self.state.email.range(of: "taken", options: .caseInsensitive) != nil {
-                self.state.status = .error
-                self.state.errorMessage = String(
-                    localized: "That email is already registered. Try signing in."
-                )
-            } else {
+            do {
+                try await accountService.createAccount(email: email, password: password)
+                guard let self, !Task.isCancelled else { return }
+                try pendingPlan.persistUser(to: userStore)
                 self.state.status = .success
-                try? await Task.sleep(for: .milliseconds(1800))
+                try? await Task.sleep(for: .milliseconds(900))
                 guard !Task.isCancelled else { return }
-                self.state.status = .idle
+                onSuccess()
+            } catch {
+                guard let self, !Task.isCancelled else { return }
+                self.state.status = .error
+                self.state.errorMessage = error.localizedDescription
             }
         }
     }

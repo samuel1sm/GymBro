@@ -1,20 +1,28 @@
 import SwiftUI
 
-/// Sign Up — Save Plan Gate.
-///
-/// Modal gate presented over the plan the first time an anonymous user tries to
-/// save it or start a workout (from Planner Review / start-workout). Leads with
-/// the Apple path, then an email + password form. A plan chip up top anchors the
-/// loss-aversion ("your plan is ready — create an account to keep it"). The
-/// close (×) dismisses the gate; a valid email + 8-char password enables the CTA.
 struct SignUpView: View {
     @Environment(\.coordinator) private var coordinator
+    @Environment(\.accountService) private var accountService
+    @Environment(\.userStore) private var userStore
+    @Environment(\.pendingPlanStore) private var pendingPlanStore
 
     @State private var viewModel: SignUpViewModel
     @FocusState private var focusedField: SignUpState.Field?
 
     init(viewModel: SignUpViewModel = SignUpViewModel()) {
         _viewModel = State(initialValue: viewModel)
+    }
+
+    private func submit() {
+        // A pending plan means a fresh signup out of plan generation — that
+        // flow reviews (and saves) the plan first; otherwise go straight to Home.
+        let isNewUser = pendingPlanStore.hasPendingPlan
+        viewModel.submit(
+            accountService: accountService,
+            userStore: userStore,
+            pendingPlan: pendingPlanStore,
+            onSuccess: { coordinator.replaceRoot(isNewUser ? .plannerReview : .main) }
+        )
     }
 
     var body: some View {
@@ -224,7 +232,7 @@ struct SignUpView: View {
         .submitLabel(.go)
         .onSubmit {
             focusedField = nil
-            viewModel.submit()
+            submit()
         }
     }
 
@@ -257,7 +265,7 @@ struct SignUpView: View {
 
         return Button {
             focusedField = nil
-            viewModel.submit()
+            submit()
         } label: {
             HStack(spacing: 9) {
                 if isLoading {

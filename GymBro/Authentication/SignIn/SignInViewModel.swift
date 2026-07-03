@@ -3,10 +3,9 @@ import Observation
 
 /// View model for the Sign In screen.
 ///
-/// Owns the auth form state and the demo authentication flow. The view is a
-/// thin `@Bindable` projection of this object. Authentication is simulated
-/// with a short delay; replace `authenticate()` with a real network call when
-/// a backend exists.
+/// Owns the auth form state and drives authentication through `AccountService`
+/// (mocked for now). Persisting a pending plan happens later, on the Planner
+/// Review screen — this screen only authenticates and routes.
 @Observable
 final class SignInViewModel {
 
@@ -24,13 +23,15 @@ final class SignInViewModel {
         authTask?.cancel()
     }
 
-    /// Attempts to sign in with the current credentials.
+    /// Attempts to sign in with the current credentials. `onSuccess` fires
+    /// after the success state has been shown for a beat — the view routes
+    /// onward there.
     ///
-    /// Empty fields short-circuit to an inline error. Otherwise we enter the
-    /// loading state, simulate a request, then resolve to success or error.
-    /// On success the prototype returns to idle after a beat; once a Home
-    /// screen exists this is where you'd route there instead.
-    func submit() {
+    /// Empty fields short-circuit to an inline error.
+    func submit(
+        accountService: AccountService,
+        onSuccess: @escaping () -> Void = {}
+    ) {
         guard state.status != .loading else { return }
 
         guard state.hasBothFields else {
@@ -42,19 +43,22 @@ final class SignInViewModel {
         state.status = .loading
         state.errorMessage = ""
 
+        let email = state.email
+        let password = state.password
+
         authTask?.cancel()
         authTask = Task { @MainActor [weak self] in
-            try? await Task.sleep(for: .milliseconds(1500))
-            guard let self, !Task.isCancelled else { return }
-
-            if self.state.credentialsAreValid {
+            do {
+                try await accountService.signIn(email: email, password: password)
+                guard let self, !Task.isCancelled else { return }
                 self.state.status = .success
-                try? await Task.sleep(for: .milliseconds(1600))
+                try? await Task.sleep(for: .milliseconds(900))
                 guard !Task.isCancelled else { return }
-                self.state.status = .idle
-            } else {
+                onSuccess()
+            } catch {
+                guard let self, !Task.isCancelled else { return }
                 self.state.status = .error
-                self.state.errorMessage = String(localized: "Incorrect email or password.")
+                self.state.errorMessage = error.localizedDescription
             }
         }
     }
