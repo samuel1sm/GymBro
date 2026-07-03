@@ -24,6 +24,7 @@ final class StoredUser {
 
     var daysPerWeek: Int
     var sessionDurationMinutes: Int
+    var preferredTrainingDays: [String]
     var preferredSplit: String
 
     var createdAt: Date
@@ -50,6 +51,7 @@ final class StoredUser {
         injuriesAndLimitations: String? = nil,
         daysPerWeek: Int,
         sessionDurationMinutes: Int,
+        preferredTrainingDays: [String] = [],
         preferredSplit: String,
         createdAt: Date = .now,
         updatedAt: Date = .now
@@ -68,6 +70,7 @@ final class StoredUser {
         self.injuriesAndLimitations = injuriesAndLimitations
         self.daysPerWeek = daysPerWeek
         self.sessionDurationMinutes = sessionDurationMinutes
+        self.preferredTrainingDays = preferredTrainingDays
         self.preferredSplit = preferredSplit
         self.createdAt = createdAt
         self.updatedAt = updatedAt

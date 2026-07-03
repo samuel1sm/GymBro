@@ -6,7 +6,7 @@ enum Route: Hashable {
     case signUp
     case profileGoals
     case forgotPassword
-    case planGeneration
+    case planGeneration(AIPlan.PlanRequest)
     case plannerReview
     case editWorkout
     case activeSession

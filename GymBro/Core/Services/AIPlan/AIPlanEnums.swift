@@ -55,6 +55,16 @@ enum AIPlan {
         case custom
     }
 
+    enum Weekday: String, Codable, CaseIterable, Sendable {
+        case monday
+        case tuesday
+        case wednesday
+        case thursday
+        case friday
+        case saturday
+        case sunday
+    }
+
     enum UnitSystem: String, Codable, CaseIterable, Sendable {
         case metric
         case imperial

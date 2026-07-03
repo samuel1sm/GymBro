@@ -18,7 +18,11 @@ struct ProfileGoalsView: View {
             case .equipment:
                 EquipmentView(state: $vm.state, onNext: viewModel.next, onBack: viewModel.back)
             case .injuries:
-                InjuriesView(state: $vm.state, onNext: { coordinator.push(.planGeneration) }, onBack: viewModel.back)
+                InjuriesView(
+                    state: $vm.state,
+                    onNext: { coordinator.push(.planGeneration(viewModel.state.toPlanRequest())) },
+                    onBack: viewModel.back
+                )
             }
         }
         .animation(.easeInOut(duration: 0.22), value: viewModel.step)

@@ -3,7 +3,7 @@ import Foundation
 extension AIPlan {
 
     /// User profile sent to the AI to generate a plan.
-    struct PlanRequest: Codable, Sendable, Equatable {
+    struct PlanRequest: Codable, Sendable, Hashable {
         var name: String?
         var birthDate: Date
         var sex: BiologicalSex
@@ -17,6 +17,7 @@ extension AIPlan {
         var injuriesAndLimitations: String?
         var daysPerWeek: Int
         var sessionDurationMinutes: Int
+        var preferredTrainingDays: [Weekday] = []
         var preferredSplit: SplitType
 
         var age: Int {

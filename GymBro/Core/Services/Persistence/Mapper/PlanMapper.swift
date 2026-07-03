@@ -131,6 +131,7 @@ enum PlanMapper {
             injuriesAndLimitations: request.injuriesAndLimitations,
             daysPerWeek: request.daysPerWeek,
             sessionDurationMinutes: request.sessionDurationMinutes,
+            preferredTrainingDays: request.preferredTrainingDays.map(\.rawValue),
             preferredSplit: request.preferredSplit.rawValue
         )
     }
@@ -150,6 +151,7 @@ enum PlanMapper {
         user.injuriesAndLimitations = request.injuriesAndLimitations
         user.daysPerWeek = request.daysPerWeek
         user.sessionDurationMinutes = request.sessionDurationMinutes
+        user.preferredTrainingDays = request.preferredTrainingDays.map(\.rawValue)
         user.preferredSplit = request.preferredSplit.rawValue
         user.updatedAt = .now
     }
@@ -172,6 +174,7 @@ enum PlanMapper {
             injuriesAndLimitations: user.injuriesAndLimitations,
             daysPerWeek: user.daysPerWeek,
             sessionDurationMinutes: user.sessionDurationMinutes,
+            preferredTrainingDays: user.preferredTrainingDays.compactMap(AIPlan.Weekday.init(rawValue:)),
             preferredSplit: AIPlan.SplitType(rawValue: user.preferredSplit) ?? .custom
         )
     }

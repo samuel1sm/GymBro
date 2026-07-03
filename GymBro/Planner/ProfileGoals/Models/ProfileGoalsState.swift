@@ -13,6 +13,9 @@ struct ProfileGoalsState {
     var fitnessLevel: FitnessLevel = .intermediate
 
     var goals: [FitnessGoal] = []
+    var daysPerWeek: Int = 4
+    var sessionDurationMinutes: Int = 60
+    var preferredDays: Set<TrainingDay> = []
 
     var equipment: Set<EquipmentOption> = []
 

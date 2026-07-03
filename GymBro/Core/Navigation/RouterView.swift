@@ -22,8 +22,8 @@ struct RouterView<Root: View>: View {
                         ProfileGoalsView()
                     case .forgotPassword:
                         ForgotPasswordView()
-                    case .planGeneration:
-                        PlanGenerationView()
+                    case .planGeneration(let request):
+                        PlanGenerationView(request: request)
                     case .plannerReview:
                         PlannerReviewView()
                     case .editWorkout:

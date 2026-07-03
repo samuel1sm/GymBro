@@ -32,6 +32,15 @@ final class PlanGenerationViewModel {
     var progress: Double = 0
     var rotatingIndex: Int = 0
     var glowing: Bool = false
+    var generatedPlan: AIPlan.WorkoutPlan?
+
+    // MARK: - Dependencies
+
+    private let planService: PlanCreationService
+
+    init(planService: PlanCreationService = SimulatedPlanCreationService()) {
+        self.planService = planService
+    }
 
     // MARK: - Derived
 
@@ -54,12 +63,14 @@ final class PlanGenerationViewModel {
         }
     }
 
-    /// Runs the simulated generation to completion, then routes to the Save
-    /// Plan gate. Cancellation-safe — navigating away mid-generation won't push.
-    func generatePlan() async {
+    /// Calls the plan creation service while the progress animation runs, then
+    /// holds the full ring for a beat. Cancellation-safe — navigating away
+    /// mid-generation won't push.
+    func generatePlan(from request: AIPlan.PlanRequest) async {
+        async let plan = planService.createPlan(from: request)
         await runProgressLoop()
+        generatedPlan = try? await plan
         guard !Task.isCancelled else { return }
-        // Hold the full ring for a beat, then present the Save Plan gate.
         try? await Task.sleep(for: .milliseconds(400))
         guard !Task.isCancelled else { return }
     }

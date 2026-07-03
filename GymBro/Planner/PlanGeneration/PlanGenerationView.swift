@@ -6,6 +6,8 @@ struct PlanGenerationView: View {
     @Environment(\.coordinator) private var coordinator
     @State private var viewModel = PlanGenerationViewModel()
 
+    let request: AIPlan.PlanRequest
+
     var body: some View {
         VStack(spacing: 0) {
             Text("PLAN GENERATION")
@@ -70,7 +72,7 @@ struct PlanGenerationView: View {
         .toolbar(.hidden, for: .navigationBar)
         .onAppear { viewModel.startGlow() }
 		.task {
-			await viewModel.generatePlan()
+			await viewModel.generatePlan(from: request)
 			coordinator.push(.signUp)
 		}
         .task { await viewModel.runRotatingTextLoop() }
@@ -81,6 +83,6 @@ struct PlanGenerationView: View {
 
 #Preview {
     RouterView {
-        PlanGenerationView()
+        PlanGenerationView(request: ProfileGoalsState().toPlanRequest())
     }
 }
