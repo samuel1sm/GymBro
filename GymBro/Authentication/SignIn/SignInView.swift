@@ -37,34 +37,40 @@ struct SignInView: View {
         @Bindable var vm = viewModel
 
         VStack(spacing: 0) {
-            navBar
+            AuthNavBar { coordinator.pop() }
 
             VStack(alignment: .leading, spacing: 0) {
-                header
-                    .padding(.top, 18)
+                AuthHeader(
+                    title: "Welcome back",
+                    subtitle: "Sign in to pick up where you left off."
+                )
+                .padding(.top, 18)
 
                 fields(vm: vm)
                     .padding(.top, 28)
 
-                forgotPassword
-                    .padding(.top, 12)
+                ForgotPasswordLink {
+                    focusedField = nil
+                    coordinator.push(.forgotPassword)
+                }
+                .padding(.top, 12)
 
                 if viewModel.state.status == .error {
-                    errorBanner
+                    AuthErrorBanner(message: viewModel.state.errorMessage)
                         .padding(.top, 18)
                 }
 
                 primaryCTA
                     .padding(.top, viewModel.state.status == .error ? 14 : 28)
 
-                divider
+                AuthDivider()
                     .padding(.vertical, 20)
 
-                appleButton
+                AppleAuthButton(title: "Sign in with Apple")
 
                 Spacer(minLength: 16)
 
-                bottomLink
+                AuthBottomLink(prompt: "Don't have an account?", actionTitle: "Sign up")
                     .padding(.bottom, 8)
             }
             .padding(.horizontal, 24)
@@ -74,40 +80,6 @@ struct SignInView: View {
         .contentShape(Rectangle())
         .onTapGesture { focusedField = nil }
         .toolbar(.hidden, for: .navigationBar)
-    }
-
-    // MARK: - Nav bar
-
-    private var navBar: some View {
-        HStack {
-            Button {
-                coordinator.pop()
-            } label: {
-                GBIconButton(icon: "chevron.left")
-            }
-            .buttonStyle(.plain)
-            .padding(.leading, -4)
-
-            Spacer()
-        }
-        .frame(height: 44)
-        .padding(.horizontal, 20)
-        .padding(.top, 4)
-    }
-
-    // MARK: - Header
-
-    private var header: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("Welcome back")
-                .font(.barlowCondensed(.bold, size: 28))
-                .tracking(-0.6)
-                .foregroundStyle(.labelPrimary)
-            Text("Sign in to pick up where you left off.")
-                .font(.plusJakartaSans(.regular, size: 14))
-                .foregroundStyle(.labelSecondary)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     // MARK: - Fields
@@ -175,137 +147,26 @@ struct SignInView: View {
         }
     }
 
-    private var forgotPassword: some View {
-        HStack {
-            Spacer()
-            Button("Forgot password?") {
-                focusedField = nil
-                coordinator.push(.forgotPassword)
-            }
-                .font(.plusJakartaSans(.medium, size: 13))
-                .foregroundStyle(.labelSecondary)
-                .buttonStyle(.plain)
-        }
-    }
-
-    // MARK: - Error banner
-
-    private var errorBanner: some View {
-        HStack(spacing: 8) {
-            Image(systemName: "xmark")
-                .font(.system(size: 9, weight: .heavy))
-                .foregroundStyle(.appBackground)
-                .frame(width: 16, height: 16)
-                .background(.danger)
-                .clipShape(Circle())
-
-            Text(viewModel.state.errorMessage)
-                .font(.plusJakartaSans(.regular, size: 13))
-                .foregroundStyle(.danger)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
     // MARK: - Primary CTA
 
     private var primaryCTA: some View {
         let status = viewModel.state.status
-        let isLoading = status == .loading
-        let isSuccess = status == .success
+        let phase: AuthPrimaryCTA.Phase = switch status {
+        case .loading: .loading
+        case .success: .success
+        case .idle, .error: .idle
+        }
 
-        return Button {
+        return AuthPrimaryCTA(
+            title: "Sign In",
+            loadingTitle: "Signing in…",
+            successTitle: "Signed in",
+            phase: phase,
+            isEnabled: status != .loading
+        ) {
             focusedField = nil
             submit()
-        } label: {
-            HStack(spacing: 9) {
-                if isLoading {
-                    SignInSpinner()
-                } else if isSuccess {
-                    Image(systemName: "checkmark")
-                        .font(.system(size: 17, weight: .bold))
-                }
-                Text(isLoading ? "Signing in…" : isSuccess ? "Signed in" : "Sign In")
-                    .font(.plusJakartaSans(.semiBold, size: 16))
-            }
-            .foregroundStyle(.labelOnAccent)
-            .frame(maxWidth: .infinity)
-            .frame(height: 54)
-            .background(isSuccess ? Color.voltMedium : Color.volt)
-            .clipShape(RoundedRectangle(cornerRadius: 14))
-            .opacity(isLoading ? 0.92 : 1)
-            .animation(.easeInOut(duration: 0.16), value: status)
         }
-        .buttonStyle(.plain)
-        .disabled(isLoading)
-    }
-
-    // MARK: - Divider
-
-    private var divider: some View {
-        HStack(spacing: 14) {
-            Rectangle().fill(Color.borderDefault).frame(height: 1)
-            Text("or")
-                .font(.system(size: 11, weight: .regular, design: .monospaced))
-                .tracking(1.2)
-                .textCase(.uppercase)
-                .foregroundStyle(.labelTertiary)
-            Rectangle().fill(Color.borderDefault).frame(height: 1)
-        }
-    }
-
-    // MARK: - Apple
-
-    private var appleButton: some View {
-        Button {} label: {
-            HStack(spacing: 8) {
-                Image(systemName: "apple.logo")
-                    .font(.system(size: 17, weight: .medium))
-                Text("Sign in with Apple")
-                    .font(.plusJakartaSans(.semiBold, size: 15))
-            }
-            .foregroundStyle(.black)
-            .frame(maxWidth: .infinity)
-            .frame(height: 54)
-            .background(.labelPrimary)
-            .clipShape(RoundedRectangle(cornerRadius: 14))
-        }
-        .buttonStyle(.plain)
-    }
-
-    // MARK: - Bottom link
-
-    private var bottomLink: some View {
-        HStack(spacing: 6) {
-            Text("Don't have an account?")
-                .font(.plusJakartaSans(.regular, size: 13))
-                .foregroundStyle(.labelSecondary)
-            Button("Sign up") {}
-                .font(.plusJakartaSans(.semiBold, size: 13))
-                .foregroundStyle(.volt)
-                .buttonStyle(.plain)
-        }
-        .frame(maxWidth: .infinity)
-    }
-}
-
-// MARK: - Spinner
-
-/// 18pt ring with a transparent top, spinning continuously — matches the
-/// prototype's loading indicator on the CTA.
-private struct SignInSpinner: View {
-    @State private var rotation: Double = 0
-
-    var body: some View {
-        Circle()
-            .trim(from: 0, to: 0.75)
-            .stroke(Color.labelOnAccent, style: StrokeStyle(lineWidth: 2, lineCap: .round))
-            .frame(width: 18, height: 18)
-            .rotationEffect(.degrees(rotation))
-            .onAppear {
-                withAnimation(.linear(duration: 0.72).repeatForever(autoreverses: false)) {
-                    rotation = 360
-                }
-            }
     }
 }
 

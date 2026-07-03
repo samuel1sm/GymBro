@@ -9,7 +9,8 @@ struct StatisticsView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                header
+                ScreenTitleHeader(title: "Statistics", size: 22)
+                    .padding(.bottom, 4)
 
                 WeeklyVolumeCard(
                     points: viewModel.state.weeklyVolume,
@@ -34,17 +35,6 @@ struct StatisticsView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appBackground)
         .toolbar(.hidden, for: .navigationBar)
-    }
-
-    private var header: some View {
-        Text("Statistics")
-            .font(.barlowCondensed(.bold, size: 22))
-            .kerning(-0.5)
-            .foregroundStyle(.labelPrimary)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 20)
-            .padding(.top, 10)
-            .padding(.bottom, 4)
     }
 }
 

@@ -22,7 +22,7 @@ struct PlannerReviewView: View {
         @Bindable var vm = viewModel
 
         VStack(spacing: 0) {
-            header
+            PlannerReviewHeader { coordinator.pop() }
 
             PlannerTabStrip(slots: viewModel.state.slots, activeIndex: $vm.activeIndex)
 
@@ -61,7 +61,10 @@ struct PlannerReviewView: View {
             .scrollContentBackground(.hidden)
             .scrollDismissesKeyboard(.interactively)
 
-            bottomActions
+            PlannerReviewBottomActions(
+                onSave: savePlan,
+                onRegenerate: { fireToast("Regenerating…") }
+            )
         }
         .background(Color.appBackground)
         .toolbar(.hidden, for: .navigationBar)
@@ -87,86 +90,6 @@ struct PlannerReviewView: View {
             }
             .animation(.easeOut(duration: 0.22), value: viewModel.toastMessage)
         }
-    }
-
-    // MARK: - Header
-
-    private var header: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            HStack {
-                Button {
-                    coordinator.pop()
-                } label: {
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundStyle(.labelPrimary)
-                        .padding(8)
-                }
-                .buttonStyle(.plain)
-
-                Spacer()
-
-                Text("REVIEW PLAN")
-                    .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                    .tracking(1.6)
-                    .foregroundStyle(.labelSecondary)
-
-                Spacer()
-
-                Color.clear.frame(width: 36, height: 36)
-            }
-            .frame(height: 36)
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Your Week")
-                    .font(.barlowCondensed(.bold, size: 32))
-                    .foregroundStyle(.labelPrimary)
-
-                Text("Review each session, swap or reorder exercises, then save.")
-                    .font(.plusJakartaSans(.medium, size: 14))
-                    .foregroundStyle(.labelSecondary)
-            }
-            .padding(.top, 6)
-        }
-        .padding(.horizontal, 20)
-        .padding(.top, 2)
-        .padding(.bottom, 14)
-    }
-
-    // MARK: - Bottom actions
-
-    private var bottomActions: some View {
-        VStack(spacing: 10) {
-            GBButton(
-                label: "Save Plan",
-                variant: .primary,
-                size: .lg,
-                isFullWidth: true
-            ) {
-                savePlan()
-            }
-
-            GBButton(
-                label: "Regenerate",
-                variant: .secondary,
-                size: .lg,
-                icon: "bolt.fill",
-                isFullWidth: true
-            ) {
-                fireToast("Regenerating…")
-            }
-        }
-        .padding(.horizontal, 20)
-        .padding(.top, 12)
-        .padding(.bottom, 14)
-        .background(
-            Color.appBackground
-                .overlay(alignment: .top) {
-                    Rectangle()
-                        .fill(Color.borderDefault)
-                        .frame(height: 1)
-                }
-		)
     }
 
     // MARK: - Helpers

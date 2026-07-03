@@ -23,9 +23,22 @@ struct ActiveSessionView: View {
                     onMore: { /* placeholder */ }
                 )
 
-                metaRow
+                SessionMetaRow(
+                    doneCount: viewModel.doneCount,
+                    totalCount: viewModel.exercises.count,
+                    elapsedSeconds: viewModel.elapsedSeconds
+                )
 
-                exerciseList
+                ActiveSessionExerciseList(
+                    exercises: viewModel.exercises,
+                    doneCounts: viewModel.logs.map(\.count),
+                    onTapExercise: { index in
+                        withAnimation(.spring(response: 0.34, dampingFraction: 0.86)) {
+                            viewModel.openExerciseSheet(at: index)
+                        }
+                    },
+                    onEndSession: { withAnimation { viewModel.requestConfirmEnd() } }
+                )
             }
 
             // Layer 2 — exercise sheet
@@ -64,67 +77,6 @@ struct ActiveSessionView: View {
         .animation(.spring(response: 0.34, dampingFraction: 0.86), value: viewModel.isConfirmingEnd)
         .onAppear { viewModel.startClock() }
         .onDisappear { viewModel.stopClock() }
-    }
-
-    // MARK: - Meta row
-
-    private var metaRow: some View {
-        HStack {
-            Text("\(viewModel.doneCount) of \(viewModel.exercises.count) done")
-                .font(.plusJakartaSans(.medium, size: 13))
-                .foregroundStyle(.labelSecondary)
-
-            Spacer()
-
-            HStack(spacing: 6) {
-                Image(systemName: "clock")
-                    .font(.system(size: 12, weight: .medium))
-                Text(SessionFormat.mmss(viewModel.elapsedSeconds))
-                    .font(.system(size: 13, weight: .medium, design: .monospaced))
-                    .monospacedDigit()
-            }
-            .foregroundStyle(.labelSecondary)
-        }
-        .padding(.horizontal, 20)
-        .padding(.top, 14)
-        .padding(.bottom, 12)
-    }
-
-    // MARK: - Exercise list + end footer
-
-    private var exerciseList: some View {
-        ScrollView {
-            VStack(spacing: 10) {
-                ForEach(Array(viewModel.exercises.enumerated()), id: \.element.id) { index, exercise in
-                    ActiveSessionExerciseRow(
-                        exercise: exercise,
-                        index: index,
-                        doneCount: viewModel.logs[index].count,
-                        onTap: {
-                            withAnimation(.spring(response: 0.34, dampingFraction: 0.86)) {
-                                viewModel.openExerciseSheet(at: index)
-                            }
-                        }
-                    )
-                }
-
-                Button(action: { withAnimation { viewModel.requestConfirmEnd() } }) {
-                    Text("End session")
-                        .font(.plusJakartaSans(.semiBold, size: 13))
-                        .foregroundStyle(.labelSecondary)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 46)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.borderDefault, lineWidth: 1)
-                        )
-                }
-                .buttonStyle(.plain)
-                .padding(.top, 6)
-            }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 8)
-        }
     }
 
     // MARK: - Sheet overlay

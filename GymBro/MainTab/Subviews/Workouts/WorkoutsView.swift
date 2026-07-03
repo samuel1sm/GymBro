@@ -14,7 +14,7 @@ struct WorkoutsView: View {
 
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                header
+                ScreenTitleHeader(title: "My Workouts")
 
                 PlanSelectorRow(planName: viewModel.activePlanName) {
                     viewModel.openLibrary()
@@ -22,8 +22,10 @@ struct WorkoutsView: View {
                 .padding(.horizontal, 20)
                 .padding(.top, 16)
 
-                sessionsSection
-                    .padding(.top, 26)
+                SessionsSection(sessions: viewModel.state.sessions) { session in
+                    viewModel.selectSession(session)
+                }
+                .padding(.top, 26)
             }
             .padding(.bottom, 16)
         }
@@ -61,37 +63,6 @@ struct WorkoutsView: View {
         }
     }
 
-    // MARK: - Header
-
-    private var header: some View {
-        Text("My Workouts")
-            .font(.barlowCondensed(.bold, size: 24))
-            .kerning(-0.5)
-            .foregroundStyle(.labelPrimary)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 20)
-            .padding(.top, 10)
-    }
-
-    // MARK: - Sessions
-
-    private var sessionsSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("SESSIONS")
-                .font(.plusJakartaSans(.semiBold, size: 13))
-                .kerning(1)
-                .foregroundStyle(.labelSecondary)
-
-            VStack(spacing: 10) {
-                ForEach(viewModel.state.sessions) { session in
-                    SessionCard(session: session) {
-                        viewModel.selectSession(session)
-                    }
-                }
-            }
-        }
-        .padding(.horizontal, 20)
-    }
 }
 
 // MARK: - Preview

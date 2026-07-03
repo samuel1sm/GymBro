@@ -12,7 +12,7 @@ struct EditWorkoutView: View {
         @Bindable var vm = viewModel
 
         VStack(spacing: 0) {
-            navBar
+            EditWorkoutNavBar(onCancel: cancel, onSave: save)
 
             List {
                 EditSessionHeaderCard(
@@ -107,43 +107,6 @@ struct EditWorkoutView: View {
             }
             .animation(.easeOut(duration: 0.22), value: viewModel.toastMessage)
         }
-    }
-
-    // MARK: - Nav bar
-
-    private var navBar: some View {
-        HStack {
-            Button(action: cancel) {
-                Text("Cancel")
-                    .font(.plusJakartaSans(.medium, size: 15))
-                    .foregroundStyle(.labelSecondary)
-                    .padding(.vertical, 8)
-                    .padding(.horizontal, 10)
-            }
-            .buttonStyle(.plain)
-
-            Spacer()
-
-            Text("Edit Workout")
-                .font(.plusJakartaSans(.semiBold, size: 16))
-                .foregroundStyle(.labelPrimary)
-
-            Spacer()
-
-            Button(action: save) {
-                Text("Save")
-                    .font(.plusJakartaSans(.semiBold, size: 15))
-                    .foregroundStyle(.volt)
-                    .padding(.vertical, 8)
-                    .padding(.horizontal, 10)
-            }
-            .buttonStyle(.plain)
-        }
-        .frame(height: 38)
-        .padding(.top, 4)
-        .padding(.horizontal, 12)
-        .padding(.bottom, 10)
-        .background(Color.appBackground)
     }
 
     // MARK: - Actions

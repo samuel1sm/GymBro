@@ -19,11 +19,13 @@ struct ForgotPasswordView: View {
         @Bindable var vm = viewModel
 
         VStack(spacing: 0) {
-            navBar
+            AuthNavBar { coordinator.pop() }
 
             Group {
                 if viewModel.state.sent {
-                    confirmation
+                    ResetLinkConfirmation(sentTo: viewModel.state.sentToDisplay) {
+                        coordinator.pop()
+                    }
                 } else {
                     entry(vm: vm)
                 }
@@ -37,41 +39,15 @@ struct ForgotPasswordView: View {
         .toolbar(.hidden, for: .navigationBar)
     }
 
-    // MARK: - Nav bar
-
-    private var navBar: some View {
-        HStack {
-            Button {
-                coordinator.pop()
-            } label: {
-                GBIconButton(icon: "chevron.left")
-            }
-            .buttonStyle(.plain)
-            .padding(.leading, -4)
-
-            Spacer()
-        }
-        .frame(height: 44)
-        .padding(.horizontal, 20)
-        .padding(.top, 4)
-    }
-
     // MARK: - State A — Email entry
 
     private func entry(vm: ForgotPasswordViewModel) -> some View {
         @Bindable var vm = vm
         return VStack(alignment: .leading, spacing: 0) {
-            VStack(alignment: .leading, spacing: 6) {
-                Text("Reset password")
-                    .font(.barlowCondensed(.bold, size: 28))
-                    .tracking(-0.6)
-                    .foregroundStyle(.labelPrimary)
-                Text("Enter the email tied to your account and we'll send a reset link.")
-                    .font(.plusJakartaSans(.regular, size: 14))
-                    .foregroundStyle(.labelSecondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            AuthHeader(
+                title: "Reset password",
+                subtitle: "Enter the email tied to your account and we'll send a reset link."
+            )
             .padding(.top, 18)
 
             SignInField(label: "Email", isFocused: focusedField == .email) {
@@ -96,8 +72,10 @@ struct ForgotPasswordView: View {
 
             Spacer(minLength: 16)
 
-            bottomLink
-                .padding(.bottom, 8)
+            AuthBottomLink(prompt: "Remembered it?", actionTitle: "Back to sign in") {
+                coordinator.pop()
+            }
+            .padding(.bottom, 8)
         }
     }
 
@@ -112,126 +90,17 @@ struct ForgotPasswordView: View {
         let valid = viewModel.state.emailIsValid
         let isLoading = viewModel.state.status == .loading
 
-        return Button {
+        return AuthPrimaryCTA(
+            title: "Send reset link",
+            loadingTitle: "Sending…",
+            phase: isLoading ? .loading : .idle,
+            isEnabled: valid && !isLoading,
+            dimmed: !valid
+        ) {
             focusedField = nil
             viewModel.submit()
-        } label: {
-            HStack(spacing: 9) {
-                if isLoading {
-                    ForgotSpinner()
-                }
-                Text(isLoading ? "Sending…" : "Send reset link")
-                    .font(.plusJakartaSans(.semiBold, size: 16))
-            }
-            .foregroundStyle(.labelOnAccent)
-            .frame(maxWidth: .infinity)
-            .frame(height: 54)
-            .background(.volt)
-            .clipShape(RoundedRectangle(cornerRadius: 14))
-            .opacity(valid ? (isLoading ? 0.92 : 1) : 0.35)
-            .animation(.easeInOut(duration: 0.16), value: viewModel.state.status)
         }
-        .buttonStyle(.plain)
-        .disabled(!valid || isLoading)
     }
-
-    private var bottomLink: some View {
-        HStack(spacing: 6) {
-            Text("Remembered it?")
-                .font(.plusJakartaSans(.regular, size: 13))
-                .foregroundStyle(.labelSecondary)
-            Button("Back to sign in") {
-                coordinator.pop()
-            }
-            .font(.plusJakartaSans(.semiBold, size: 13))
-            .foregroundStyle(.volt)
-            .buttonStyle(.plain)
-        }
-        .frame(maxWidth: .infinity)
-    }
-
-    // MARK: - State B — Confirmation
-
-    private var confirmation: some View {
-        VStack(spacing: 0) {
-            Spacer()
-
-            ZStack {
-                Circle()
-                    .fill(Color.voltDimBadge)
-                Circle()
-                    .stroke(Color.volt, lineWidth: 1.5)
-                MailCheckIcon(size: 32, color: .volt)
-            }
-            .frame(width: 72, height: 72)
-
-            Text("Check your inbox")
-                .font(.barlowCondensed(.bold, size: 24))
-                .tracking(-0.5)
-                .foregroundStyle(.labelPrimary)
-                .padding(.top, 24)
-
-            VStack(spacing: 4) {
-                Text("We sent a reset link to")
-                    .font(.plusJakartaSans(.regular, size: 14))
-                    .foregroundStyle(.labelSecondary)
-                Text(verbatim: viewModel.state.sentToDisplay)
-                    .font(.plusJakartaSans(.semiBold, size: 14))
-                    .foregroundStyle(.labelPrimary)
-                    .monospacedDigit()
-            }
-            .multilineTextAlignment(.center)
-            .padding(.top, 10)
-            .frame(maxWidth: 280)
-
-            Button {
-                coordinator.pop()
-            } label: {
-                Text("Back to sign in")
-                    .font(.plusJakartaSans(.semiBold, size: 16))
-                    .foregroundStyle(.labelPrimary)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 54)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 14)
-                            .stroke(Color.borderDefault, lineWidth: 1)
-                    )
-            }
-            .buttonStyle(.plain)
-            .padding(.top, 32)
-
-            Spacer()
-        }
-        .padding(.bottom, 48)
-    }
-}
-
-// MARK: - Spinner
-
-/// 18pt ring with a transparent top, spinning continuously — matches the
-/// prototype's loading indicator on the CTA.
-private struct ForgotSpinner: View {
-    @State private var rotation: Double = 0
-
-    var body: some View {
-        Circle()
-            .trim(from: 0, to: 0.75)
-            .stroke(Color.labelOnAccent, style: StrokeStyle(lineWidth: 2, lineCap: .round))
-            .frame(width: 18, height: 18)
-            .rotationEffect(.degrees(rotation))
-            .onAppear {
-                withAnimation(.linear(duration: 0.72).repeatForever(autoreverses: false)) {
-                    rotation = 360
-                }
-            }
-    }
-}
-
-// MARK: - Local color
-
-private extension Color {
-    /// VoltDim badge fill behind the mail-check glyph (#141A00).
-    static let voltDimBadge = Color(red: 20 / 255, green: 26 / 255, blue: 0)
 }
 
 // MARK: - Preview
