@@ -1,8 +1,9 @@
 import SwiftUI
 
 struct EquipmentView: View {
-    @Binding var step: Int
     @Binding var state: ProfileGoalsState
+    let onNext: () -> Void
+    let onBack: () -> Void
 
     private func toggle(_ option: EquipmentOption) {
         if state.equipment.contains(option) {
@@ -14,11 +15,11 @@ struct EquipmentView: View {
 
     var body: some View {
         ProfileFrame(
-            step: 4,
+            step: .equipment,
             title: "What gear do you have?",
             subtitle: "Select all that apply. 'Full gym' covers everything.",
-            onNext: { step += 1 },
-            onBack: { step -= 1 }
+            onNext: onNext,
+            onBack: onBack
         ) {
             VStack(alignment: .leading, spacing: 20) {
                 HStack {
@@ -86,6 +87,6 @@ struct EquipmentView: View {
 
 #Preview {
     RouterView {
-        EquipmentView(step: .constant(4), state: .constant(ProfileGoalsState()))
+        EquipmentView(state: .constant(ProfileGoalsState()), onNext: {}, onBack: {})
     }
 }

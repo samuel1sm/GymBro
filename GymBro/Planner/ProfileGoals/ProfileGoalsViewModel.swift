@@ -1,16 +1,16 @@
 import Foundation
 import Observation
 
-/// View model for the Profile & Goals flow.
-///
-/// Owns the current step and the accumulated profile answers
-/// (`ProfileGoalsState`). The view is a thin projection of this
-/// object via `@Bindable`.
 @Observable
 final class ProfileGoalsViewModel {
-
-    // MARK: - State
-
-    var step: Int = 1
+    var step: ProfileGoalsStep = .physical
     var state = ProfileGoalsState()
+
+    func next() {
+        if let next = step.next { step = next }
+    }
+
+    func back() {
+        if let previous = step.previous { step = previous }
+    }
 }

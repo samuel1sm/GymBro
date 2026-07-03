@@ -1,16 +1,17 @@
 import SwiftUI
 
 struct FitnessLevelView: View {
-    @Binding var step: Int
     @Binding var state: ProfileGoalsState
+    let onNext: () -> Void
+    let onBack: () -> Void
 
     var body: some View {
         ProfileFrame(
-            step: 2,
+            step: .fitnessLevel,
             title: "Your fitness level",
             subtitle: "Honest is best — the plan calibrates from here.",
-            onNext: { step += 1 },
-            onBack: { step -= 1 }
+            onNext: onNext,
+            onBack: onBack
         ) {
             VStack(spacing: 10) {
                 ForEach(FitnessLevel.allCases, id: \.self) { level in
@@ -79,6 +80,6 @@ struct FitnessLevelView: View {
 
 #Preview {
     RouterView {
-        FitnessLevelView(step: .constant(2), state: .constant(ProfileGoalsState()))
+        FitnessLevelView(state: .constant(ProfileGoalsState()), onNext: {}, onBack: {})
     }
 }

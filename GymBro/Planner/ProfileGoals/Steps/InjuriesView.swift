@@ -1,9 +1,9 @@
 import SwiftUI
 
 struct InjuriesView: View {
-    @Environment(\.coordinator) private var coordinator
-    @Binding var step: Int
     @Binding var state: ProfileGoalsState
+    let onNext: () -> Void
+    let onBack: () -> Void
 
     private func toggleInjury(_ area: InjuryArea) {
         if area == .none {
@@ -20,12 +20,12 @@ struct InjuriesView: View {
 
     var body: some View {
         ProfileFrame(
-            step: 5,
+            step: .injuries,
             title: "Injuries or limitations",
             subtitle: "Safety constraint — we'll filter contraindicated movements.",
             ctaLabel: "Generate Plan",
-            onNext: { coordinator.push(.planGeneration) },
-            onBack: { step -= 1 }
+            onNext: onNext,
+            onBack: onBack
         ) {
             VStack(alignment: .leading, spacing: 18) {
                 VStack(alignment: .leading, spacing: 8) {
@@ -97,6 +97,6 @@ struct InjuriesView: View {
 
 #Preview {
     RouterView {
-        InjuriesView(step: .constant(5), state: .constant(ProfileGoalsState()))
+        InjuriesView(state: .constant(ProfileGoalsState()), onNext: {}, onBack: {})
     }
 }

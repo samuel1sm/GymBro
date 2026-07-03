@@ -1,9 +1,9 @@
 import SwiftUI
 
 struct PhysicalView: View {
-    @Environment(\.coordinator) private var coordinator
-    @Binding var step: Int
     @Binding var state: ProfileGoalsState
+    let onNext: () -> Void
+    let onBack: () -> Void
 
     private var sexIndex: Binding<Int> {
         Binding(
@@ -66,11 +66,11 @@ struct PhysicalView: View {
 
     var body: some View {
         ProfileFrame(
-            step: 1,
+            step: .physical,
             title: "Your physical profile",
             subtitle: "We use this to dial in volume, load, and recovery.",
-            onNext: { step += 1 },
-            onBack: { coordinator.pop() }
+            onNext: onNext,
+            onBack: onBack
         ) {
             VStack(alignment: .leading, spacing: 16) {
                 VStack(alignment: .leading, spacing: 8) {
@@ -101,7 +101,7 @@ struct PhysicalView: View {
                         .font(.plusJakartaSans(.medium, size: 14))
                         .foregroundStyle(.labelSecondary)
 
-                    SegmentedPicker(options: ["Male", "Female", "Prefer not to say"], selectedIndex: sexIndex)
+                    SegmentedPicker(options: ["Male", "Female", "not to say"], selectedIndex: sexIndex)
                         .frame(height: 52)
                 }
 
@@ -180,6 +180,6 @@ struct PhysicalView: View {
 
 #Preview {
     RouterView {
-        PhysicalView(step: .constant(1), state: .constant(ProfileGoalsState()))
+        PhysicalView(state: .constant(ProfileGoalsState()), onNext: {}, onBack: {})
     }
 }

@@ -1,8 +1,7 @@
 import SwiftUI
 
 struct ProfileFrame<Content: View>: View {
-    let step: Int
-    let totalSteps: Int
+    let step: ProfileGoalsStep
     let title: String
     let subtitle: String?
     let ctaLabel: LocalizedStringKey
@@ -11,9 +10,10 @@ struct ProfileFrame<Content: View>: View {
     let onBack: () -> Void
     let content: Content
 
+    private var totalSteps: Int { ProfileGoalsStep.totalSteps }
+
     init(
-        step: Int,
-        totalSteps: Int = 5,
+        step: ProfileGoalsStep,
         title: String,
         subtitle: String? = nil,
         ctaLabel: LocalizedStringKey = "Continue",
@@ -23,7 +23,6 @@ struct ProfileFrame<Content: View>: View {
         @ViewBuilder content: () -> Content
     ) {
         self.step = step
-        self.totalSteps = totalSteps
         self.title = title
         self.subtitle = subtitle
         self.ctaLabel = ctaLabel
@@ -48,7 +47,7 @@ struct ProfileFrame<Content: View>: View {
 
                 HStack(spacing: 2) {
                     Text("Step")
-                    Text("\(step)").foregroundStyle(.volt)
+                    Text("\(step.rawValue)").foregroundStyle(.volt)
                     Text("/ \(totalSteps)")
                 }
                 .font(.system(size: 11, weight: .semibold, design: .monospaced))
@@ -64,7 +63,7 @@ struct ProfileFrame<Content: View>: View {
             HStack(spacing: 6) {
                 ForEach(0..<totalSteps, id: \.self) { i in
                     Capsule()
-                        .fill(i < step ? Color.volt : Color.loaderTrack)
+                        .fill(i < step.rawValue ? Color.volt : Color.loaderTrack)
                         .frame(height: 4)
                 }
             }
@@ -124,8 +123,7 @@ struct ProfileFrame<Content: View>: View {
 
 #Preview {
     ProfileFrame(
-        step: 2,
-        totalSteps: 5,
+        step: .fitnessLevel,
         title: "What's your fitness goal?",
         subtitle: "Help us personalize your experience by selecting your primary fitness objective.",
         ctaLabel: "Continue",

@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ProfileGoalsView: View {
+    @Environment(\.coordinator) private var coordinator
     @State private var viewModel = ProfileGoalsViewModel()
 
     var body: some View {
@@ -8,11 +9,16 @@ struct ProfileGoalsView: View {
 
         Group {
             switch viewModel.step {
-            case 1: PhysicalView(step: $vm.step, state: $vm.state)
-            case 2: FitnessLevelView(step: $vm.step, state: $vm.state)
-            case 3: GoalsView(step: $vm.step, state: $vm.state)
-            case 4: EquipmentView(step: $vm.step, state: $vm.state)
-            default: InjuriesView(step: $vm.step, state: $vm.state)
+            case .physical:
+                PhysicalView(state: $vm.state, onNext: viewModel.next, onBack: { coordinator.pop() })
+            case .fitnessLevel:
+                FitnessLevelView(state: $vm.state, onNext: viewModel.next, onBack: viewModel.back)
+            case .goals:
+                GoalsView(state: $vm.state, onNext: viewModel.next, onBack: viewModel.back)
+            case .equipment:
+                EquipmentView(state: $vm.state, onNext: viewModel.next, onBack: viewModel.back)
+            case .injuries:
+                InjuriesView(state: $vm.state, onNext: { coordinator.push(.planGeneration) }, onBack: viewModel.back)
             }
         }
         .animation(.easeInOut(duration: 0.22), value: viewModel.step)

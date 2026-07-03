@@ -3,8 +3,9 @@ import SwiftUI
 private let maxGoals = 3
 
 struct GoalsView: View {
-    @Binding var step: Int
     @Binding var state: ProfileGoalsState
+    let onNext: () -> Void
+    let onBack: () -> Void
 
     private func toggle(_ goal: FitnessGoal) {
         if let i = state.goals.firstIndex(of: goal) {
@@ -16,12 +17,12 @@ struct GoalsView: View {
 
     var body: some View {
         ProfileFrame(
-            step: 3,
+            step: .goals,
             title: "What are you training for?",
             subtitle: "Pick up to three. We'll prioritise in that order.",
             ctaDisabled: state.goals.isEmpty,
-            onNext: { step += 1 },
-            onBack: { step -= 1 }
+            onNext: onNext,
+            onBack: onBack
         ) {
             VStack(alignment: .leading, spacing: 20) {
                 HStack {
@@ -97,6 +98,6 @@ struct GoalsView: View {
 
 #Preview {
     RouterView {
-        GoalsView(step: .constant(3), state: .constant(ProfileGoalsState()))
+        GoalsView(state: .constant(ProfileGoalsState()), onNext: {}, onBack: {})
     }
 }
