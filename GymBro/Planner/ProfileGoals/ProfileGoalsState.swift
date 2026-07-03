@@ -76,7 +76,7 @@ enum InjuryArea: String, CaseIterable, Hashable {
 }
 
 struct ProfileGoalsState {
-    var age: Int = 28
+    var birthDate: Date = Calendar.current.date(byAdding: .year, value: -28, to: .now) ?? .now
     var weightLbs: Int = 180
     var weightKg: Int = 82
     var weightUnit: WeightUnit = .lbs

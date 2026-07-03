@@ -119,7 +119,7 @@ enum PlanMapper {
     static func makeUser(from request: AIPlan.PlanRequest) -> StoredUser {
         StoredUser(
             name: request.name,
-            age: request.age,
+            birthDate: request.birthDate,
             sex: request.sex.rawValue,
             weightKg: request.weightKg,
             heightCm: request.heightCm,
@@ -138,7 +138,7 @@ enum PlanMapper {
     /// Updates an existing profile in place, bumping `updatedAt`.
     static func apply(_ request: AIPlan.PlanRequest, to user: StoredUser) {
         user.name = request.name
-        user.age = request.age
+        user.birthDate = request.birthDate
         user.sex = request.sex.rawValue
         user.weightKg = request.weightKg
         user.heightCm = request.heightCm
@@ -160,7 +160,7 @@ enum PlanMapper {
     static func toRequest(_ user: StoredUser) -> AIPlan.PlanRequest {
         AIPlan.PlanRequest(
             name: user.name,
-            age: user.age,
+            birthDate: user.birthDate,
             sex: AIPlan.BiologicalSex(rawValue: user.sex) ?? .unspecified,
             weightKg: user.weightKg,
             heightCm: user.heightCm,

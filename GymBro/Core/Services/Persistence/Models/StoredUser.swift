@@ -9,7 +9,7 @@ final class StoredUser {
     @Attribute(.unique) var id: UUID
 
     var name: String?
-    var age: Int
+    var birthDate: Date
     var sex: String
     var weightKg: Double
     var heightCm: Double
@@ -38,7 +38,7 @@ final class StoredUser {
     init(
         id: UUID = UUID(),
         name: String? = nil,
-        age: Int,
+        birthDate: Date,
         sex: String,
         weightKg: Double,
         heightCm: Double,
@@ -56,7 +56,7 @@ final class StoredUser {
     ) {
         self.id = id
         self.name = name
-        self.age = age
+        self.birthDate = birthDate
         self.sex = sex
         self.weightKg = weightKg
         self.heightCm = heightCm

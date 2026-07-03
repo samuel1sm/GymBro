@@ -34,12 +34,13 @@ struct PersistenceTests {
         let first = try store.saveUser(Self.sampleRequest)
 
         var edited = Self.sampleRequest
-        edited.age = 41
+        let newBirthDate = Date(timeIntervalSince1970: 473_385_600) // 1985-01-01
+        edited.birthDate = newBirthDate
         edited.daysPerWeek = 6
         let second = try store.saveUser(edited)
 
-        #expect(first.id == second.id)               // same record
-        #expect(try store.loadUser()?.age == 41)     // updated
+        #expect(first.id == second.id)                          // same record
+        #expect(try store.loadUser()?.birthDate == newBirthDate) // updated
     }
 
     // MARK: - Plan graph round-trip through storage
@@ -199,7 +200,8 @@ extension PersistenceTests {
     static var sampleRequest: AIPlan.PlanRequest {
         AIPlan.PlanRequest(
             name: "Sam",
-            age: 28,
+            birthDate: Date(timeIntervalSince1970: 883_612_800), // 1998-01-01
+
             sex: .male,
             weightKg: 82,
             heightCm: 178,

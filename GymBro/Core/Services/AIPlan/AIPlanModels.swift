@@ -5,7 +5,7 @@ extension AIPlan {
     /// User profile sent to the AI to generate a plan.
     struct PlanRequest: Codable, Sendable, Equatable {
         var name: String?
-        var age: Int
+        var birthDate: Date
         var sex: BiologicalSex
         var weightKg: Double
         var heightCm: Double
@@ -18,6 +18,10 @@ extension AIPlan {
         var daysPerWeek: Int
         var sessionDurationMinutes: Int
         var preferredSplit: SplitType
+
+        var age: Int {
+            Calendar.current.dateComponents([.year], from: birthDate, to: .now).year ?? 0
+        }
     }
 
     struct MuscleGroups: Codable, Sendable, Equatable {

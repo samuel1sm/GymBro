@@ -48,6 +48,12 @@ struct PhysicalView: View {
         )
     }
 
+    private var birthDateRange: ClosedRange<Date> {
+        let earliest = Calendar.current.date(byAdding: .year, value: -100, to: .now) ?? .distantPast
+        let latest = Calendar.current.date(byAdding: .year, value: -13, to: .now) ?? .now
+        return earliest...latest
+    }
+
     private var heightValue: Binding<Int> {
         Binding(
             get: { state.heightUnit == .inches ? state.heightIn : state.heightCm },
@@ -66,46 +72,29 @@ struct PhysicalView: View {
             onNext: { step += 1 },
             onBack: { coordinator.pop() }
         ) {
-            VStack(spacing: 16) {
+            VStack(alignment: .leading, spacing: 16) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Age")
+                    Text("Date of birth")
                         .font(.plusJakartaSans(.medium, size: 14))
                         .foregroundStyle(.labelSecondary)
 
-                    HStack(spacing: 0) {
-                        Button {
-                            if state.age > 13 { state.age -= 1 }
-                        } label: {
-                            Image(systemName: "minus")
-                                .font(.system(size: 14, weight: .semibold))
-                                .foregroundStyle(.labelSecondary)
-                                .frame(width: 44, height: 52)
-                        }
-                        .buttonStyle(.plain)
-
-                        Rectangle().fill(Color.borderDefault).frame(width: 1, height: 24)
-
-                        Text("\(state.age)")
-                            .font(.system(size: 20, weight: .bold))
-                            .foregroundStyle(.labelPrimary)
-                            .frame(maxWidth: .infinity)
-
-                        Rectangle().fill(Color.borderDefault).frame(width: 1, height: 24)
-
-                        Button {
-                            if state.age < 100 { state.age += 1 }
-                        } label: {
-                            Image(systemName: "plus")
-                                .font(.system(size: 14, weight: .semibold))
-                                .foregroundStyle(.volt)
-                                .frame(width: 44, height: 52)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                    .background(Color.surfaceSecondary)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.borderDefault, lineWidth: 1))
-                }
+					Text(state.birthDate, format: .dateTime.day().month().year())
+						.font(.system(size: 20, weight: .bold))
+						.foregroundStyle(.labelPrimary)
+						.padding(.horizontal, 12)
+						.padding(.vertical, 8)
+						.cornerRadius(8)
+						.overlay {
+							DatePicker("", selection: $state.birthDate, displayedComponents: .date)
+								.labelsHidden()
+								.blendMode(.destinationOver)
+						}
+						.padding(.horizontal, 16)
+						.frame(height: 52)
+						.background(Color.surfaceSecondary)
+						.clipShape(RoundedRectangle(cornerRadius: 10))
+						.overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.borderDefault, lineWidth: 1))
+				}
 
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Biological sex")
