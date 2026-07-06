@@ -17,7 +17,7 @@ final class OnboardingViewModel {
     // MARK: - Actions
 
     func advance() {
-        selectedTab += 1
+        selectedTab = min(selectedTab + 1, OnboardingStates.thirdView.rawValue)
     }
 
 	func skipToLastTab() {

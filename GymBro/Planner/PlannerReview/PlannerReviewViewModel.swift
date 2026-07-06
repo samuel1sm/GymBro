@@ -13,7 +13,7 @@ final class PlannerReviewViewModel {
     // MARK: - State
 
     var state = PlannerReviewState(plan: .reviewSeed)
-    var toastMessage: String? = nil
+    var toastMessage: String? { toast.message }
 
     var activeIndex: Int = 0 {
         didSet { expandedExerciseID = nil }
@@ -25,7 +25,7 @@ final class PlannerReviewViewModel {
     // MARK: - Private
 
     private var hasLoadedPendingPlan = false
-    private var toastTask: Task<Void, Never>? = nil
+    private let toast = ToastPresenter()
 
     // MARK: - Derived
 
@@ -92,12 +92,6 @@ final class PlannerReviewViewModel {
     // MARK: - Toast
 
     func fireToast(_ message: String) {
-        toastTask?.cancel()
-        toastMessage = message
-        toastTask = Task { @MainActor [weak self] in
-            try? await Task.sleep(nanoseconds: 1_800_000_000)
-            guard let self, !Task.isCancelled else { return }
-            self.toastMessage = nil
-        }
+        toast.fire(message)
     }
 }

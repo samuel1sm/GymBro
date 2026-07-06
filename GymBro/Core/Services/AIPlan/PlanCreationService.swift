@@ -1,11 +1,13 @@
 import Foundation
 
-protocol PlanCreationService: Sendable {
+/// `nonisolated` opts the service layer out of the target's default MainActor
+/// isolation — plan creation is async backend work, not UI state.
+nonisolated protocol PlanCreationService: Sendable {
     func createPlan(from request: AIPlan.PlanRequest) async throws -> AIPlan.WorkoutPlan
 }
 
 /// Stand-in until the real AI backend is wired up.
-struct SimulatedPlanCreationService: PlanCreationService {
+nonisolated struct SimulatedPlanCreationService: PlanCreationService {
     func createPlan(from request: AIPlan.PlanRequest) async throws -> AIPlan.WorkoutPlan {
         try await Task.sleep(for: .seconds(2))
 

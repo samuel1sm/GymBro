@@ -19,9 +19,19 @@ struct LoggedSet: Hashable {
     var reps: Int
 }
 
+/// Rest countdown anchored to a wall-clock end date, so time spent suspended
+/// (phone locked between sets) still counts. `remaining` is a display snapshot
+/// refreshed from `endDate` on every clock tick.
 struct RestState: Hashable {
-    var remaining: Int
+    var endDate: Date
     var total: Int
+    var remaining: Int
+
+    init(total: Int, now: Date = .now) {
+        self.endDate = now.addingTimeInterval(TimeInterval(total))
+        self.total = total
+        self.remaining = total
+    }
 }
 
 // MARK: - State

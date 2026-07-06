@@ -2,8 +2,8 @@ import SwiftUI
 
 /// "SESSIONS" label plus the active plan's session cards.
 struct SessionsSection: View {
-    let sessions: [WorkoutSession]
-    let onSelect: (WorkoutSession) -> Void
+    let sessions: [WorkoutsSession]
+    let onSelect: (WorkoutsSession) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -29,9 +29,9 @@ struct SessionsSection: View {
 #Preview {
     SessionsSection(
         sessions: [
-            WorkoutSession(number: 1, name: "Training 1", focus: .push, exercises: 6, minutes: 60, status: .done),
-            WorkoutSession(number: 2, name: "Training 2", focus: .pull, exercises: 6, minutes: 65, status: .today),
-            WorkoutSession(number: 3, name: "Training 3", focus: .legs, exercises: 7, minutes: 70, status: .upcoming),
+            WorkoutsSession(number: 1, name: "Training 1", focus: .push, exercises: 6, minutes: 60, status: .done),
+            WorkoutsSession(number: 2, name: "Training 2", focus: .pull, exercises: 6, minutes: 65, status: .today),
+            WorkoutsSession(number: 3, name: "Training 3", focus: .legs, exercises: 7, minutes: 70, status: .upcoming),
         ],
         onSelect: { _ in }
     )

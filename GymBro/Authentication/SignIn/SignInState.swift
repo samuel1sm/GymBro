@@ -29,17 +29,6 @@ struct SignInState {
 
     // MARK: - Derived
 
-    /// Demo auth rule (mirrors the prototype): a well-formed email and a
-    /// password of at least 6 characters is accepted.
-    var credentialsAreValid: Bool {
-        let trimmedEmail = email.trimmingCharacters(in: .whitespaces)
-        let emailLooksValid = trimmedEmail.range(
-            of: #"^\S+@\S+\.\S+$"#,
-            options: .regularExpression
-        ) != nil
-        return emailLooksValid && password.count >= 6
-    }
-
     /// Both fields carry something — the bare minimum to attempt a sign-in.
     var hasBothFields: Bool {
         !email.trimmingCharacters(in: .whitespaces).isEmpty && !password.isEmpty

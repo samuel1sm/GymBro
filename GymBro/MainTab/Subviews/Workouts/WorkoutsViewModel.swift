@@ -12,7 +12,7 @@ final class WorkoutsViewModel {
     var state: WorkoutsState
 
     /// The session whose action sheet is open, if any.
-    var selectedSession: WorkoutSession?
+    var selectedSession: WorkoutsSession?
 
     /// Whether the plan-library selector is open.
     var isLibraryOpen = false
@@ -30,7 +30,7 @@ final class WorkoutsViewModel {
 
     // MARK: - Intents
 
-    func selectSession(_ session: WorkoutSession) {
+    func selectSession(_ session: WorkoutsSession) {
         selectedSession = session
     }
 
@@ -46,7 +46,7 @@ final class WorkoutsViewModel {
         isLibraryOpen = false
     }
 
-    func activatePlan(_ plan: WorkoutPlan) {
+    func activatePlan(_ plan: WorkoutsPlan) {
         state.activePlanID = plan.id
         isLibraryOpen = false
     }

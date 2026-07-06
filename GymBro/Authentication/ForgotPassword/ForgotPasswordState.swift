@@ -26,13 +26,9 @@ struct ForgotPasswordState {
 
     // MARK: - Derived
 
-    /// A well-formed email enables the primary CTA (mirrors the prototype's
-    /// `^[^\s@]+@[^\s@]+\.[^\s@]+$`).
+    /// A well-formed email enables the primary CTA.
     var emailIsValid: Bool {
-        email.trimmingCharacters(in: .whitespaces).range(
-            of: #"^[^\s@]+@[^\s@]+\.[^\s@]+$"#,
-            options: .regularExpression
-        ) != nil
+        AuthValidation.isValidEmail(email)
     }
 
     /// Address echoed back on the confirmation screen, with a fallback for the

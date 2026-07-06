@@ -3,9 +3,9 @@ import SwiftUI
 /// The saved-plans library: a list of plans (the active one highlighted) plus a
 /// "New Plan" action.
 struct PlanLibrarySheet: View {
-    var plans: [WorkoutPlan]
-    var activePlanID: WorkoutPlan.ID
-    var onPick: (WorkoutPlan) -> Void = { _ in }
+    var plans: [WorkoutsPlan]
+    var activePlanID: WorkoutsPlan.ID
+    var onPick: (WorkoutsPlan) -> Void = { _ in }
     var onNewPlan: () -> Void = {}
 
     var body: some View {
@@ -54,7 +54,7 @@ struct PlanLibrarySheet: View {
 /// A single plan row in the library — name + meta, with an "Active" marker or a
 /// trailing chevron.
 private struct PlanRow: View {
-    var plan: WorkoutPlan
+    var plan: WorkoutsPlan
     var isActive: Bool
     var onTap: () -> Void
 

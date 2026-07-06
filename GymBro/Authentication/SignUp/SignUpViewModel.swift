@@ -49,7 +49,7 @@ final class SignUpViewModel {
                 guard let self, !Task.isCancelled else { return }
                 try pendingPlan.persistUser(to: userStore)
                 self.state.status = .success
-                try? await Task.sleep(for: .milliseconds(900))
+                try? await Task.sleep(for: AuthPrimaryCTA.successHold)
                 guard !Task.isCancelled else { return }
                 onSuccess()
             } catch {
@@ -60,7 +60,4 @@ final class SignUpViewModel {
         }
     }
 
-    func toggleReveal() {
-        state.revealPassword.toggle()
-    }
 }

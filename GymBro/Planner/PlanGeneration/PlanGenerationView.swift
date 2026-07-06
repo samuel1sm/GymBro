@@ -10,6 +10,8 @@ struct PlanGenerationView: View {
     let request: AIPlan.PlanRequest
 
     var body: some View {
+        @Bindable var vm = viewModel
+
         VStack(spacing: 0) {
             Text("PLAN GENERATION")
                 .font(.system(size: 11, weight: .semibold, design: .monospaced))
@@ -72,14 +74,19 @@ struct PlanGenerationView: View {
         .background(.appBackground)
         .toolbar(.hidden, for: .navigationBar)
         .onAppear { viewModel.startGlow() }
-		.task {
-			await viewModel.generatePlan(from: request)
-			if let plan = viewModel.generatedPlan {
-				pendingPlanStore.stash(request: request, plan: plan)
-			}
-			coordinator.push(.signUp)
-		}
+        .task(id: viewModel.attempt) {
+            await viewModel.generatePlan(from: request)
+            guard !Task.isCancelled, let plan = viewModel.generatedPlan else { return }
+            pendingPlanStore.stash(request: request, plan: plan)
+            coordinator.push(.signUp)
+        }
         .task { await viewModel.runRotatingTextLoop() }
+        .alert("Couldn't build your plan", isPresented: $vm.generationFailed) {
+            Button("Try Again") { viewModel.retry() }
+            Button("Go Back", role: .cancel) { coordinator.pop() }
+        } message: {
+            Text("Something went wrong while generating your plan. Check your connection and try again.")
+        }
     }
 }
 

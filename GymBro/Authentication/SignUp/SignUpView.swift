@@ -36,8 +36,10 @@ struct SignUpView: View {
             }
 
             VStack(alignment: .leading, spacing: 0) {
-                PendingPlanChip(planTitle: viewModel.state.planTitle)
-                    .padding(.top, 14)
+                PendingPlanChip(
+                    planTitle: pendingPlanStore.plan?.pendingChipTitle ?? viewModel.state.planTitle
+                )
+                .padding(.top, 14)
 
                 AuthHeader(
                     title: "Save your plan",
@@ -86,67 +88,21 @@ struct SignUpView: View {
 
     // MARK: - Fields
 
-    /// Styled placeholder. Uses `verbatim:` so an email-shaped string isn't
-    /// parsed as markdown and auto-linkified — keeping the placeholder the
-    /// design's tertiary gray.
-    private func placeholder(_ text: String) -> Text {
-        Text(verbatim: text).foregroundStyle(.labelTertiary)
-    }
-
     private func fields(vm: SignUpViewModel) -> some View {
         @Bindable var vm = vm
-        return VStack(spacing: 16) {
-            SignInField(label: "Email", isFocused: focusedField == .email) {
-                TextField("", text: $vm.state.email, prompt: placeholder("you@email.com"))
-                    .font(.plusJakartaSans(.regular, size: 15))
-                    .foregroundStyle(.labelPrimary)
-                    .tint(.volt)
-                    .focused($focusedField, equals: .email)
-                    .keyboardType(.emailAddress)
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
-                    .submitLabel(.next)
-                    .onSubmit { focusedField = .password }
+        return AuthCredentialFields(
+            email: $vm.state.email,
+            password: $vm.state.password,
+            revealPassword: $vm.state.revealPassword,
+            focus: $focusedField,
+            emailField: .email,
+            passwordField: .password,
+            passwordPrompt: "At least \(AuthValidation.minPasswordLength) characters",
+            onSubmit: {
+                focusedField = nil
+                submit()
             }
-
-            SignInField(label: "Password", isFocused: focusedField == .password) {
-                passwordInput(vm: vm)
-
-                Button {
-                    viewModel.toggleReveal()
-                } label: {
-                    Image(systemName: viewModel.state.revealPassword ? "eye" : "eye.slash")
-                        .font(.system(size: 18, weight: .regular))
-                        .foregroundStyle(.labelSecondary)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel(viewModel.state.revealPassword ? "Hide password" : "Show password")
-            }
-        }
-    }
-
-    private func passwordInput(vm: SignUpViewModel) -> some View {
-        @Bindable var vm = vm
-        return Group {
-            if viewModel.state.revealPassword {
-                TextField("", text: $vm.state.password, prompt: placeholder("At least 8 characters"))
-                    .tracking(-0.1)
-            } else {
-                SecureField("", text: $vm.state.password, prompt: placeholder("At least 8 characters"))
-                    .tracking(2)
-            }
-        }
-        .font(.plusJakartaSans(.regular, size: 15))
-        .foregroundStyle(.labelPrimary)
-        .tint(.volt)
-        .textInputAutocapitalization(.never)
-        .autocorrectionDisabled()
-        .focused($focusedField, equals: .password)
-        .submitLabel(.go)
-        .onSubmit {
-            focusedField = nil
-            submit()
-        }
+        )
     }
 
     // MARK: - Primary CTA — Create account & save

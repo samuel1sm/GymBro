@@ -53,7 +53,7 @@ struct PlannerTrainingSlot: Identifiable, Hashable {
 
     init(source: AIPlan.WorkoutSession) {
         self.source = source
-        self.exercises = source.exercises.map(PlannerExercise.init)
+        self.exercises = source.exercises.map { PlannerExercise(source: $0) }
     }
 
     var name: String { "Training \(source.sessionNumber)" }
@@ -87,7 +87,7 @@ struct PlannerReviewState {
     init(plan: AIPlan.WorkoutPlan) {
         splitType = plan.splitType
         planNotes = plan.planNotes
-        slots = plan.sessions.map(PlannerTrainingSlot.init)
+        slots = plan.sessions.map { PlannerTrainingSlot(source: $0) }
     }
 
     func buildPlan() -> AIPlan.WorkoutPlan {

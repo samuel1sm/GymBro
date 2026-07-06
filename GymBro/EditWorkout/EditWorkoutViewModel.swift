@@ -20,11 +20,11 @@ final class EditWorkoutViewModel {
     /// Set the moment the user changes anything — gates the discard sheet.
     private(set) var isDirty = false
 
-    var toastMessage: String? = nil
+    var toastMessage: String? { toast.message }
 
     // MARK: - Private
 
-    private var toastTask: Task<Void, Never>? = nil
+    private let toast = ToastPresenter()
 
     // MARK: - Derived
 
@@ -98,12 +98,6 @@ final class EditWorkoutViewModel {
     // MARK: - Toast
 
     func fireToast(_ message: String) {
-        toastTask?.cancel()
-        toastMessage = message
-        toastTask = Task { @MainActor [weak self] in
-            try? await Task.sleep(nanoseconds: 1_700_000_000)
-            guard let self, !Task.isCancelled else { return }
-            self.toastMessage = nil
-        }
+        toast.fire(message)
     }
 }

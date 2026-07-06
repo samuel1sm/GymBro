@@ -1,8 +1,8 @@
 import Foundation
 
 /// Namespace for the Codable AI/JSON contract. Kept separate from the SwiftData
-/// layer (bridged by `PlanMapper`) and from the UI-state types in
-/// `WorkoutsState.swift`, whose names would otherwise collide.
+/// layer (bridged by `PlanMapper`) and from the Workouts-screen UI types
+/// (`WorkoutsSession`/`WorkoutsPlan` in `WorkoutsState.swift`).
 enum AIPlan {
 
     enum FitnessLevel: String, Codable, CaseIterable, Sendable {

@@ -17,18 +17,16 @@ final class HomeViewModel {
 
     /// Time-aware greeting — morning before noon, afternoon before 18:00, else evening.
     var greeting: String {
-        switch Calendar.current.component(.hour, from: Date()) {
-        case ..<12:  return "Good morning"
-        case 12..<18: return "Good afternoon"
-        default:     return "Good evening"
+        switch Calendar.current.component(.hour, from: .now) {
+        case ..<12:   String(localized: "Good morning")
+        case 12..<18: String(localized: "Good afternoon")
+        default:      String(localized: "Good evening")
         }
     }
 
     /// Today's date as an uppercase header label, e.g. "FRIDAY, MAY 29".
     var dateLabel: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE, MMM d"
-        return formatter.string(from: Date()).uppercased()
+        Date.now.formatted(.dateTime.weekday(.wide).month(.abbreviated).day()).uppercased()
     }
 
     /// Starts today's session → Active Workout Session (Screen 06).

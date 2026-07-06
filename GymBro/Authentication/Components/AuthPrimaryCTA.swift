@@ -9,6 +9,9 @@ struct AuthPrimaryCTA: View {
         case success
     }
 
+    /// How long the success phase stays on screen before the flow routes onward.
+    static let successHold: Duration = .milliseconds(900)
+
     let title: String
     let loadingTitle: String
     var successTitle: String = ""

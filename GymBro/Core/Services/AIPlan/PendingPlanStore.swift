@@ -1,6 +1,10 @@
 import Foundation
 import Observation
 
+/// Thrown by `persistPlan` when there's no saved user and no stashed request
+/// to create one from — the plan would have nowhere to attach.
+struct MissingUserForPlanError: Error {}
+
 /// Holds the generated plan (and the request that produced it) between plan
 /// generation and account creation. Backed by `UserDefaults` so the plan
 /// survives the app being closed before the user signs up or logs in.
@@ -55,7 +59,8 @@ final class PendingPlanStore {
     /// Persists the given plan — the stashed plan with any review edits
     /// applied — for the saved user and clears the stash. Falls back to
     /// creating the user from the stashed request if sign-up didn't save one
-    /// (e.g. the user signed in instead).
+    /// (e.g. the user signed in instead). Throws `MissingUserForPlanError`
+    /// when neither exists, so callers never mistake a dropped plan for a save.
     func persistPlan(_ plan: AIPlan.WorkoutPlan, to store: UserStore) throws {
         let user: StoredUser
         if let existing = try store.loadUser() {
@@ -63,7 +68,7 @@ final class PendingPlanStore {
         } else if let request {
             user = try store.saveUser(request)
         } else {
-            return
+            throw MissingUserForPlanError()
         }
         try store.savePlan(plan, for: user, name: nil)
         clear()

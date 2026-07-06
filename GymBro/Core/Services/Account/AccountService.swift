@@ -14,15 +14,17 @@ enum AccountError: LocalizedError {
     }
 }
 
-protocol AccountService: Sendable {
+/// `nonisolated` opts the service layer out of the target's default MainActor
+/// isolation — auth is async backend work, not UI state.
+nonisolated protocol AccountService: Sendable {
     func createAccount(email: String, password: String) async throws
     func signIn(email: String, password: String) async throws
 }
 
 /// Demo rules until a real backend exists: creating with an email containing
 /// "taken" fails as a duplicate; signing in accepts any well-formed email with
-/// a 6+ character password.
-struct MockAccountService: AccountService {
+/// a password meeting the sign-up minimum.
+nonisolated struct MockAccountService: AccountService {
 
     func createAccount(email: String, password: String) async throws {
         try await Task.sleep(for: .milliseconds(1500))
@@ -33,10 +35,9 @@ struct MockAccountService: AccountService {
 
     func signIn(email: String, password: String) async throws {
         try await Task.sleep(for: .milliseconds(1500))
-        let emailLooksValid = email
-            .trimmingCharacters(in: .whitespaces)
-            .range(of: #"^\S+@\S+\.\S+$"#, options: .regularExpression) != nil
-        guard emailLooksValid, password.count >= 6 else {
+        guard AuthValidation.isValidEmail(email),
+              password.count >= AuthValidation.minPasswordLength
+        else {
             throw AccountError.invalidCredentials
         }
     }

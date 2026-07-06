@@ -32,6 +32,10 @@ final class ActiveSessionViewModel {
     private var savedReps: String = ""
     private var clockTask: Task<Void, Never>? = nil
 
+    /// Wall-clock anchor for the session timer — `elapsedSeconds` is derived
+    /// from it on every tick, so time spent suspended still counts.
+    private let startedAt: Date
+
     // MARK: - Init
 
     init(state: ActiveSessionState = ActiveSessionState(), elapsedSeconds: Int = 742) {
@@ -40,6 +44,7 @@ final class ActiveSessionViewModel {
         self.exercises = state.exercises
         self.logs = state.logs
         self.elapsedSeconds = elapsedSeconds
+        self.startedAt = Date.now.addingTimeInterval(-TimeInterval(elapsedSeconds))
     }
 
     // MARK: - Derived
@@ -54,7 +59,7 @@ final class ActiveSessionViewModel {
     }
 
     var openLogs: [LoggedSet] {
-        guard let i = openIndex else { return [] }
+        guard let i = openIndex, logs.indices.contains(i) else { return [] }
         return logs[i]
     }
 
@@ -72,7 +77,7 @@ final class ActiveSessionViewModel {
             while !Task.isCancelled {
                 try? await Task.sleep(nanoseconds: 1_000_000_000)
                 guard let self, !Task.isCancelled else { return }
-                self.elapsedSeconds += 1
+                self.elapsedSeconds = max(0, Int(Date.now.timeIntervalSince(self.startedAt)))
                 self.tickRest()
             }
         }
@@ -108,6 +113,7 @@ final class ActiveSessionViewModel {
     }
 
     func openExerciseSheet(at index: Int) {
+        guard exercises.indices.contains(index), logs.indices.contains(index) else { return }
         openIndex = index
         weightInput = lastKg(for: index)
         repsInput = ""
@@ -134,7 +140,7 @@ final class ActiveSessionViewModel {
             exitEdit()
             return
         }
-        guard let i = openIndex else { return }
+        guard let i = openIndex, exercises.indices.contains(i), logs.indices.contains(i) else { return }
         let exercise = exercises[i]
         let kg = Double(weightInput) ?? exercise.planKg
         let reps = Int(repsInput) ?? exercise.repHi
@@ -149,7 +155,7 @@ final class ActiveSessionViewModel {
             }
         } else {
             // State B — rest
-            rest = RestState(remaining: exercise.restSeconds, total: exercise.restSeconds)
+            rest = RestState(total: exercise.restSeconds)
         }
     }
 
@@ -163,7 +169,7 @@ final class ActiveSessionViewModel {
             savedReps = repsInput
         }
         editIndex = idx
-        guard let i = openIndex else { return }
+        guard let i = openIndex, logs.indices.contains(i), logs[i].indices.contains(idx) else { return }
         let set = logs[i][idx]
         weightInput = SessionFormat.kg(set.kg)
         repsInput = String(set.reps)
@@ -173,7 +179,7 @@ final class ActiveSessionViewModel {
 
     private func tickRest() {
         guard var current = rest else { return }
-        current.remaining -= 1
+        current.remaining = max(0, Int(current.endDate.timeIntervalSinceNow.rounded(.up)))
         if current.remaining <= 0 {
             endRest()
         } else {
@@ -189,6 +195,7 @@ final class ActiveSessionViewModel {
     }
 
     private func lastKg(for index: Int) -> String {
+        guard exercises.indices.contains(index), logs.indices.contains(index) else { return "" }
         if let last = logs[index].last {
             return SessionFormat.kg(last.kg)
         }

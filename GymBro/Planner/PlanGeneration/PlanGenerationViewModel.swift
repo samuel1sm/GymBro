@@ -6,7 +6,8 @@ import Observation
 /// Owns the step checklist, the rotating status copy and the simulated
 /// progress, along with the timing loops that drive them. The view simply
 /// kicks off the loops; all the timing and animation lives here.
-@MainActor
+/// (MainActor-isolated via the target's `SWIFT_DEFAULT_ACTOR_ISOLATION`,
+/// like every view model in this module.)
 @Observable
 final class PlanGenerationViewModel {
 
@@ -33,6 +34,12 @@ final class PlanGenerationViewModel {
     var rotatingIndex: Int = 0
     var glowing: Bool = false
     var generatedPlan: AIPlan.WorkoutPlan?
+
+    /// Set when the service fails — drives the retry alert.
+    var generationFailed = false
+
+    /// Bumped by `retry()`; the view keys its generation `.task` on this.
+    private(set) var attempt = 0
 
     // MARK: - Dependencies
 
@@ -64,15 +71,27 @@ final class PlanGenerationViewModel {
     }
 
     /// Calls the plan creation service while the progress animation runs, then
-    /// holds the full ring for a beat. Cancellation-safe — navigating away
-    /// mid-generation won't push.
+    /// holds the full ring for a beat. On failure sets `generationFailed`; the
+    /// view checks `Task.isCancelled` before routing onward.
     func generatePlan(from request: AIPlan.PlanRequest) async {
+        generatedPlan = nil
+        generationFailed = false
         async let plan = planService.createPlan(from: request)
         await runProgressLoop()
         generatedPlan = try? await plan
         guard !Task.isCancelled else { return }
+        guard generatedPlan != nil else {
+            generationFailed = true
+            return
+        }
         try? await Task.sleep(for: .milliseconds(400))
-        guard !Task.isCancelled else { return }
+    }
+
+    /// Rewinds the progress UI and re-keys the view's generation task.
+    func retry() {
+        progress = 0
+        generationFailed = false
+        attempt += 1
     }
 
     /// Advances the simulated progress ring until it reaches 100% (or the task

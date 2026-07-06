@@ -3,7 +3,7 @@ import SwiftUI
 /// A tappable card for one session in the active plan: focus tile, name + focus
 /// pill, meta line, and a trailing status indicator.
 struct SessionCard: View {
-    var session: WorkoutSession
+    var session: WorkoutsSession
     var onTap: () -> Void = {}
 
     var body: some View {

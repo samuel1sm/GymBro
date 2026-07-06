@@ -3,7 +3,7 @@ import SwiftUI
 /// Compact action sheet shown when a session is tapped: a header summarising the
 /// session, then Start / Edit actions.
 struct SessionActionSheet: View {
-    var session: WorkoutSession
+    var session: WorkoutsSession
     var onStart: () -> Void = {}
     var onEdit: () -> Void = {}
 

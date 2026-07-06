@@ -15,16 +15,8 @@ final class StatisticsViewModel {
         self.state = state
     }
 
-    /// The headline weekly volume, grouped for display, e.g. "14,100".
+    /// The headline weekly volume, grouped for the user's locale, e.g. "14,100".
     var currentVolumeLabel: String {
-        Self.groupedFormatter.string(from: NSNumber(value: state.currentVolumeKg))
-            ?? "\(state.currentVolumeKg)"
+        state.currentVolumeKg.formatted()
     }
-
-    private static let groupedFormatter: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.groupingSeparator = ","
-        return formatter
-    }()
 }

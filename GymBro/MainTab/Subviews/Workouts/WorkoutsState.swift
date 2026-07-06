@@ -20,7 +20,7 @@ enum SessionStatus {
 }
 
 /// One session in the active plan's session list.
-struct WorkoutSession: Identifiable {
+struct WorkoutsSession: Identifiable {
     let id = UUID()
     /// The training number shown in the focus tile, e.g. 3.
     let number: Int
@@ -38,7 +38,7 @@ struct WorkoutSession: Identifiable {
 }
 
 /// A saved plan in the plan-library selector.
-struct WorkoutPlan: Identifiable {
+struct WorkoutsPlan: Identifiable {
     let id = UUID()
     let name: String
     /// Session count · start date, e.g. "5 sessions · since May 26".
@@ -54,25 +54,25 @@ struct WorkoutsState {
 
     // MARK: - Sessions
 
-    var sessions: [WorkoutSession] = [
-        WorkoutSession(number: 1, name: "Training 1", focus: .push, exercises: 6, minutes: 60, status: .done),
-        WorkoutSession(number: 2, name: "Training 2", focus: .pull, exercises: 6, minutes: 65, status: .done),
-        WorkoutSession(number: 3, name: "Training 3", focus: .legs, exercises: 7, minutes: 70, status: .today),
-        WorkoutSession(number: 4, name: "Training 4", focus: .push, exercises: 6, minutes: 55, status: .upcoming),
-        WorkoutSession(number: 5, name: "Training 5", focus: .pull, exercises: 6, minutes: 60, status: .upcoming),
+    var sessions: [WorkoutsSession] = [
+        WorkoutsSession(number: 1, name: "Training 1", focus: .push, exercises: 6, minutes: 60, status: .done),
+        WorkoutsSession(number: 2, name: "Training 2", focus: .pull, exercises: 6, minutes: 65, status: .done),
+        WorkoutsSession(number: 3, name: "Training 3", focus: .legs, exercises: 7, minutes: 70, status: .today),
+        WorkoutsSession(number: 4, name: "Training 4", focus: .push, exercises: 6, minutes: 55, status: .upcoming),
+        WorkoutsSession(number: 5, name: "Training 5", focus: .pull, exercises: 6, minutes: 60, status: .upcoming),
     ]
 
     // MARK: - Plans
 
-    var plans: [WorkoutPlan] = [
-        WorkoutPlan(name: "5-Day PPL Split", meta: "5 sessions · since May 26"),
-        WorkoutPlan(name: "Upper / Lower",   meta: "4 sessions · Apr 2"),
-        WorkoutPlan(name: "Full Body",       meta: "3 sessions · Mar 1"),
+    var plans: [WorkoutsPlan] = [
+        WorkoutsPlan(name: "5-Day PPL Split", meta: "5 sessions · since May 26"),
+        WorkoutsPlan(name: "Upper / Lower",   meta: "4 sessions · Apr 2"),
+        WorkoutsPlan(name: "Full Body",       meta: "3 sessions · Mar 1"),
     ]
 
     /// The plan currently active — its name shows in the selector, and it is
     /// marked "Active" in the library. Defaults to the first plan.
-    var activePlanID: WorkoutPlan.ID
+    var activePlanID: WorkoutsPlan.ID
 
     init() {
         activePlanID = plans.first!.id

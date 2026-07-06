@@ -15,7 +15,9 @@ struct GymBroApp: App {
         do {
             let container = try PersistenceContainer.makeShared()
             modelContainer = container
-            userStore = SwiftDataUserStore(context: ModelContext(container))
+            // Share the container's mainContext so future @Query/@Environment
+            // consumers observe the same context the store writes through.
+            userStore = SwiftDataUserStore(context: container.mainContext)
         } catch {
             fatalError("Failed to set up the SwiftData container: \(error)")
         }
@@ -35,20 +37,17 @@ struct GymBroApp: App {
 
 // MARK: - Login
 
-/// Resolves the post-login destination: a saved `StoredUser` routes the
-/// returning-user flow, `nil` routes new-user onboarding.
+/// Resolves where sign-in lands: Home when the account already has a saved
+/// plan, otherwise Planner Review so the user still reviews (and saves) one —
+/// pending or freshly generated. Store errors fall back to the review screen,
+/// which can always save.
 enum LoginFlow {
 
-    enum Destination {
-        case returningUser(StoredUser, savedPlans: [StoredPlan])
-        case newUser
-    }
-
-    static func resolve(using store: UserStore) throws -> Destination {
-        guard let user = try store.loadUser() else {
-            return .newUser
-        }
-        let plans = try store.loadSavedPlans(for: user)
-        return .returningUser(user, savedPlans: plans)
+    static func postSignInRoute(using store: UserStore) -> Route {
+        guard let user = try? store.loadUser(),
+              let plans = try? store.loadSavedPlans(for: user),
+              !plans.isEmpty
+        else { return .plannerReview }
+        return .main
     }
 }

@@ -24,6 +24,8 @@ struct SignUpState {
     }
 
     /// Plan being saved — shown in the loss-aversion chip at the top.
+    /// Placeholder for previews; the view overrides it with the real pending
+    /// plan's title when one is stashed.
     var planTitle: String = "Push Day · 5 training days"
 
     var email: String = ""
@@ -36,17 +38,39 @@ struct SignUpState {
 
     /// Email is well-formed.
     var emailIsValid: Bool {
-        email.range(of: #"^\S+@\S+\.\S+$"#, options: .regularExpression) != nil
+        AuthValidation.isValidEmail(email)
     }
 
     /// Password meets the minimum length the design enforces.
     var passwordIsValid: Bool {
-        password.count >= 8
+        password.count >= AuthValidation.minPasswordLength
     }
 
     /// The CTA only enables once both fields pass — and never mid-request or
     /// after a successful create. Mirrors `canSubmit` in the prototype.
     func canSubmit() -> Bool {
         emailIsValid && passwordIsValid && status != .loading && status != .success
+    }
+}
+
+// MARK: - Chip title
+
+extension AIPlan.WorkoutPlan {
+    /// Title for the save-plan chip, e.g. "Push · Pull · Legs · 4 training days".
+    var pendingChipTitle: String {
+        let days = sessions.count == 1 ? "1 training day" : "\(sessions.count) training days"
+        return "\(splitType.displayTitle) · \(days)"
+    }
+}
+
+extension AIPlan.SplitType {
+    var displayTitle: String {
+        switch self {
+        case .fullBody:     "Full Body"
+        case .upperLower:   "Upper / Lower"
+        case .pushPullLegs: "Push · Pull · Legs"
+        case .bodyPart:     "Body-Part Split"
+        case .custom:       "Custom Split"
+        }
     }
 }

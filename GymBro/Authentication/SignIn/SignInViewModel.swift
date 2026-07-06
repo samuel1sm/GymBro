@@ -52,7 +52,7 @@ final class SignInViewModel {
                 try await accountService.signIn(email: email, password: password)
                 guard let self, !Task.isCancelled else { return }
                 self.state.status = .success
-                try? await Task.sleep(for: .milliseconds(900))
+                try? await Task.sleep(for: AuthPrimaryCTA.successHold)
                 guard !Task.isCancelled else { return }
                 onSuccess()
             } catch {
@@ -63,7 +63,4 @@ final class SignInViewModel {
         }
     }
 
-    func toggleReveal() {
-        state.revealPassword.toggle()
-    }
 }
