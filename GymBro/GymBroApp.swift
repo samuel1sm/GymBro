@@ -8,6 +8,7 @@ struct GymBroApp: App {
     private let modelContainer: ModelContainer
     private let userStore: UserStore
     private let pendingPlanStore = PendingPlanStore()
+    private let appSettingsStore = UserDefaultsAppSettingsStore()
 
     init() {
         FontRegister.registerAll()
@@ -30,6 +31,7 @@ struct GymBroApp: App {
             }
             .environment(\.userStore, userStore)
             .environment(\.pendingPlanStore, pendingPlanStore)
+            .environment(\.appSettingsStore, appSettingsStore)
         }
         .modelContainer(modelContainer)
     }

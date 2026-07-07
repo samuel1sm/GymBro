@@ -15,6 +15,22 @@ final class ProfileSettingsViewModel {
         self.state = state
     }
 
+    /// Replaces the state with the persisted profile, if one exists, then
+    /// overlays the saved app settings. Until the first save, the units
+    /// default to the profile's stored unit system.
+    func load(from store: UserStore, settings settingsStore: AppSettingsStore) {
+        if let user = try? store.loadUser() {
+            state = ProfileSettingsState(user: user)
+        }
+        if let saved = settingsStore.load() {
+            state.appSettings = saved
+        }
+    }
+
+    func saveSettings(to settingsStore: AppSettingsStore) {
+        settingsStore.save(state.appSettings)
+    }
+
     /// Resets profile and preferences, then re-triggers onboarding.
     /// Workout history is kept.
     func redoSetup(popToRoot: () -> Void) {

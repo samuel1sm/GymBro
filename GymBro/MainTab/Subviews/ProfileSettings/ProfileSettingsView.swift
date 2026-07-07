@@ -4,6 +4,8 @@ import SwiftUI
 /// Preferences, personal data summary, app settings. Tab 5 (Profile).
 struct ProfileSettingsView: View {
     @Environment(\.coordinator) private var coordinator
+    @Environment(\.userStore) private var userStore
+    @Environment(\.appSettingsStore) private var appSettingsStore
 
     @State private var viewModel = ProfileSettingsViewModel()
 
@@ -18,7 +20,7 @@ struct ProfileSettingsView: View {
 
                     SettingsGroup(title: "Training Preferences") {
                         SettingsRow(label: "Goals", value: viewModel.state.goalsDisplay, showsChevron: true, isFirst: true)
-                        SettingsRow(label: "Equipment", value: viewModel.state.equipment.rawValue, showsChevron: true)
+                        SettingsRow(label: "Equipment", value: viewModel.state.equipmentDisplay, showsChevron: true)
                         SettingsRow(label: "Injuries", value: viewModel.state.injuries, showsChevron: true)
                     }
 
@@ -26,7 +28,7 @@ struct ProfileSettingsView: View {
                         SettingsRow(label: "Days per week", value: "\(viewModel.state.daysPerWeek)", isFirst: true)
                         SettingsRow(label: "Session duration", value: "\(viewModel.state.sessionMinutes) min")
                         SettingsRow(label: "Preferred split", value: viewModel.state.preferredSplit)
-                        SettingsRow(label: "Workout time", value: viewModel.state.workoutTime)
+                        SettingsRow(label: "Training days", value: viewModel.state.trainingDaysDisplay)
                     }
 
                     SettingsGroup(title: "App Settings") {
@@ -53,6 +55,12 @@ struct ProfileSettingsView: View {
             }
         .background(Color.appBackground)
         .toolbar(.hidden, for: .navigationBar)
+        .onAppear {
+            viewModel.load(from: userStore, settings: appSettingsStore)
+        }
+        .onChange(of: viewModel.state.appSettings) {
+            viewModel.saveSettings(to: appSettingsStore)
+        }
     }
 }
 

@@ -16,6 +16,10 @@ private struct PendingPlanStoreKey: EnvironmentKey {
     static let defaultValue = PendingPlanStore()
 }
 
+private struct AppSettingsStoreKey: EnvironmentKey {
+    static let defaultValue: AppSettingsStore = InMemoryAppSettingsStore()
+}
+
 extension EnvironmentValues {
     var userStore: UserStore {
         get { self[UserStoreKey.self] }
@@ -30,5 +34,10 @@ extension EnvironmentValues {
     var pendingPlanStore: PendingPlanStore {
         get { self[PendingPlanStoreKey.self] }
         set { self[PendingPlanStoreKey.self] = newValue }
+    }
+
+    var appSettingsStore: AppSettingsStore {
+        get { self[AppSettingsStoreKey.self] }
+        set { self[AppSettingsStoreKey.self] = newValue }
     }
 }
