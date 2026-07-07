@@ -41,7 +41,7 @@ struct OnboardingView: View {
 						isFullWidth: true
 					) {
 						if viewModel.isLastTab {
-							coordinator.push(.profileGoals)
+							coordinator.push(.profileGoals(prefill: nil))
 						} else {
 							var transaction = Transaction()
 							transaction.disablesAnimations = true

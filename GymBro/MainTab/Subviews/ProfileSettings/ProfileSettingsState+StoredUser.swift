@@ -27,59 +27,6 @@ extension ProfileSettingsState {
     }
 }
 
-private extension AIPlan.FitnessLevel {
-    var toUI: FitnessLevel {
-        switch self {
-        case .beginner:     return .beginner
-        case .intermediate: return .intermediate
-        case .advanced:     return .advanced
-        }
-    }
-}
-
-private extension AIPlan.FitnessGoal {
-    var toUI: FitnessGoal {
-        switch self {
-        case .muscleGain:          return .muscleGain
-        case .fatLoss:             return .fatLoss
-        case .strength:            return .strength
-        case .endurance:           return .endurance
-        case .flexibility:         return .flexibility
-        case .generalFitness:      return .generalFitness
-        case .athleticPerformance: return .athleticPerformance
-        }
-    }
-}
-
-private extension AIPlan.Equipment {
-    var toUI: EquipmentOption {
-        switch self {
-        case .bodyweight:      return .bodyweightOnly
-        case .dumbbells:       return .dumbbells
-        case .barbell:         return .barbellPlates
-        case .kettlebell:      return .kettlebells
-        case .resistanceBands: return .resistanceBands
-        case .pullupBar:       return .pullupBar
-        case .cableMachine:    return .cableMachine
-        case .fullGym:         return .fullGym
-        }
-    }
-}
-
-private extension AIPlan.Weekday {
-    var toUI: TrainingDay {
-        switch self {
-        case .monday:    return .monday
-        case .tuesday:   return .tuesday
-        case .wednesday: return .wednesday
-        case .thursday:  return .thursday
-        case .friday:    return .friday
-        case .saturday:  return .saturday
-        case .sunday:    return .sunday
-        }
-    }
-}
-
 private extension AIPlan.SplitType {
     var displayName: String {
         switch self {

@@ -21,7 +21,7 @@ struct SignUpView: View {
             accountService: accountService,
             userStore: userStore,
             pendingPlan: pendingPlanStore,
-            onSuccess: { coordinator.replaceRoot(isNewUser ? .plannerReview : .main) }
+            onSuccess: { coordinator.replaceRoot(isNewUser ? .plannerReview(.onboarding) : .main) }
         )
     }
 

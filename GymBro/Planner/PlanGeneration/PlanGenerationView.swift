@@ -5,9 +5,11 @@ import SwiftUI
 struct PlanGenerationView: View {
     @Environment(\.coordinator) private var coordinator
     @Environment(\.pendingPlanStore) private var pendingPlanStore
+    @Environment(\.userStore) private var userStore
     @State private var viewModel = PlanGenerationViewModel()
 
     let request: AIPlan.PlanRequest
+    var flow: PlanFlow = .onboarding
 
     var body: some View {
         @Bindable var vm = viewModel
@@ -77,8 +79,21 @@ struct PlanGenerationView: View {
         .task(id: viewModel.attempt) {
             await viewModel.generatePlan(from: request)
             guard !Task.isCancelled, let plan = viewModel.generatedPlan else { return }
-            pendingPlanStore.stash(request: request, plan: plan)
-            coordinator.push(.signUp)
+            switch flow {
+            case .onboarding:
+                pendingPlanStore.stash(request: request, plan: plan)
+                coordinator.push(.signUp)
+            case .profileEdit:
+                // Persist the edited profile now; the plan itself is saved
+                // after the user reviews it on the next screen.
+                do {
+                    try userStore.saveUser(request)
+                    pendingPlanStore.stash(request: request, plan: plan)
+                    coordinator.push(.plannerReview(.profileEdit))
+                } catch {
+                    viewModel.generationFailed = true
+                }
+            }
         }
         .task { await viewModel.runRotatingTextLoop() }
         .alert("Couldn't build your plan", isPresented: $vm.generationFailed) {

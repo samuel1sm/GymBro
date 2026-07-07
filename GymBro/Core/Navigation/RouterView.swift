@@ -18,14 +18,14 @@ struct RouterView<Root: View>: View {
                         SignInView()
                     case .signUp:
                         SignUpView()
-                    case .profileGoals:
-                        ProfileGoalsView()
+                    case .profileGoals(let prefill):
+                        ProfileGoalsView(prefill: prefill)
                     case .forgotPassword:
                         ForgotPasswordView()
-                    case .planGeneration(let request):
-                        PlanGenerationView(request: request)
-                    case .plannerReview:
-                        PlannerReviewView()
+                    case .planGeneration(let request, let flow):
+                        PlanGenerationView(request: request, flow: flow)
+                    case .plannerReview(let flow):
+                        PlannerReviewView(flow: flow)
                     case .editWorkout:
                         EditWorkoutView()
                     case .activeSession:

@@ -22,9 +22,22 @@ final class Coordinator {
         path.append(route)
     }
 
+    /// One-shot toast for the screen revealed by the next pop — set it before
+    /// popping, and the destination consumes it on appear.
+    var pendingToast: String?
+
+    func consumePendingToast() -> String? {
+        defer { pendingToast = nil }
+        return pendingToast
+    }
+
     func pop() {
         guard !path.isEmpty else { return }
         path.removeLast()
+    }
+
+    func pop(count: Int) {
+        path.removeLast(min(count, path.count))
     }
 
     func popToRoot() {

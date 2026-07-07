@@ -49,7 +49,7 @@ enum LoginFlow {
         guard let user = try? store.loadUser(),
               let plans = try? store.loadSavedPlans(for: user),
               !plans.isEmpty
-        else { return .plannerReview }
+        else { return .plannerReview(.onboarding) }
         return .main
     }
 }

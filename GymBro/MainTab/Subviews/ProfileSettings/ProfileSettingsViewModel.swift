@@ -10,9 +10,16 @@ import Observation
 final class ProfileSettingsViewModel {
 
     var state: ProfileSettingsState
+    var toastMessage: String? { toast.message }
+
+    private let toast = ToastPresenter()
 
     init(state: ProfileSettingsState = ProfileSettingsState()) {
         self.state = state
+    }
+
+    func fireToast(_ message: String) {
+        toast.fire(message)
     }
 
     /// Replaces the state with the persisted profile, if one exists, then

@@ -6,6 +6,12 @@ final class ProfileGoalsViewModel {
     var step: ProfileGoalsStep = .physical
     var state = ProfileGoalsState()
 
+    init(prefill: AIPlan.PlanRequest? = nil) {
+        if let prefill {
+            state = ProfileGoalsState(request: prefill)
+        }
+    }
+
     func next() {
         if let next = step.next { step = next }
     }

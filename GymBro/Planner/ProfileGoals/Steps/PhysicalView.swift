@@ -2,6 +2,9 @@ import SwiftUI
 
 struct PhysicalView: View {
     @Binding var state: ProfileGoalsState
+    /// Hidden when editing an existing profile — birth date and biological
+    /// sex are set once during onboarding; the saved values pass through.
+    var showsIdentityFields: Bool = true
     let onNext: () -> Void
     let onBack: () -> Void
 
@@ -73,36 +76,38 @@ struct PhysicalView: View {
             onBack: onBack
         ) {
             VStack(alignment: .leading, spacing: 16) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Date of birth")
-                        .font(.plusJakartaSans(.medium, size: 14))
-                        .foregroundStyle(.labelSecondary)
+                if showsIdentityFields {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Date of birth")
+                            .font(.plusJakartaSans(.medium, size: 14))
+                            .foregroundStyle(.labelSecondary)
 
-					Text(state.birthDate, format: .dateTime.day().month().year())
-						.font(.system(size: 20, weight: .bold))
-						.foregroundStyle(.labelPrimary)
-						.padding(.horizontal, 12)
-						.padding(.vertical, 8)
-						.cornerRadius(8)
-						.overlay {
-							DatePicker("", selection: $state.birthDate, displayedComponents: .date)
-								.labelsHidden()
-								.blendMode(.destinationOver)
-						}
-						.padding(.horizontal, 16)
-						.frame(height: 52)
-						.background(Color.surfaceSecondary)
-						.clipShape(RoundedRectangle(cornerRadius: 10))
-						.overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.borderDefault, lineWidth: 1))
-				}
+                        Text(state.birthDate, format: .dateTime.day().month().year())
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundStyle(.labelPrimary)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .cornerRadius(8)
+                            .overlay {
+                                DatePicker("", selection: $state.birthDate, displayedComponents: .date)
+                                    .labelsHidden()
+                                    .blendMode(.destinationOver)
+                            }
+                            .padding(.horizontal, 16)
+                            .frame(height: 52)
+                            .background(Color.surfaceSecondary)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.borderDefault, lineWidth: 1))
+                    }
 
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Biological sex")
-                        .font(.plusJakartaSans(.medium, size: 14))
-                        .foregroundStyle(.labelSecondary)
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Biological sex")
+                            .font(.plusJakartaSans(.medium, size: 14))
+                            .foregroundStyle(.labelSecondary)
 
-                    SegmentedPicker(options: ["Male", "Female", "not to say"], selectedIndex: sexIndex)
-                        .frame(height: 52)
+                        SegmentedPicker(options: ["Male", "Female", "not to say"], selectedIndex: sexIndex)
+                            .frame(height: 52)
+                    }
                 }
 
                 numericField(

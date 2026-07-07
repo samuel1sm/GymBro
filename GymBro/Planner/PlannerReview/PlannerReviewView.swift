@@ -8,12 +8,22 @@ struct PlannerReviewView: View {
     @State private var viewModel = PlannerReviewViewModel()
     @State private var exerciseToDelete: PlannerExercise?
 
+    var flow: PlanFlow = .onboarding
+
     /// Persists the reviewed plan — with every edit applied — to SwiftData,
-    /// then routes Home.
+    /// then routes Home, or back to Profile when the review came from an
+    /// edit of the saved profile.
     private func savePlan() {
         do {
             try pendingPlanStore.persistPlan(viewModel.buildPlan(), to: userStore)
-            coordinator.replaceRoot(.main)
+            switch flow {
+            case .onboarding:
+                coordinator.replaceRoot(.main)
+            case .profileEdit:
+                coordinator.pendingToast = String(localized: "New plan created")
+                // Unwinds profile goals + generation + review, back to Profile.
+                coordinator.pop(count: 3)
+            }
         } catch {
             fireToast("Couldn't save your plan")
         }

@@ -18,10 +18,10 @@ struct ProfileSettingsView: View {
 
                     ProfileSummaryCard(state: viewModel.state)
 
-                    SettingsGroup(title: "Training Preferences") {
-                        SettingsRow(label: "Goals", value: viewModel.state.goalsDisplay, showsChevron: true, isFirst: true)
-                        SettingsRow(label: "Equipment", value: viewModel.state.equipmentDisplay, showsChevron: true)
-                        SettingsRow(label: "Injuries", value: viewModel.state.injuries, showsChevron: true)
+                    SettingsGroup(title: "Training Preferences", onEdit: editTrainingPreferences) {
+                        SettingsRow(label: "Goals", value: viewModel.state.goalsDisplay, isFirst: true)
+                        SettingsRow(label: "Equipment", value: viewModel.state.equipmentDisplay)
+                        SettingsRow(label: "Injuries", value: viewModel.state.injuries)
                     }
 
                     SettingsGroup(title: "Schedule") {
@@ -57,10 +57,30 @@ struct ProfileSettingsView: View {
         .toolbar(.hidden, for: .navigationBar)
         .onAppear {
             viewModel.load(from: userStore, settings: appSettingsStore)
+            if let message = coordinator.consumePendingToast() {
+                viewModel.fireToast(message)
+            }
         }
         .onChange(of: viewModel.state.appSettings) {
             viewModel.saveSettings(to: appSettingsStore)
         }
+        .overlay(alignment: .bottom) {
+            Group {
+                if let toastMessage = viewModel.toastMessage {
+                    PlannerToast(message: toastMessage)
+                        .padding(.bottom, 100)
+                        .transition(.opacity)
+                }
+            }
+            .animation(.easeOut(duration: 0.22), value: viewModel.toastMessage)
+        }
+    }
+
+    /// Re-runs the profile & goals flow prefilled with the saved data; the
+    /// flow ends by generating (and saving) a fresh plan.
+    private func editTrainingPreferences() {
+        let prefill = (try? userStore.loadUser()).map(PlanMapper.toRequest)
+        coordinator.push(.profileGoals(prefill: prefill))
     }
 }
 
