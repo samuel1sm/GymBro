@@ -4,6 +4,7 @@ import SwiftUI
 /// this week. Tab 1 in the bottom tab bar.
 struct HomeView: View {
     @Environment(\.coordinator) private var coordinator
+    @Environment(\.userStore) private var userStore
 
     @State private var viewModel = HomeViewModel()
 
@@ -40,6 +41,9 @@ struct HomeView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appBackground)
         .toolbar(.hidden, for: .navigationBar)
+        .onAppear {
+            viewModel.load(from: userStore)
+        }
     }
 }
 

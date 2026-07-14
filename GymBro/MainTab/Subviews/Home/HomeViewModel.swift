@@ -29,9 +29,16 @@ final class HomeViewModel {
         Date.now.formatted(.dateTime.weekday(.wide).month(.abbreviated).day()).uppercased()
     }
 
+    /// Replaces the state with the persisted profile, plan library and logs.
+    func load(from store: UserStore) {
+        guard let user = try? store.loadUser() else { return }
+        let plans = (try? store.loadSavedPlans(for: user)) ?? []
+        let logs = (try? store.loadLogs(for: user)) ?? []
+        state = HomeState(user: user, plans: plans, logs: logs)
+    }
+
     /// Starts today's session → Active Workout Session (Screen 06).
-    /// No context yet — Home isn't wired to the saved plan library.
     func startWorkout(push: (Route) -> Void) {
-        push(.activeSession(nil))
+        push(.activeSession(state.activeSessionContext))
     }
 }

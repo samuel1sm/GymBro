@@ -1,16 +1,18 @@
 import Foundation
 
-/// Per-day status in the "This Week" strip.
+/// Per-day status in the "This Week" strip, under the weekly-quota model: any
+/// day trained counts, untrained days consume the week's rest budget, and days
+/// beyond it are missed.
 enum WeekDayStatus {
-    /// Completed session.
+    /// A day the user trained.
     case done
-    /// Today's planned session (still open).
+    /// Today, with a session still open.
     case today
-    /// A planned session that was skipped.
+    /// An untrained day after the week's rest budget ran out.
     case missed
-    /// A scheduled rest day.
+    /// An untrained day within the week's rest budget.
     case rest
-    /// A planned session later this week.
+    /// A day that hasn't happened yet — nothing is projected ahead.
     case future
 }
 
@@ -46,6 +48,8 @@ enum ActivityRange: String, CaseIterable {
 ///
 /// The app's main view on every launch: greeting, today's session, this week.
 /// Stays short and decisive — progress analytics live on the Statistics screen.
+/// The placeholder values below keep previews working; `HomeViewModel.load(from:)`
+/// replaces them with the persisted profile, plan and logs.
 struct HomeState {
 
     // MARK: - Identity
@@ -58,6 +62,10 @@ struct HomeState {
     var isRestDay: Bool = false
     var sessionTitle: String = "Training 3 — Pull Day"
     var sessionDetail: String = "6 exercises · 60 min"
+
+    /// Identity of today's session in the saved plan — what Start Workout
+    /// pushes to the active session. Nil until loaded from persistence.
+    var activeSessionContext: ActiveSessionContext?
 
     // MARK: - This week
 
@@ -104,14 +112,12 @@ struct HomeState {
     /// Sessions completed this week.
     var doneCount: Int { week.filter { $0.status == .done }.count }
 
-    /// Sessions planned this week (everything that isn't a rest day).
-    var plannedCount: Int { week.filter { $0.status != .rest }.count }
+    /// The weekly session target — the days per week the user's plan trains.
+    var plannedCount: Int = 5
 
     /// Sessions completed so far this month.
     var monthDoneCount: Int { month.filter { $0.status == .done }.count }
 
-    /// Sessions planned this month (everything scheduled that isn't a rest day).
-    var monthPlannedCount: Int {
-        month.filter { $0.status != nil && $0.status != .rest }.count
-    }
+    /// The month's session target — the weekly target scaled to the month's length.
+    var monthPlannedCount: Int = 22
 }
