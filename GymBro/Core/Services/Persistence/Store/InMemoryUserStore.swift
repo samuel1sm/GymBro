@@ -36,6 +36,40 @@ final class InMemoryUserStore: UserStore {
         try backing.deletePlan(plan)
     }
 
+    func updateSession(
+        _ session: StoredSession,
+        name: String?,
+        focus: String,
+        estimatedDurationMinutes: Int,
+        exercises: [SessionExerciseEdit]
+    ) throws {
+        try backing.updateSession(
+            session,
+            name: name,
+            focus: focus,
+            estimatedDurationMinutes: estimatedDurationMinutes,
+            exercises: exercises
+        )
+    }
+
+    func saveCompletedWorkout(
+        planId: UUID,
+        sessionId: UUID,
+        startedAt: Date,
+        completedAt: Date,
+        sets: [StoredLoggedSet],
+        for user: StoredUser
+    ) throws {
+        try backing.saveCompletedWorkout(
+            planId: planId,
+            sessionId: sessionId,
+            startedAt: startedAt,
+            completedAt: completedAt,
+            sets: sets,
+            for: user
+        )
+    }
+
     func startWorkoutLog(planId: UUID, sessionId: UUID, for user: StoredUser) throws -> StoredWorkoutLog {
         try backing.startWorkoutLog(planId: planId, sessionId: sessionId, for: user)
     }

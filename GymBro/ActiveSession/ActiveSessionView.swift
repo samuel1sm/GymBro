@@ -7,7 +7,13 @@ import SwiftUI
 ///          A (active set), B (rest timer), C (auto-dismiss after last set), D (edit).
 struct ActiveSessionView: View {
     @Environment(\.coordinator) private var coordinator
-    @State private var viewModel = ActiveSessionViewModel()
+    @Environment(\.userStore) private var userStore
+    @Environment(\.appSettingsStore) private var appSettingsStore
+    @State private var viewModel: ActiveSessionViewModel
+
+    init(context: ActiveSessionContext? = nil) {
+        _viewModel = State(initialValue: ActiveSessionViewModel(context: context))
+    }
 
     var body: some View {
         @Bindable var vm = viewModel
@@ -48,6 +54,7 @@ struct ActiveSessionView: View {
                         exercise: exercise,
                         logged: viewModel.openLogs,
                         mode: viewModel.currentMode,
+                        weightUnit: viewModel.weightUnit,
                         weightInput: $vm.weightInput,
                         repsInput: $vm.repsInput,
                         onClose: { withAnimation(.easeIn(duration: 0.22)) { viewModel.closeSheet() } },
@@ -65,7 +72,7 @@ struct ActiveSessionView: View {
                 sheetOverlay {
                     EndSessionConfirmSheet(
                         onResume: { withAnimation(.easeOut(duration: 0.2)) { viewModel.resumeFromConfirm() } },
-                        onEnd: { withAnimation(.easeOut(duration: 0.22)) { viewModel.endSession(pop: coordinator.pop) } }
+                        onEnd: { withAnimation(.easeOut(duration: 0.22)) { viewModel.endSession(pop: coordinator.pop, store: userStore) } }
                     )
                 }
                 .transition(.move(edge: .bottom).combined(with: .opacity))
@@ -75,7 +82,10 @@ struct ActiveSessionView: View {
         .toolbar(.hidden, for: .navigationBar)
         .animation(.spring(response: 0.34, dampingFraction: 0.86), value: viewModel.openIndex)
         .animation(.spring(response: 0.34, dampingFraction: 0.86), value: viewModel.isConfirmingEnd)
-        .onAppear { viewModel.startClock() }
+        .onAppear {
+            viewModel.load(from: userStore, settings: appSettingsStore)
+            viewModel.startClock()
+        }
         .onDisappear { viewModel.stopClock() }
     }
 

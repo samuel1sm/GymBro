@@ -1,11 +1,11 @@
 import SwiftUI
 
-/// A small Volt-tinted pill labelling a session's focus (Push / Pull / Legs).
+/// A small Volt-tinted pill labelling a session's focus, e.g. "Push" or "Full Body A".
 struct FocusPill: View {
-    var focus: SessionFocus
+    var focus: String
 
     var body: some View {
-        Text(focus.label)
+        Text(focus)
             .font(.plusJakartaSans(.semiBold, size: 11))
             .kerning(0.1)
             .foregroundStyle(.volt)
@@ -21,9 +21,9 @@ struct FocusPill: View {
 
 #Preview {
     HStack(spacing: 8) {
-        FocusPill(focus: .push)
-        FocusPill(focus: .pull)
-        FocusPill(focus: .legs)
+        FocusPill(focus: "Push")
+        FocusPill(focus: "Pull")
+        FocusPill(focus: "Legs")
     }
     .padding()
     .background(.appBackground)

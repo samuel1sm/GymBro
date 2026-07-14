@@ -2,8 +2,18 @@ import Foundation
 
 // MARK: - Models
 
+/// Identity of the session being performed — what the workout log is written
+/// against when the session ends. Flows that aren't wired to a saved plan yet
+/// push the active-session route without one, and no log is saved.
+struct ActiveSessionContext: Hashable {
+    let planId: UUID
+    let sessionId: UUID
+}
+
 struct ActiveSessionExercise: Identifiable, Hashable {
-    let id: UUID = UUID()
+    /// Matches `StoredExercise.id` when loaded from a saved plan, so logged
+    /// sets reference the real exercise.
+    var id: UUID = UUID()
     var name: String
     var subtitle: String
     var muscles: [String]
@@ -66,12 +76,14 @@ enum SessionFormat {
         return "\(s / 60):\(String(format: "%02d", s % 60))"
     }
 
-    /// Display a kg value the way the design does — integer when whole, one
-    /// decimal otherwise (matches JS `String(82.5)` / `String(80)`).
-    static func kg(_ value: Double) -> String {
-        if value.truncatingRemainder(dividingBy: 1) == 0 {
-            return String(Int(value))
+    /// Display a weight the way the design does — integer when whole, one
+    /// decimal otherwise. Rounds to one decimal first, so kg ↔ lbs conversions
+    /// never leak floating-point noise.
+    static func weight(_ value: Double) -> String {
+        let rounded = (value * 10).rounded() / 10
+        if rounded.truncatingRemainder(dividingBy: 1) == 0 {
+            return String(Int(rounded))
         }
-        return String(value)
+        return String(rounded)
     }
 }

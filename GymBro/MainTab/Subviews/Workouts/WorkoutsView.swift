@@ -7,6 +7,7 @@ import SwiftUI
 /// inside `MainTabView`, which owns the bottom tab bar.
 struct WorkoutsView: View {
     @Environment(\.coordinator) private var coordinator
+    @Environment(\.userStore) private var userStore
     @State private var viewModel = WorkoutsViewModel()
 
     var body: some View {
@@ -33,16 +34,25 @@ struct WorkoutsView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appBackground)
         .toolbar(.hidden, for: .navigationBar)
+        .onAppear {
+            viewModel.load(from: userStore)
+        }
         .sheet(item: $vm.selectedSession) { session in
             SessionActionSheet(
                 session: session,
                 onStart: {
                     viewModel.dismissSession()
-                    coordinator.push(.activeSession)
+                    coordinator.push(.activeSession(ActiveSessionContext(
+                        planId: viewModel.state.activePlanID,
+                        sessionId: session.id
+                    )))
                 },
                 onEdit: {
                     viewModel.dismissSession()
-                    coordinator.push(.editWorkout)
+                    coordinator.push(.editWorkout(EditWorkoutContext(
+                        planId: viewModel.state.activePlanID,
+                        sessionId: session.id
+                    )))
                 }
             )
             .presentationDetents([.height(280)])

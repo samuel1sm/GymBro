@@ -20,6 +20,7 @@ struct ExerciseLogSheet: View {
     let exercise: ActiveSessionExercise
     let logged: [LoggedSet]
     let mode: LogSheetMode
+    var weightUnit: WeightUnit = .kg
 
     @Binding var weightInput: String
     @Binding var repsInput: String
@@ -175,6 +176,7 @@ struct ExerciseLogSheet: View {
                         HistoryRow(
                             number: i + 1,
                             set: set,
+                            weightUnit: weightUnit,
                             isEditing: editingIndex == i,
                             onTap: { onTapHistory(i) }
                         )
@@ -191,7 +193,7 @@ struct ExerciseLogSheet: View {
                 .padding(.bottom, 8)
 
             HStack(spacing: 12) {
-                NumericTile(label: "KG", value: $weightInput, placeholder: "")
+                NumericTile(label: weightUnit.label, value: $weightInput, placeholder: "")
                 NumericTile(label: "REPS", value: $repsInput, placeholder: "—")
             }
         }
@@ -259,6 +261,7 @@ struct ExerciseLogSheet: View {
 private struct HistoryRow: View {
     let number: Int
     let set: LoggedSet
+    let weightUnit: WeightUnit
     let isEditing: Bool
     var onTap: () -> Void
 
@@ -269,7 +272,7 @@ private struct HistoryRow: View {
                     .font(.plusJakartaSans(.medium, size: 12))
                     .foregroundStyle(.labelSecondary)
                 Spacer()
-                Text("\(SessionFormat.kg(set.kg)) kg · \(set.reps) reps")
+                Text("\(SessionFormat.weight(weightUnit.fromKg(set.kg))) \(weightUnit.rawValue) · \(set.reps) reps")
                     .font(.plusJakartaSans(.semiBold, size: 12))
                     .foregroundStyle(.labelPrimary)
                     .monospacedDigit()

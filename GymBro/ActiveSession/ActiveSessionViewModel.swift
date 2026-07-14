@@ -17,6 +17,8 @@ final class ActiveSessionViewModel {
     var logs: [[LoggedSet]]
     var elapsedSeconds: Int
 
+    var weightUnit: WeightUnit = .kg
+
     // MARK: - Sheet
 
     var openIndex: Int? = nil
@@ -32,19 +34,31 @@ final class ActiveSessionViewModel {
     private var savedReps: String = ""
     private var clockTask: Task<Void, Never>? = nil
 
+    /// The plan/session this workout logs against — nil when launched from a
+    /// flow that isn't wired to a saved plan.
+    private let context: ActiveSessionContext?
+
     /// Wall-clock anchor for the session timer — `elapsedSeconds` is derived
     /// from it on every tick, so time spent suspended still counts.
     private let startedAt: Date
 
     // MARK: - Init
 
-    init(state: ActiveSessionState = ActiveSessionState(), elapsedSeconds: Int = 742) {
+    /// Real sessions (a context is present) start the clock at zero; the
+    /// placeholder session keeps the design's mid-workout elapsed time.
+    init(
+        state: ActiveSessionState = ActiveSessionState(),
+        context: ActiveSessionContext? = nil,
+        elapsedSeconds: Int? = nil
+    ) {
+        let elapsed = elapsedSeconds ?? (context == nil ? 742 : 0)
         self.split = state.split
         self.day = state.day
         self.exercises = state.exercises
         self.logs = state.logs
-        self.elapsedSeconds = elapsedSeconds
-        self.startedAt = Date.now.addingTimeInterval(-TimeInterval(elapsedSeconds))
+        self.context = context
+        self.elapsedSeconds = elapsed
+        self.startedAt = Date.now.addingTimeInterval(-TimeInterval(elapsed))
     }
 
     // MARK: - Derived
@@ -90,6 +104,35 @@ final class ActiveSessionViewModel {
 
     // MARK: - Actions
 
+    /// Resolves the display unit (saved app settings, else the profile's unit
+    /// system) and replaces the placeholder session with the stored session
+    /// named by the context, so logged sets reference real `StoredExercise`
+    /// ids. The session swap is a no-op once sets have been logged, or when
+    /// the context is missing from the library.
+    func load(from store: UserStore, settings settingsStore: AppSettingsStore) {
+        let user = try? store.loadUser()
+        if let saved = settingsStore.load() {
+            weightUnit = saved.weightUnit
+        } else if let user {
+            weightUnit = user.unitSystem == AIPlan.UnitSystem.imperial.rawValue ? .lbs : .kg
+        }
+
+        guard
+            logs.allSatisfy(\.isEmpty),
+            let context,
+            let user,
+            let plans = try? store.loadSavedPlans(for: user),
+            let session = plans.first(where: { $0.id == context.planId })?
+                .orderedSessions.first(where: { $0.id == context.sessionId })
+        else { return }
+
+        let state = ActiveSessionState(stored: session)
+        split = state.split
+        day = state.day
+        exercises = state.exercises
+        logs = state.logs
+    }
+
     func handleBack(pop: () -> Void) {
         if logs.contains(where: { !$0.isEmpty }) {
             isConfirmingEnd = true
@@ -98,10 +141,37 @@ final class ActiveSessionViewModel {
         }
     }
 
-    func endSession(pop: () -> Void) {
+    func endSession(pop: () -> Void, store: UserStore) {
         isConfirmingEnd = false
         openIndex = nil
+        saveWorkoutLog(to: store)
         pop()
+    }
+
+    /// Persists the finished workout as a completed `StoredWorkoutLog` with
+    /// every set logged so far.
+    private func saveWorkoutLog(to store: UserStore) {
+        guard let context, let user = try? store.loadUser() else { return }
+
+        let sets = zip(exercises, logs).flatMap { exercise, logged in
+            logged.enumerated().map { index, set in
+                StoredLoggedSet(
+                    exerciseId: exercise.id,
+                    setIndex: index,
+                    weightKg: set.kg,
+                    repsCompleted: set.reps
+                )
+            }
+        }
+
+        try? store.saveCompletedWorkout(
+            planId: context.planId,
+            sessionId: context.sessionId,
+            startedAt: startedAt,
+            completedAt: .now,
+            sets: sets,
+            for: user
+        )
     }
 
     func resumeFromConfirm() {
@@ -142,7 +212,7 @@ final class ActiveSessionViewModel {
         }
         guard let i = openIndex, exercises.indices.contains(i), logs.indices.contains(i) else { return }
         let exercise = exercises[i]
-        let kg = Double(weightInput) ?? exercise.planKg
+        let kg = Double(weightInput).map(weightUnit.toKg) ?? exercise.planKg
         let reps = Int(repsInput) ?? exercise.repHi
         logs[i].append(LoggedSet(kg: kg, reps: reps))
 
@@ -171,7 +241,7 @@ final class ActiveSessionViewModel {
         editIndex = idx
         guard let i = openIndex, logs.indices.contains(i), logs[i].indices.contains(idx) else { return }
         let set = logs[i][idx]
-        weightInput = SessionFormat.kg(set.kg)
+        weightInput = SessionFormat.weight(weightUnit.fromKg(set.kg))
         repsInput = String(set.reps)
     }
 
@@ -197,8 +267,9 @@ final class ActiveSessionViewModel {
     private func lastKg(for index: Int) -> String {
         guard exercises.indices.contains(index), logs.indices.contains(index) else { return "" }
         if let last = logs[index].last {
-            return SessionFormat.kg(last.kg)
+            return SessionFormat.weight(weightUnit.fromKg(last.kg))
         }
-        return SessionFormat.kg(exercises[index].planKg)
+        let planKg = exercises[index].planKg
+        return planKg > 0 ? SessionFormat.weight(weightUnit.fromKg(planKg)) : ""
     }
 }

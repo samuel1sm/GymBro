@@ -15,7 +15,7 @@ struct SessionActionSheet: View {
                 FocusTile(number: session.number, size: 46)
 
                 VStack(alignment: .leading, spacing: 3) {
-                    Text("\(session.name) — \(session.focus.label)")
+                    Text("\(session.name) — \(session.focus)")
                         .font(.barlowCondensed(.bold, size: 20))
                         .kerning(-0.3)
                         .foregroundStyle(.labelPrimary)

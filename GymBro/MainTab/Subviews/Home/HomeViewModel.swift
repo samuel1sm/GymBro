@@ -30,7 +30,8 @@ final class HomeViewModel {
     }
 
     /// Starts today's session → Active Workout Session (Screen 06).
+    /// No context yet — Home isn't wired to the saved plan library.
     func startWorkout(push: (Route) -> Void) {
-        push(.activeSession)
+        push(.activeSession(nil))
     }
 }

@@ -51,7 +51,56 @@ final class SwiftDataUserStore: UserStore {
         try context.save()
     }
 
+    func updateSession(
+        _ session: StoredSession,
+        name: String?,
+        focus: String,
+        estimatedDurationMinutes: Int,
+        exercises edits: [SessionExerciseEdit]
+    ) throws {
+        session.name = name
+        session.focus = focus
+        session.estimatedDurationMinutes = estimatedDurationMinutes
+
+        let orderByID = Dictionary(uniqueKeysWithValues: edits.enumerated().map { ($1.id, $0) })
+        let removed = session.exercises.filter { orderByID[$0.id] == nil }
+        removed.forEach(context.delete)
+
+        for edit in edits {
+            guard let exercise = session.exercises.first(where: { $0.id == edit.id }) else { continue }
+            exercise.orderIndex = orderByID[edit.id] ?? exercise.orderIndex
+            exercise.sets = edit.sets
+            if let repsMin = edit.repsMin { exercise.repsMin = repsMin }
+            if let repsMax = edit.repsMax { exercise.repsMax = repsMax }
+            if let restSeconds = edit.restSeconds { exercise.restSeconds = restSeconds }
+        }
+        try context.save()
+    }
+
     // MARK: - Logging
+
+    func saveCompletedWorkout(
+        planId: UUID,
+        sessionId: UUID,
+        startedAt: Date,
+        completedAt: Date,
+        sets: [StoredLoggedSet],
+        for user: StoredUser
+    ) throws {
+        let log = StoredWorkoutLog(
+            planId: planId,
+            sessionId: sessionId,
+            startedAt: startedAt,
+            completedAt: completedAt
+        )
+        log.user = user
+        context.insert(log)
+        for set in sets {
+            set.log = log
+            context.insert(set)
+        }
+        try context.save()
+    }
 
     // TODO: WCSession seam (send) — before a watch workout, fetch the matching
     // self-contained StoredSession, transfer it to the watch, and open the log here.

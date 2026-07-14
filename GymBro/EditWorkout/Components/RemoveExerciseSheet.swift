@@ -53,7 +53,7 @@ struct RemoveExerciseSheet: View {
         .padding(.top, 28)
         .padding(.bottom, 16)
         .frame(maxWidth: .infinity)
-        .background(Color.appBackground)
+        .presentationBackground(Color.appBackground)
         .presentationDetents([.height(360)])
         .presentationDragIndicator(.visible)
         .presentationCornerRadius(28)

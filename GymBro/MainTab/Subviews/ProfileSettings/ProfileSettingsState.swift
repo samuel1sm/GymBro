@@ -60,7 +60,7 @@ struct ProfileSettingsState {
 
     var weightDisplay: String {
         weightUnit == .lbs
-            ? "\(Int((Double(weightKg) / 0.45359237).rounded())) lbs"
+            ? "\(Int(WeightUnit.lbs.fromKg(Double(weightKg)).rounded())) lbs"
             : "\(weightKg) kg"
     }
 

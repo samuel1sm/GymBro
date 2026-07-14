@@ -29,9 +29,9 @@ struct SessionsSection: View {
 #Preview {
     SessionsSection(
         sessions: [
-            WorkoutsSession(number: 1, name: "Training 1", focus: .push, exercises: 6, minutes: 60, status: .done),
-            WorkoutsSession(number: 2, name: "Training 2", focus: .pull, exercises: 6, minutes: 65, status: .today),
-            WorkoutsSession(number: 3, name: "Training 3", focus: .legs, exercises: 7, minutes: 70, status: .upcoming),
+            WorkoutsSession(number: 1, name: "Training 1", focus: "Push", exercises: 6, minutes: 60, status: .done),
+            WorkoutsSession(number: 2, name: "Training 2", focus: "Pull", exercises: 6, minutes: 65, status: .today),
+            WorkoutsSession(number: 3, name: "Training 3", focus: "Legs", exercises: 7, minutes: 70, status: .upcoming),
         ],
         onSelect: { _ in }
     )

@@ -26,10 +26,10 @@ struct RouterView<Root: View>: View {
                         PlanGenerationView(request: request, flow: flow)
                     case .plannerReview(let flow):
                         PlannerReviewView(flow: flow)
-                    case .editWorkout:
-                        EditWorkoutView()
-                    case .activeSession:
-                        ActiveSessionView()
+                    case .editWorkout(let context):
+                        EditWorkoutView(context: context)
+                    case .activeSession(let context):
+                        ActiveSessionView(context: context)
                     case .main:
                         MainTabView()
                     }

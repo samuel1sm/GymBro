@@ -1,5 +1,12 @@
 import Foundation
 
+/// Identity of the session being edited — where Save writes back. Flows not
+/// wired to a saved plan push the editor without one and edits stay local.
+struct EditWorkoutContext: Hashable {
+    let planId: UUID
+    let sessionId: UUID
+}
+
 // MARK: - Models
 
 /// A single exercise inside the session being edited.
@@ -8,7 +15,9 @@ import Foundation
 /// inline editing — matching the Edit Workout design's text fields. `sets` stays
 /// numeric because it is driven by a stepper.
 struct EditExercise: Identifiable, Hashable {
-    let id: UUID = UUID()
+    /// Matches `StoredExercise.id` when loaded from a saved plan, so saves
+    /// write back to the same rows.
+    var id: UUID = UUID()
     var name: String
     var muscles: String
     var sets: Int

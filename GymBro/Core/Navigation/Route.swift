@@ -15,7 +15,7 @@ enum Route: Hashable {
     case forgotPassword
     case planGeneration(AIPlan.PlanRequest, PlanFlow)
     case plannerReview(PlanFlow)
-    case editWorkout
-    case activeSession
+    case editWorkout(EditWorkoutContext?)
+    case activeSession(ActiveSessionContext?)
     case main
 }

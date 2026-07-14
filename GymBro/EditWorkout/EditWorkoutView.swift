@@ -2,11 +2,16 @@ import SwiftUI
 
 struct EditWorkoutView: View {
     @Environment(\.coordinator) private var coordinator
+    @Environment(\.userStore) private var userStore
 
-    @State private var viewModel = EditWorkoutViewModel()
+    @State private var viewModel: EditWorkoutViewModel
     @State private var exerciseToDelete: EditExercise?
     @State private var isFocusPickerPresented = false
     @State private var isDiscardPresented = false
+
+    init(context: EditWorkoutContext? = nil) {
+        _viewModel = State(initialValue: EditWorkoutViewModel(context: context))
+    }
 
     var body: some View {
         @Bindable var vm = viewModel
@@ -66,6 +71,9 @@ struct EditWorkoutView: View {
         }
         .background(Color.appBackground)
         .toolbar(.hidden, for: .navigationBar)
+        .onAppear {
+            viewModel.load(from: userStore)
+        }
         .sheet(item: $exerciseToDelete) { exercise in
             RemoveExerciseSheet(
                 exerciseName: exercise.name,
@@ -120,6 +128,7 @@ struct EditWorkoutView: View {
     }
 
     private func save() {
+        viewModel.save(to: userStore)
         coordinator.pop()
     }
 

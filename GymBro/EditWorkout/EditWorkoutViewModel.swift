@@ -26,9 +26,52 @@ final class EditWorkoutViewModel {
 
     private let toast = ToastPresenter()
 
+    /// The plan/session this editor writes back to — nil when launched from a
+    /// flow that isn't wired to a saved plan, in which case edits stay local.
+    private let context: EditWorkoutContext?
+
+    // MARK: - Init
+
+    init(context: EditWorkoutContext? = nil) {
+        self.context = context
+    }
+
     // MARK: - Derived
 
     var session: EditWorkoutSession { state.session }
+
+    // MARK: - Persistence
+
+    /// Replaces the placeholder session with the stored session named by the
+    /// context. No-op once edits are in flight or when the context is missing
+    /// from the library.
+    func load(from store: UserStore) {
+        guard !isDirty, let stored = storedSession(in: store) else { return }
+        state = EditWorkoutState(stored: stored)
+    }
+
+    /// Writes the edited session back to the store — the Save action.
+    func save(to store: UserStore) {
+        guard let stored = storedSession(in: store) else { return }
+        let name = session.name.trimmingCharacters(in: .whitespaces)
+        try? store.updateSession(
+            stored,
+            name: name.isEmpty ? nil : name,
+            focus: session.focus,
+            estimatedDurationMinutes: session.estimatedMinutes,
+            exercises: session.exerciseEdits
+        )
+    }
+
+    private func storedSession(in store: UserStore) -> StoredSession? {
+        guard
+            let context,
+            let user = try? store.loadUser(),
+            let plans = try? store.loadSavedPlans(for: user)
+        else { return nil }
+        return plans.first { $0.id == context.planId }?
+            .orderedSessions.first { $0.id == context.sessionId }
+    }
 
     // MARK: - Session edits
 
@@ -77,14 +120,6 @@ final class EditWorkoutViewModel {
         if expandedExerciseID == id { expandedExerciseID = nil }
         markDirty()
         fireToast("Exercise removed")
-    }
-
-    // MARK: - Discard
-
-    func discardChanges() {
-        state = EditWorkoutState()
-        expandedExerciseID = nil
-        isDirty = false
     }
 
     // MARK: - Helpers
