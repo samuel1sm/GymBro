@@ -4,6 +4,8 @@ import SwiftUI
 /// volume trend, personal records, muscle frequency, and plan history in a single
 /// scrollable view. Tab 3 (Stats) in the bottom tab bar.
 struct StatisticsView: View {
+    @Environment(\.userStore) private var userStore
+
     @State private var viewModel = StatisticsViewModel()
 
     var body: some View {
@@ -35,6 +37,9 @@ struct StatisticsView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appBackground)
         .toolbar(.hidden, for: .navigationBar)
+        .onAppear {
+            viewModel.load(from: userStore)
+        }
     }
 }
 

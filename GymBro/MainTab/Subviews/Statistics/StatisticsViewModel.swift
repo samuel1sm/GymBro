@@ -19,4 +19,13 @@ final class StatisticsViewModel {
     var currentVolumeLabel: String {
         state.currentVolumeKg.formatted()
     }
+
+    /// Replaces the state with analytics derived from the persisted plan
+    /// library and workout logs.
+    func load(from store: UserStore) {
+        guard let user = try? store.loadUser() else { return }
+        let plans = (try? store.loadSavedPlans(for: user)) ?? []
+        let logs = (try? store.loadLogs(for: user)) ?? []
+        state = StatisticsState(plans: plans, logs: logs)
+    }
 }

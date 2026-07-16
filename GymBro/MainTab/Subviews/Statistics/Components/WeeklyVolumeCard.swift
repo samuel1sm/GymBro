@@ -8,14 +8,21 @@ struct WeeklyVolumeCard: View {
     var trendPercent: Int
 
     // Chart geometry — mirrors the design spec.
-    private let maxKg: Int = 16000
-    private let ticks: [Int] = [16000, 8000, 0]
     private let chartHeight: CGFloat = 148
     private let yAxisWidth: CGFloat = 20
     private let chartGap: CGFloat = 10
     private let barSpacing: CGFloat = 7
 
     private var monoCaption: Font { .system(size: 9.5, weight: .regular, design: .monospaced) }
+
+    /// Chart ceiling — the heaviest week rounded up to an even 2k so the mid
+    /// tick stays a whole thousand.
+    private var maxKg: Int {
+        let peak = points.map(\.kilograms).max() ?? 0
+        return max(Int((Double(peak) / 2000).rounded(.up)) * 2000, 2000)
+    }
+
+    private var ticks: [Int] { [maxKg, maxKg / 2, 0] }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -51,9 +58,9 @@ struct WeeklyVolumeCard: View {
             Spacer(minLength: 0)
 
             HStack(spacing: 3) {
-                Image(systemName: "arrow.up")
+                Image(systemName: trendPercent < 0 ? "arrow.down" : "arrow.up")
                     .font(.system(size: 12, weight: .bold))
-                Text("\(trendPercent)%")
+                Text("\(abs(trendPercent))%")
                     .font(.plusJakartaSans(.semiBold, size: 13))
                     .monospacedDigit()
             }
