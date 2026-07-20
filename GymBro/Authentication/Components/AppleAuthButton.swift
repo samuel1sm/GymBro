@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// White "Sign in/up with Apple" button (visual placeholder — no auth wired).
+/// White "Sign in/up with Apple" button; the owning screen supplies the auth action.
 struct AppleAuthButton: View {
     let title: String
     var height: CGFloat = 54

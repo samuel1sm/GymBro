@@ -19,6 +19,7 @@ enum AccountError: LocalizedError {
 nonisolated protocol AccountService: Sendable {
     func createAccount(email: String, password: String) async throws
     func signIn(email: String, password: String) async throws
+    func signInWithApple(idToken: String, nonce: String) async throws
 }
 
 /// Demo rules until a real backend exists: creating with an email containing
@@ -40,5 +41,9 @@ nonisolated struct MockAccountService: AccountService {
         else {
             throw AccountError.invalidCredentials
         }
+    }
+
+    func signInWithApple(idToken: String, nonce: String) async throws {
+        try await Task.sleep(for: .milliseconds(1500))
     }
 }

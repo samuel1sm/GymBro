@@ -13,6 +13,16 @@ struct SignUpView: View {
         _viewModel = State(initialValue: viewModel)
     }
 
+    private func submitWithApple() {
+        let isNewUser = pendingPlanStore.hasPendingPlan
+        viewModel.submitWithApple(
+            accountService: accountService,
+            userStore: userStore,
+            pendingPlan: pendingPlanStore,
+            onSuccess: { coordinator.replaceRoot(isNewUser ? .plannerReview(.onboarding) : .main) }
+        )
+    }
+
     private func submit() {
         // A pending plan means a fresh signup out of plan generation — that
         // flow reviews (and saves) the plan first; otherwise go straight to Home.
@@ -50,8 +60,11 @@ struct SignUpView: View {
                 .padding(.top, 20)
 
                 // Apple is the primary path, placed first.
-                AppleAuthButton(title: "Sign up with Apple", height: 52)
-                    .padding(.top, 22)
+                AppleAuthButton(title: "Sign up with Apple", height: 52) {
+                    focusedField = nil
+                    submitWithApple()
+                }
+                .padding(.top, 22)
 
                 AuthDivider(text: "or with email")
                     .padding(.vertical, 18)

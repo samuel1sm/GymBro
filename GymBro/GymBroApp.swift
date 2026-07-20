@@ -9,6 +9,10 @@ struct GymBroApp: App {
     private let userStore: UserStore
     private let pendingPlanStore = PendingPlanStore()
     private let appSettingsStore = UserDefaultsAppSettingsStore()
+    /// Mock until `SupabaseConfig` has real project credentials.
+    private let accountService: AccountService = SupabaseConfig.isConfigured
+        ? SupabaseAccountService()
+        : MockAccountService()
 
     init() {
         FontRegister.registerAll()
@@ -30,6 +34,7 @@ struct GymBroApp: App {
                 LaunchView()
             }
             .environment(\.userStore, userStore)
+            .environment(\.accountService, accountService)
             .environment(\.pendingPlanStore, pendingPlanStore)
             .environment(\.appSettingsStore, appSettingsStore)
         }

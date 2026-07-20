@@ -25,6 +25,14 @@ struct SignInView: View {
         )
     }
 
+    private func submitWithApple() {
+        let destination = LoginFlow.postSignInRoute(using: userStore)
+        viewModel.submitWithApple(
+            accountService: accountService,
+            onSuccess: { coordinator.replaceRoot(destination) }
+        )
+    }
+
     var body: some View {
         @Bindable var vm = viewModel
 
@@ -58,7 +66,10 @@ struct SignInView: View {
                 AuthDivider()
                     .padding(.vertical, 20)
 
-                AppleAuthButton(title: "Sign in with Apple")
+                AppleAuthButton(title: "Sign in with Apple") {
+                focusedField = nil
+                submitWithApple()
+            }
 
                 Spacer(minLength: 16)
 

@@ -1,3 +1,4 @@
+import AuthenticationServices
 import Foundation
 import Observation
 
@@ -52,6 +53,45 @@ final class SignUpViewModel {
                 try? await Task.sleep(for: AuthPrimaryCTA.successHold)
                 guard !Task.isCancelled else { return }
                 onSuccess()
+            } catch {
+                guard let self, !Task.isCancelled else { return }
+                self.state.status = .error
+                self.state.errorMessage = error.localizedDescription
+            }
+        }
+    }
+
+    /// Apple path of the save-plan gate: same outcome as `submit`, but the
+    /// account comes from the native Apple sheet instead of the form.
+    /// Dismissing the sheet resets to idle without an error.
+    func submitWithApple(
+        accountService: AccountService,
+        userStore: UserStore,
+        pendingPlan: PendingPlanStore,
+        onSuccess: @escaping () -> Void = {}
+    ) {
+        guard state.status != .loading else { return }
+
+        state.status = .loading
+        state.errorMessage = ""
+
+        createTask?.cancel()
+        createTask = Task { @MainActor [weak self] in
+            do {
+                let credential = try await AppleSignInCoordinator().signIn()
+                try await accountService.signInWithApple(
+                    idToken: credential.idToken,
+                    nonce: credential.nonce
+                )
+                guard let self, !Task.isCancelled else { return }
+                try pendingPlan.persistUser(to: userStore)
+                self.state.status = .success
+                try? await Task.sleep(for: AuthPrimaryCTA.successHold)
+                guard !Task.isCancelled else { return }
+                onSuccess()
+            } catch let error as ASAuthorizationError where error.code == .canceled {
+                guard let self, !Task.isCancelled else { return }
+                self.state.status = .idle
             } catch {
                 guard let self, !Task.isCancelled else { return }
                 self.state.status = .error
