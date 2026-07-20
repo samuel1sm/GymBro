@@ -73,3 +73,25 @@ struct AuthCredentialFields<Field: Hashable>: View {
         .onSubmit(onSubmit)
     }
 }
+
+// MARK: - Preview
+
+private nonisolated enum PreviewField { case email, password }
+
+#Preview {
+    @Previewable @State var email = ""
+    @Previewable @State var password = ""
+    @Previewable @State var revealPassword = false
+    @Previewable @FocusState var focus: PreviewField?
+
+    AuthCredentialFields(
+        email: $email,
+        password: $password,
+        revealPassword: $revealPassword,
+        focus: $focus,
+        emailField: .email,
+        passwordField: .password
+    )
+    .padding(24)
+    .background(.appBackground)
+}

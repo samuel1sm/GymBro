@@ -79,7 +79,10 @@ struct ProfileSettingsView: View {
     /// Re-runs the profile & goals flow prefilled with the saved data; the
     /// flow ends by generating (and saving) a fresh plan.
     private func editTrainingPreferences() {
-        let prefill = (try? userStore.loadUser()).map(PlanMapper.toRequest)
+        var prefill: AIPlan.PlanRequest?
+        if let user = try? userStore.loadUser() {
+            prefill = PlanMapper.toRequest(user)
+        }
         coordinator.push(.profileGoals(prefill: prefill))
     }
 }

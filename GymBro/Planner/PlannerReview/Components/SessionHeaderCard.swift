@@ -55,3 +55,11 @@ struct SessionHeaderCard: View {
         .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.borderSubtle, lineWidth: 1))
     }
 }
+
+// MARK: - Preview
+
+#Preview {
+    SessionHeaderCard(slot: PlannerTrainingSlot(source: AIPlan.WorkoutPlan.reviewSeed.sessions[0]))
+        .padding(20)
+        .background(.appBackground)
+}

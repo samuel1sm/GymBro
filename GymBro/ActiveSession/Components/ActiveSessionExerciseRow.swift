@@ -88,3 +88,15 @@ struct ActiveSessionExerciseRow: View {
         .frame(height: 3)
     }
 }
+
+// MARK: - Preview
+
+#Preview {
+    VStack(spacing: 10) {
+        ActiveSessionExerciseRow(exercise: ActiveSessionState.seed[0], index: 0, doneCount: 4, onTap: {})
+        ActiveSessionExerciseRow(exercise: ActiveSessionState.seed[1], index: 1, doneCount: 2, onTap: {})
+        ActiveSessionExerciseRow(exercise: ActiveSessionState.seed[2], index: 2, doneCount: 0, onTap: {})
+    }
+    .padding(20)
+    .background(.appBackground)
+}

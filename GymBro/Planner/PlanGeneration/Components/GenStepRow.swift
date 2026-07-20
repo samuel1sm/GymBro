@@ -66,3 +66,15 @@ struct GenStepRow: View {
         }
     }
 }
+
+// MARK: - Preview
+
+#Preview {
+    VStack(alignment: .leading, spacing: 0) {
+        GenStepRow(label: "Analyzing your profile", stepState: .done)
+        GenStepRow(label: "Selecting exercises", stepState: .active)
+        GenStepRow(label: "Balancing weekly volume", stepState: .pending)
+    }
+    .padding(24)
+    .background(.appBackground)
+}

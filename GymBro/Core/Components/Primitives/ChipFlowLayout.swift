@@ -41,3 +41,15 @@ struct ChipFlowLayout: Layout {
         }
     }
 }
+
+// MARK: - Preview
+
+#Preview {
+    ChipFlowLayout(spacing: 8) {
+        ForEach(["Build muscle", "Lose fat", "Endurance", "Mobility", "General fitness", "Strength"], id: \.self) { label in
+            SelectableChip(label: label, isActive: label == "Strength", action: {})
+        }
+    }
+    .padding(24)
+    .background(.appBackground)
+}

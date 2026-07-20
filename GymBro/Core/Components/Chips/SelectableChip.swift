@@ -19,3 +19,15 @@ struct SelectableChip: View {
         .buttonStyle(.plain)
     }
 }
+
+// MARK: - Preview
+
+#Preview {
+    HStack(spacing: 8) {
+        SelectableChip(label: "Build muscle", isActive: true, action: {})
+        SelectableChip(label: "Lose fat", action: {})
+        SelectableChip(label: "Endurance", action: {})
+    }
+    .padding(24)
+    .background(.appBackground)
+}

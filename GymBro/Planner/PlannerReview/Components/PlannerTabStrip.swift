@@ -49,3 +49,16 @@ struct PlannerTabStrip: View {
         .buttonStyle(.plain)
     }
 }
+
+// MARK: - Preview
+
+#Preview {
+    @Previewable @State var activeIndex = 0
+
+    PlannerTabStrip(
+        slots: AIPlan.WorkoutPlan.reviewSeed.sessions.map { PlannerTrainingSlot(source: $0) },
+        activeIndex: $activeIndex
+    )
+    .padding(.vertical, 24)
+    .background(.appBackground)
+}

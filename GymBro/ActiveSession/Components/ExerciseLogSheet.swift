@@ -327,6 +327,35 @@ private struct NumericTile: View {
     }
 }
 
+// MARK: - Previews
+
+#Preview("Active") {
+    @Previewable @State var weightInput = "80"
+    @Previewable @State var repsInput = ""
+
+    ExerciseLogSheet(
+        exercise: ActiveSessionState.seed[0],
+        logged: [LoggedSet(kg: 80, reps: 10), LoggedSet(kg: 80, reps: 9)],
+        mode: .active,
+        weightInput: $weightInput,
+        repsInput: $repsInput,
+        onClose: {}, onLog: {}, onSkipRest: {}, onTapHistory: { _ in }
+    )
+    .background(.appBackground)
+}
+
+#Preview("Rest") {
+    ExerciseLogSheet(
+        exercise: ActiveSessionState.seed[0],
+        logged: [LoggedSet(kg: 80, reps: 10)],
+        mode: .rest(RestState(total: 120)),
+        weightInput: .constant(""),
+        repsInput: .constant(""),
+        onClose: {}, onLog: {}, onSkipRest: {}, onTapHistory: { _ in }
+    )
+    .background(.appBackground)
+}
+
 // MARK: - Shape — only top corners rounded
 
 struct RoundedSheetShape: Shape {

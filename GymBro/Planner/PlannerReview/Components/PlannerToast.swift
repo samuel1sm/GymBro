@@ -22,3 +22,11 @@ struct PlannerToast: View {
         .transition(.opacity.combined(with: .offset(y: 8)))
     }
 }
+
+// MARK: - Preview
+
+#Preview {
+    PlannerToast(message: "Plan saved")
+        .padding(24)
+        .background(.appBackground)
+}

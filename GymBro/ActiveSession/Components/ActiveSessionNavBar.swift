@@ -50,3 +50,11 @@ struct ActiveSessionNavBar: View {
         .buttonStyle(.plain)
     }
 }
+
+// MARK: - Preview
+
+#Preview {
+    ActiveSessionNavBar(split: "PUSH", day: 1, onBack: {}, onMore: {})
+        .padding(.vertical, 24)
+        .background(.appBackground)
+}

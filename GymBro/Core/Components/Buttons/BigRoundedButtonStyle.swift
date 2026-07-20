@@ -21,3 +21,12 @@ struct BigRoundedButtonStyle: ButtonStyle {
 extension ButtonStyle where Self == BigRoundedButtonStyle {
     static var bigRounded: BigRoundedButtonStyle { BigRoundedButtonStyle() }
 }
+
+// MARK: - Preview
+
+#Preview {
+    Button("Get Started") {}
+        .buttonStyle(.bigRounded)
+        .padding(24)
+        .background(.appBackground)
+}

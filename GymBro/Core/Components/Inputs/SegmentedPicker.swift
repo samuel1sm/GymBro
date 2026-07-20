@@ -38,3 +38,16 @@ struct SegmentedPicker: View {
         .overlay(RoundedRectangle(cornerRadius: radius).stroke(Color.borderDefault, lineWidth: 1))
     }
 }
+
+// MARK: - Preview
+
+#Preview {
+    @Previewable @State var selectedIndex = 0
+
+    VStack(spacing: 24) {
+        SegmentedPicker(options: ["kg", "lb"], selectedIndex: $selectedIndex)
+        SegmentedPicker(options: ["Beginner", "Intermediate", "Advanced"], selectedIndex: $selectedIndex, compact: true)
+    }
+    .padding(24)
+    .background(.appBackground)
+}

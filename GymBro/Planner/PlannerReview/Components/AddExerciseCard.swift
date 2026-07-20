@@ -26,3 +26,11 @@ struct AddExerciseCard: View {
         .buttonStyle(.plain)
     }
 }
+
+// MARK: - Preview
+
+#Preview {
+    AddExerciseCard(onTap: {})
+        .padding(20)
+        .background(.appBackground)
+}

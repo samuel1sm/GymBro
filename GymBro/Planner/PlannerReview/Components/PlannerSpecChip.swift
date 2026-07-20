@@ -17,3 +17,20 @@ struct PlannerSpecChip<Content: View>: View {
         .overlay(Capsule().stroke(Color.borderDefault, lineWidth: 1))
     }
 }
+
+// MARK: - Preview
+
+#Preview {
+    HStack(spacing: 8) {
+        PlannerSpecChip {
+            Text("4 × 8–10")
+        }
+        PlannerSpecChip {
+            Image(systemName: "timer")
+                .font(.system(size: 11, weight: .medium))
+            Text("120s rest")
+        }
+    }
+    .padding(24)
+    .background(.appBackground)
+}

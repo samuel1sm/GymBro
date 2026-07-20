@@ -63,3 +63,11 @@ struct EndSessionConfirmSheet: View {
         )
     }
 }
+
+// MARK: - Preview
+
+#Preview {
+    EndSessionConfirmSheet(onResume: {}, onEnd: {})
+        .frame(maxHeight: .infinity, alignment: .bottom)
+        .background(.appBackground)
+}

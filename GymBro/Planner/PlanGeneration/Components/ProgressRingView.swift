@@ -54,3 +54,11 @@ struct ProgressRingView: View {
     }
 }
 
+// MARK: - Preview
+
+#Preview {
+    ProgressRingView(progress: 0.68, glowing: true)
+        .padding(24)
+        .background(.appBackground)
+}
+

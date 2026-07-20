@@ -25,3 +25,11 @@ struct PulsingDots: View {
         }
     }
 }
+
+// MARK: - Preview
+
+#Preview {
+    PulsingDots()
+        .padding(24)
+        .background(.appBackground)
+}
