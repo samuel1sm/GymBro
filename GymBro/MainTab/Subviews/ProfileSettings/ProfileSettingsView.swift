@@ -6,6 +6,7 @@ struct ProfileSettingsView: View {
     @Environment(\.coordinator) private var coordinator
     @Environment(\.userStore) private var userStore
     @Environment(\.appSettingsStore) private var appSettingsStore
+    @Environment(\.accountService) private var accountService
 
     @State private var viewModel = ProfileSettingsViewModel()
 
@@ -51,6 +52,10 @@ struct ProfileSettingsView: View {
                     RedoSetupSection {
                         viewModel.redoSetup(popToRoot: coordinator.popToRoot)
                     }
+
+                    SignOutSection {
+                        signOut()
+                    }
                 }
             }
         .background(Color.appBackground)
@@ -84,6 +89,15 @@ struct ProfileSettingsView: View {
             prefill = PlanMapper.toRequest(user)
         }
         coordinator.push(.profileGoals(prefill: prefill))
+    }
+
+    /// Ends the session and lands on Sign In, with onboarding reachable
+    /// underneath via the back chevron.
+    private func signOut() {
+        Task {
+            await accountService.signOut()
+            coordinator.replaceRoot(.accountInformation)
+        }
     }
 }
 

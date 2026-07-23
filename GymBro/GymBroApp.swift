@@ -9,10 +9,7 @@ struct GymBroApp: App {
     private let userStore: UserStore
     private let pendingPlanStore = PendingPlanStore()
     private let appSettingsStore = UserDefaultsAppSettingsStore()
-    /// Mock until `SupabaseConfig` has real project credentials.
-    private let accountService: AccountService = SupabaseConfig.isConfigured
-        ? SupabaseAccountService()
-        : MockAccountService()
+    private let accountService: AccountService = SupabaseAccountService()
 
     init() {
         FontRegister.registerAll()

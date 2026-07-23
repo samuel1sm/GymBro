@@ -1,15 +1,15 @@
 import SwiftUI
 
 /// Environment-based dependency injection. `GymBroApp` overrides `userStore`
-/// with the on-disk SwiftData store; the defaults keep previews and tests
-/// working against in-memory/mock implementations.
+/// with the on-disk SwiftData store; the remaining defaults keep previews and
+/// tests working (in-memory stores; auth talks to the real backend).
 
 private struct UserStoreKey: EnvironmentKey {
     static let defaultValue: UserStore = try! InMemoryUserStore()
 }
 
 private struct AccountServiceKey: EnvironmentKey {
-    static let defaultValue: AccountService = MockAccountService()
+    static let defaultValue: AccountService = SupabaseAccountService()
 }
 
 private struct PendingPlanStoreKey: EnvironmentKey {

@@ -20,30 +20,10 @@ nonisolated protocol AccountService: Sendable {
     func createAccount(email: String, password: String) async throws
     func signIn(email: String, password: String) async throws
     func signInWithApple(idToken: String, nonce: String) async throws
-}
-
-/// Demo rules until a real backend exists: creating with an email containing
-/// "taken" fails as a duplicate; signing in accepts any well-formed email with
-/// a password meeting the sign-up minimum.
-nonisolated struct MockAccountService: AccountService {
-
-    func createAccount(email: String, password: String) async throws {
-        try await Task.sleep(for: .milliseconds(1500))
-        if email.range(of: "taken", options: .caseInsensitive) != nil {
-            throw AccountError.emailAlreadyRegistered
-        }
-    }
-
-    func signIn(email: String, password: String) async throws {
-        try await Task.sleep(for: .milliseconds(1500))
-        guard AuthValidation.isValidEmail(email),
-              password.count >= AuthValidation.minPasswordLength
-        else {
-            throw AccountError.invalidCredentials
-        }
-    }
-
-    func signInWithApple(idToken: String, nonce: String) async throws {
-        try await Task.sleep(for: .milliseconds(1500))
-    }
+    /// Whether a previously signed-in session survives on this device, letting
+    /// launch skip the auth screens.
+    func hasRestorableSession() async -> Bool
+    /// Ends the session on this device. Never fails from the caller's view —
+    /// local data stays and the next launch simply lands on Sign In.
+    func signOut() async
 }
